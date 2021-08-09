@@ -23,7 +23,7 @@ http.createServer((req, res) => {
       req.on("end", () => {
         const newGame = JSON.parse(body);
         if (!validate(newGame))
-          return sendError(res, 'Invalid data', 'Invalid data');
+          return sendError(res, 'Invalid data', 'Invalid data', 400);
 
         fs.readFile('./data/games.json', (err, data) => {
           if (err) return sendError(res, err, `Error loading available games`); 
