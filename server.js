@@ -1,6 +1,8 @@
 const http = require("http");
 const fs = require("fs");
 
+const port = 3000;
+
 http.createServer((req, res) => {  
   if (req.url === "/products") {
     if (req.method === 'GET') {
@@ -37,8 +39,8 @@ http.createServer((req, res) => {
       });
     }  
   } else sendError(res, 'Not Found', 'Not Found', 404);
-}).listen(3000, () => {
-  console.log("Server is running at http://localhost:3000")
+}).listen(port, () => {
+  console.log(`Server is running at http://localhost:${port}`);
 });
 
 // simple validation
