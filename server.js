@@ -5,10 +5,7 @@ http.createServer((req, res) => {
   if (req.url === "/products") {
     if (req.method === 'GET') {
       fs.readFile('./data/games.json', (err, data) => {
-        if (err) {
-          res.writeHead(500);
-          return res.end('Error loading data.json');
-        }
+        if (err) sendError(res, err, 'Error loading games.json');
         res.writeHead(200, { 'Content-Type': 'application/json' });
         res.end(data);
       });
