@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const {Category, Product} = require('./schemas');
 
 const connect = () => {
   mongoose.connect('mongodb://localhost:27017/itechart');
@@ -9,4 +10,17 @@ const connect = () => {
   });
 }
 
+const getAllProducts = () => {
+  return new Promise((resolve, reject) => {
+    Product.find({}, (err, products) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(products);
+      }
+    });
+  });
+}
+
 module.exports.connect = connect;
+module.exports.getAllProducts = getAllProducts;
