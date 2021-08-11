@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const {Category, Product} = require('./schemas');
+const { Product } = require('./models/product');
 
 const connect = () => {
   mongoose.connect('mongodb://localhost:27017/itechart');

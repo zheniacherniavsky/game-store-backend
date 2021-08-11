@@ -8,9 +8,4 @@ const Product = new mongoose.Schema({
   price: Number,
 });
 
-const Category = new mongoose.Schema({
-  displayName: String,
-});
-
-module.exports.Product = mongoose.model('Product', Product);
-module.exports.Category = mongoose.model('Category', Category); 
+module.exports = mongoose.model('Product', Product);
