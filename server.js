@@ -1,19 +1,20 @@
 const express = require("express");
-const fs = require("fs");
 const database = require("./db/database");
 const app = express();
 const port = 3000;
 
-app.get('/products', (req, res) => {
-  database.getAllProducts().then(products => {
+database.connect();
+
+app.get('/products', async (req, res) => {
+  const products = await database.products.getAll();
+  if(products != null) {
     res.status(200).json(products);
-  }, err => {
-    console.log(err);
-    res.status(500).send("Server error");
-  });
+  } else {
+    res.status(404).send("No products found");
+  } 
 })
 
 app.listen(port, () => {
   console.log(`Server is running at http://localhost:${port}`);
-  database.connect();
+  database.init();
 });
