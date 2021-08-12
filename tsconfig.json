@@ -9,6 +9,10 @@
     "esModuleInterop": true,
 
     "experimentalDecorators": true,
-    "strictPropertyInitialization": false
+    "emitDecoratorMetadata": true, 
+    "strictPropertyInitialization": false,
+
+    "noImplicitAny": true,
+    "noImplicitReturns": true
   }
 }

@@ -1,9 +1,9 @@
-const Category = require("./models/category")
-const Product = require('./models/product');
+import Category from "./models/category"
+import Product from "./models/product"
 
-const dbLog = (operation, msg) => console.log(`MongoDB [${operation}]: ${msg}`);
+export const dbLog = (operation: string, msg: string) => console.log(`MongoDB [${operation}]: ${msg}`);
 
-const init = () => {
+export const init = () => {
   Category.find({}).then(categories => {
     if (categories.length === 0) {
       dbLog("Initialization", "No categories found, creating default categories with products...");
@@ -21,7 +21,7 @@ const init = () => {
           shooter._id,
           arcade._id,
         ],
-        createdAt: new Date(),
+        createdAt: new Date().toString(),
         totalRating: 8,
         price: 29,
       }).save();
@@ -40,6 +40,3 @@ const init = () => {
     }
   })
 }
-
-module.exports.init = init;
-module.exports.dbLog = dbLog;
