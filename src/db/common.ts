@@ -1,7 +1,9 @@
-import { CategoryModel } from "./models/category"
-import { ProductModel } from "./models/product"
+import mongoose from 'mongoose';
+import { CategoryModel } from '../DA/models/category';
+import { ProductModel } from '../DA/models/product';
 
-export const dbLog = (operation: string, msg: string) => console.log(`MongoDB [${operation}]: ${msg}`);
+const dbLog = (operation: string, msg: string) =>
+  console.log(`MongoDB [${operation}]: ${msg}`);
 
 export const init = () => {
   CategoryModel.find().then((categories) => {
@@ -21,7 +23,7 @@ export const init = () => {
       new ProductModel({
         displayName: 'Battlefield 4',
         categoryIds: [shooter._id, arcade._id],
-        createdAt: new Date().toString(),
+        createdAt: new Date(),
         totalRating: 8,
         price: 29,
       }).save();
@@ -37,4 +39,16 @@ export const init = () => {
       dbLog('Initialization', 'Data initialized!');
     }
   });
-}
+};
+
+export const connectMongoDb = () => {
+  mongoose.connect('mongodb://localhost:27017/itechart', {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  });
+  const db = mongoose.connection;
+  db.on('error', console.error.bind(console, 'connection error:'));
+  db.once('open', () => {
+    dbLog('Connection', 'Connected to MongoDB');
+  });
+};

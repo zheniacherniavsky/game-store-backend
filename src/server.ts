@@ -1,17 +1,12 @@
 import express from "express"
-import database from "./db/database";
+import database from "./db";
 const app = express();
 const port = 3000;
 
 database.connect();
 
 app.get('/products', async (req, res) => {
-  const products = await database.products.getAll();
-  if(products != null) {
-    res.status(200).json(products);
-  } else {
-    res.status(404).send("No products found");
-  } 
+  
 })
 
 app.listen(port, () => {
