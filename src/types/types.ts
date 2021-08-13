@@ -12,6 +12,6 @@ export interface ICategory {
   displayName: string;
 }
 
-export interface IDatabaseOperations<T> {
+export interface IDatabaseModelOperations<T> {
   getAll: () => Promise<T[]>
 }

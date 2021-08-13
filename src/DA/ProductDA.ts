@@ -1,7 +1,7 @@
 import { Product, ProductModel } from "./models/product";
-import { IDatabaseOperations } from "./../types/types"
+import { IDatabaseModelOperations } from "./../types/types"
 
-export class ProductDA implements IDatabaseOperations<Product>
+export class ProductDA implements IDatabaseModelOperations<Product>
 {
   public async getAll() : Promise<Product[]> {
     try
