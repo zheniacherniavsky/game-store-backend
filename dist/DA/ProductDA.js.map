@@ -1,0 +1,1 @@
+{"version":3,"file":"ProductDA.js","sourceRoot":"","sources":["../../src/DA/ProductDA.ts"],"names":[],"mappings":";;;;;;;;;;;;AAAA,8CAAyD;AAGzD,MAAa,SAAS;IAEP,MAAM;;YACjB,IACA;gBACE,MAAM,QAAQ,GAAe,MAAM,sBAAY,CAAC,IAAI,EAAE,CAAC;gBACvD,OAAO,QAAQ,CAAC;aACjB;YACD,OAAO,GAAG,EAAE;gBACV,MAAM,GAAG,CAAA;aACV;QACH,CAAC;KAAA;CACF;AAZD,8BAYC"}
