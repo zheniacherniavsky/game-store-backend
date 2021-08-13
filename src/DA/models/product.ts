@@ -1,7 +1,8 @@
 import { getModelForClass, prop } from "@typegoose/typegoose";
-import { Date, ObjectId } from "mongoose";
+import { ObjectId } from "mongoose";
+import { IProduct } from "../../types/types";
 
-export class Product
+export class Product implements IProduct
 {
   @prop()
   public displayName: string;
