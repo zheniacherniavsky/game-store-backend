@@ -1,13 +1,13 @@
-import { getModelForClass, prop, Ref } from "@typegoose/typegoose";
+import { getModelForClass, prop } from "@typegoose/typegoose";
 import { Date, ObjectId } from "mongoose";
 
-class Product
+export class Product
 {
   @prop()
   public displayName: string;
 
   @prop()
-  public categoryIds: ObjectId
+  public categoryIds: ObjectId[]
 
   @prop()
   public createdAt: Date;
@@ -19,4 +19,4 @@ class Product
   public price: number;
 }
 
-export default getModelForClass(Product)
+export const ProductModel = getModelForClass(Product)

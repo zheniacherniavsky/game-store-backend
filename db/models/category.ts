@@ -1,8 +1,8 @@
 import { getModelForClass, prop } from "@typegoose/typegoose";
 
-class CategorySchema {
+export class Category {
   @prop()
   public displayName: string;
 }
 
-export default getModelForClass(CategorySchema);
+export const CategoryModel = getModelForClass(Category);

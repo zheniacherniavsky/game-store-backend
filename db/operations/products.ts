@@ -1,6 +1,6 @@
-import Product from "../models/product";
+import {Product, ProductModel} from "../models/product";
 
 export const getAll = async () => {
-  const products = await Product.find({});
+  const products: Product[] = await ProductModel.find();
   return products;
 }
