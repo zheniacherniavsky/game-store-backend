@@ -5,7 +5,7 @@ import { ProductModel } from '../models/product';
 const dbLog = (operation: string, msg: string) =>
   console.log(`MongoDB [${operation}]: ${msg}`);
 
-export const init = () => {
+export const init = () : void => {
   CategoryModel.find().then((categories) => {
     if (categories.length === 0) {
       dbLog(
@@ -41,7 +41,7 @@ export const init = () => {
   });
 };
 
-export const connectMongoDb = () => {
+export const connectMongoDb = () : void => {
   const connectionString : string = process.env.MONGODB_CONNECTION_STRING || "";
 
   if(connectionString !== "")

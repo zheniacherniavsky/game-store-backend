@@ -2,17 +2,15 @@ import { ProductDA } from "../DA";
 import { IProduct } from "../types/types";
 
 export class ProductService {
+  constructor(private productDA: ProductDA) {}
 
-  constructor(private productDA: ProductDA) { }
-  
-  public async GetProducts() {
+  public async GetProducts(): Promise<IProduct[] | null> {
     try {
       const data = await this.productDA.getAll();
       return data;
-    }
-    catch (err) {
+    } catch (err) {
       console.log(err);
-      return null
+      return null;
     }
   }
 }
