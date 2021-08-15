@@ -1,10 +1,15 @@
 import express from 'express';
 import database from "./db";
+import dotenv from 'dotenv';
+
 import { ProductDA } from "./DA";
 import { ProductRouter } from "./routes/product.routes";
 import { ProductService } from "./service";
+
+dotenv.config();
+const port = process.env.SRV_PORT;
+
 const app = express();
-const port = 3000;
 
 database.connect();
 

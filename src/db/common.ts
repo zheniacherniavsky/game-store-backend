@@ -42,13 +42,21 @@ export const init = () => {
 };
 
 export const connectMongoDb = () => {
-  mongoose.connect('mongodb://localhost:27017/itechart', {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  });
-  const db = mongoose.connection;
-  db.on('error', console.error.bind(console, 'connection error:'));
-  db.once('open', () => {
-    dbLog('Connection', 'Connected to MongoDB');
-  });
+  const connectionString : string = process.env.MONGODB_CONNECTION_STRING || "";
+
+  if(connectionString !== "")
+  {
+    mongoose.connect(connectionString, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
+    const db = mongoose.connection;
+    db.on('error', console.error.bind(console, 'connection error:'));
+    db.once('open', () => {
+      dbLog('Connection', 'Connected to MongoDB');
+    });
+  }
+  else {
+    dbLog('Connection', 'process.env.MONGODB_CONNECTION_STRING is undefined. Not connected to database.');
+  }
 };
