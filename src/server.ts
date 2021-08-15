@@ -1,6 +1,7 @@
 import express from 'express';
 import database from './DA/db';
 import dotenv from 'dotenv';
+import 'reflect-metadata';
 
 import { ProductDA } from './DA';
 import { ProductRouter } from './routes/product.routes';
