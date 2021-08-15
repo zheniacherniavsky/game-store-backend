@@ -1,14 +1,14 @@
-import { getModelForClass, prop } from "@typegoose/typegoose";
+import { getModelForClass, prop, modelOptions, Severity } from "@typegoose/typegoose";
 import { ObjectId } from "mongoose";
 import { IProduct } from "../../types/types";
 
-export class Product implements IProduct
-{
+@modelOptions({ options: { allowMixed: Severity.ALLOW } })
+export class Product implements IProduct {
   @prop()
   public displayName: string;
 
   @prop()
-  public categoryIds: ObjectId[]
+  public categoryIds: ObjectId[];
 
   @prop()
   public createdAt: Date;
