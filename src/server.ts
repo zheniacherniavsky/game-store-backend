@@ -1,13 +1,14 @@
 import express from 'express';
-import database from './DA/db';
-import dotenv from 'dotenv';
 import 'reflect-metadata';
+import dotenv from 'dotenv';
+dotenv.config();
+
+import { database } from './DA';
 
 // import { ProductDA } from './DA';
 // import { ProductRouter } from './routes/product.routes';
 // import { ProductService } from './service';
 
-dotenv.config();
 const port = process.env.SRV_PORT;
 
 const app = express();
