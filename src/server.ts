@@ -1,5 +1,5 @@
 import express from 'express';
-import database from "./db";
+import database from "./DA/db";
 import dotenv from 'dotenv';
 
 import { ProductDA } from "./DA";

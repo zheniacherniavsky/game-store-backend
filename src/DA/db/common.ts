@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
-import { CategoryModel } from '../DA/models/category';
-import { ProductModel } from '../DA/models/product';
+import { CategoryModel } from '../models/category';
+import { ProductModel } from '../models/product';
 
 const dbLog = (operation: string, msg: string) =>
   console.log(`MongoDB [${operation}]: ${msg}`);
