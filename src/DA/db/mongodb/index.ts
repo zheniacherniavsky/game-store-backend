@@ -15,12 +15,11 @@ export const connectMongoDb = (): void => {
     const db = mongoose.connection;
     db.on('error', console.error.bind(console, 'connection error:'));
     db.once('open', () => {
-      dbLog('MongoDB', 'Connection', 'Connected to MongoDB');
+      dbLog('Connection', 'Connected to MongoDB');
       init();
     });
   } else {
     dbLog(
-      'MongoDB',
       'Connection',
       'process.env.MONGODB_CONNECTION_STRING is undefined. Not connected to database.',
     );
@@ -31,7 +30,6 @@ function init(): void {
   CategoryModel.find().then((categories: ICategory[]) => {
     if (categories.length === 0) {
       dbLog(
-        'MongoDB',
         'Initialization',
         'No categories found, creating default categories with products...',
       );
@@ -59,7 +57,7 @@ function init(): void {
         price: 0,
       }).save();
 
-      dbLog('MongoDB', 'Initialization', 'Data initialized!');
+      dbLog('Initialization', 'Data initialized!');
     }
   });
 }

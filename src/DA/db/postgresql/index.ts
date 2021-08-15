@@ -6,11 +6,11 @@ import { Product } from './entity/product';
 export const connectPostgreSQL = async (): Promise<void> => {
   createConnection()
     .then(() => {
-      dbLog('PostgreSQL', 'Connection', 'Connected to PostgreSQL');
+      dbLog('Connection', 'Connected to PostgreSQL');
       init();
     })
     .catch((err) => {
-      dbLog('PostgreSQL', 'Connection', err.message);
+      dbLog('Connection', err.message);
     });
 };
 
@@ -19,7 +19,6 @@ async function init(): Promise<void> {
   const categories = await categoryRepository.find();
   if (categories.length === 0) {
     dbLog(
-      'PostgreSQL',
       'Initialization',
       'No categories found, creating default categories with products...',
     );
@@ -39,6 +38,6 @@ async function init(): Promise<void> {
     const productsRepository = getRepository(Product);
     await productsRepository.save(product);
 
-    dbLog('PostgreSQL', 'Initialization', 'Data initialized!');
+    dbLog('Initialization', 'Data initialized!');
   }
 }
