@@ -1,5 +1,5 @@
 import { Product, ProductModel } from "./models/product";
-import { IDatabaseModelOperations } from "./../types/types"
+import { IDatabaseModelOperations } from "./../types/types";
 
 export class ProductDA implements IDatabaseModelOperations<Product>
 {

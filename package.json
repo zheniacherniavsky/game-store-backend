@@ -6,7 +6,8 @@
   "scripts": {
     "start": "ts-node-dev src/server.ts",
     "build": "npm run lint && tsc && nodemon dist/server.js",
-    "lint": "eslint . --ext .ts"
+    "lint": "eslint . --ext .ts",
+    "lint-fix": "eslint . --ext .ts --fix"
   },
   "repository": {
     "type": "git",

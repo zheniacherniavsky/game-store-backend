@@ -14,7 +14,7 @@ const app = express();
 database.connect();
 
 const router = express.Router();
-app.use('/', router)
+app.use('/', router);
 
 ProductRouter(router, new ProductService(new ProductDA));
 

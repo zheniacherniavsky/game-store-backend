@@ -20,4 +20,4 @@ export class Product implements IProduct {
   public price: number;
 }
 
-export const ProductModel = getModelForClass(Product)
+export const ProductModel = getModelForClass(Product);

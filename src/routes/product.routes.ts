@@ -10,5 +10,5 @@ export const ProductRouter = (router: Router, service: ProductService): void => 
     catch (err) {
       res.status(500).send("Error getting products");
     }
-  })
-}
+  });
+};
