@@ -3,9 +3,9 @@ import database from './DA/db';
 import dotenv from 'dotenv';
 import 'reflect-metadata';
 
-import { ProductDA } from './DA';
-import { ProductRouter } from './routes/product.routes';
-import { ProductService } from './service';
+// import { ProductDA } from './DA';
+// import { ProductRouter } from './routes/product.routes';
+// import { ProductService } from './service';
 
 dotenv.config();
 const port = process.env.SRV_PORT;
@@ -17,9 +17,8 @@ database.connect();
 const router = express.Router();
 app.use('/', router);
 
-ProductRouter(router, new ProductService(new ProductDA()));
+// ProductRouter(router, new ProductService(new ProductDA()));
 
 app.listen(port, () => {
   console.log(`Server is running at http://localhost:${port}`);
-  database.init();
 });

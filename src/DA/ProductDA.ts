@@ -1,4 +1,4 @@
-import { Product, ProductModel } from './models/product';
+import { Product, ProductModel } from './db/mongodb/models/product';
 import { IDatabaseModelOperations } from './../types/types';
 
 export class ProductDA implements IDatabaseModelOperations<Product> {

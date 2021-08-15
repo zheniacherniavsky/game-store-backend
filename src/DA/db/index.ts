@@ -1,8 +1,8 @@
-import { connectMongoDb, init } from './common';
+import { connectMongoDb } from './mongodb';
+import { connectPostgreSQL } from './postgresql';
 
 const database = {
-  connect: connectMongoDb,
-  init,
+  connect: connectPostgreSQL,
 };
 
 export default database;

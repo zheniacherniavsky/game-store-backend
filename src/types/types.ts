@@ -2,7 +2,7 @@ import { ObjectId } from 'mongoose';
 
 export interface IProduct {
   displayName: string;
-  categoryIds: ObjectId[];
+  categoryIds: ObjectId[] | number[];
   createdAt: Date;
   totalRating: number;
   price: number;
