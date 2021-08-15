@@ -1,5 +1,3 @@
-import { ProductDA } from "./ProductDA";
+import { ProductDA } from './ProductDA';
 
-export {
-  ProductDA
-};
+export { ProductDA };

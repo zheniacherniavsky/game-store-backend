@@ -1,8 +1,8 @@
-import {connectMongoDb, init} from "./common";
+import { connectMongoDb, init } from './common';
 
 const database = {
   connect: connectMongoDb,
-  init
+  init,
 };
 
 export default database;

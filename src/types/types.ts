@@ -1,11 +1,11 @@
-import { ObjectId } from "mongoose";
+import { ObjectId } from 'mongoose';
 
 export interface IProduct {
-  displayName: string,
-  categoryIds: ObjectId[],
-  createdAt: Date,
-  totalRating: number,
-  price: number
+  displayName: string;
+  categoryIds: ObjectId[];
+  createdAt: Date;
+  totalRating: number;
+  price: number;
 }
 
 export interface ICategory {
@@ -13,5 +13,5 @@ export interface ICategory {
 }
 
 export interface IDatabaseModelOperations<T> {
-  getAll: () => Promise<T[]>
+  getAll: () => Promise<T[]>;
 }

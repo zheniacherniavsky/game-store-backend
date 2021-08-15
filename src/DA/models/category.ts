@@ -1,5 +1,5 @@
-import { getModelForClass, prop } from "@typegoose/typegoose";
-import { ICategory } from "../../types/types";
+import { getModelForClass, prop } from '@typegoose/typegoose';
+import { ICategory } from '../../types/types';
 
 export class Category implements ICategory {
   @prop()

@@ -1,5 +1,5 @@
-import { ProductDA } from "../DA";
-import { IProduct } from "../types/types";
+import { ProductDA } from '../DA';
+import { IProduct } from '../types/types';
 
 export class ProductService {
   constructor(private productDA: ProductDA) {}

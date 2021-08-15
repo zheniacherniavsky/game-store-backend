@@ -5,7 +5,7 @@ import { ProductModel } from '../models/product';
 const dbLog = (operation: string, msg: string) =>
   console.log(`MongoDB [${operation}]: ${msg}`);
 
-export const init = () : void => {
+export const init = (): void => {
   CategoryModel.find().then((categories) => {
     if (categories.length === 0) {
       dbLog(
@@ -41,11 +41,10 @@ export const init = () : void => {
   });
 };
 
-export const connectMongoDb = () : void => {
-  const connectionString : string = process.env.MONGODB_CONNECTION_STRING || "";
+export const connectMongoDb = (): void => {
+  const connectionString: string = process.env.MONGODB_CONNECTION_STRING || '';
 
-  if(connectionString !== "")
-  {
+  if (connectionString !== '') {
     mongoose.connect(connectionString, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
@@ -55,8 +54,10 @@ export const connectMongoDb = () : void => {
     db.once('open', () => {
       dbLog('Connection', 'Connected to MongoDB');
     });
-  }
-  else {
-    dbLog('Connection', 'process.env.MONGODB_CONNECTION_STRING is undefined. Not connected to database.');
+  } else {
+    dbLog(
+      'Connection',
+      'process.env.MONGODB_CONNECTION_STRING is undefined. Not connected to database.',
+    );
   }
 };
