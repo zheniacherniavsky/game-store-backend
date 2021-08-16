@@ -1,5 +1,5 @@
+/* eslint-disable @typescript-eslint/no-empty-interface */
 import { ObjectId } from 'mongoose';
-
 export interface IProduct {
   displayName: string;
   categoryIds: ObjectId[] | number[];
@@ -12,29 +12,24 @@ export interface ICategory {
   displayName: string;
 }
 
-export interface IDatabaseModelOperations<T> {
+export interface IProductRepository<T> {
   getAll: () => Promise<T[]>;
+  create: (entity: IProduct) => Promise<T>;
 }
 
-export interface IProductRepository<T, K> {
+export interface ICategoryRepository<T> {
   getAll: () => Promise<T[]>;
-  getById: (id: K) => Promise<T>;
+  create: (entity: ICategory) => Promise<T>;
 }
 
-export interface ICategoryRepository<T, K> {
-  getAll: () => Promise<T[]>;
-  getById: (id: K) => Promise<T>;
-}
-
-/* eslint-disable @typescript-eslint/no-empty-interface */
 export interface IProductTypeOrmRepository
-  extends IProductRepository<IProduct, number> {}
+  extends IProductRepository<IProduct> {}
 
 export interface IProductTypegooseRepository
-  extends IProductRepository<IProduct, ObjectId> {}
+  extends IProductRepository<IProduct> {}
 
 export interface ICategoryTypeOrmRepository
-  extends ICategoryRepository<ICategory, number> {}
+  extends ICategoryRepository<ICategory> {}
 
 export interface ICategoryTypegooseRepository
-  extends ICategoryRepository<ICategory, ObjectId> {}
+  extends ICategoryRepository<ICategory> {}

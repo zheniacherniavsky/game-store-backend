@@ -4,7 +4,7 @@ import { Category } from './entity/category';
 import { Product } from './entity/product';
 
 export const connectPostgreSQL = async (): Promise<void> => {
-  createConnection()
+  await createConnection()
     .then(() => {
       dbLog('Connection', 'Connected to PostgreSQL');
       init();
