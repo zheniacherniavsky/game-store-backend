@@ -37,13 +37,14 @@ function init(): void {
       const shooter = new CategoryModel({ displayName: 'Shooter' });
       const arcade = new CategoryModel({ displayName: 'Arcade' });
       const board = new CategoryModel({ displayName: 'Board' });
+
       shooter.save();
       arcade.save();
       board.save();
 
       new ProductModel({
         displayName: 'Battlefield 4',
-        categoryIds: [shooter._id, arcade._id],
+        categoryIds: [shooter, arcade],
         createdAt: new Date(),
         totalRating: 8,
         price: 29,
@@ -51,7 +52,7 @@ function init(): void {
 
       new ProductModel({
         displayName: 'Chess',
-        categoryIds: [board._id],
+        categoryIds: [board],
         createdAt: new Date(),
         totalRating: 8,
         price: 0,

@@ -1,5 +1,7 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { ICategory } from '../../../../types/types';
+import { Product } from './product';
 
 @Entity("category")
 export class Category implements ICategory {
@@ -8,4 +10,7 @@ export class Category implements ICategory {
 
   @Column()
   displayName: string;
+
+  @ManyToMany(type => Product, product => product.categories)
+  products: Product[];
 }

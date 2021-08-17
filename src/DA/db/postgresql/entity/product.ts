@@ -1,5 +1,7 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { Column, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { IProduct } from '../../../../types/types';
+import { Category } from './category';
 
 @Entity("product")
 export class Product implements IProduct {
@@ -9,8 +11,11 @@ export class Product implements IProduct {
   @Column()
   displayName: string;
 
-  @Column('int', { array: true })
-  categoryIds: number[];
+  @ManyToMany(type => Category, category => category.products, {
+    cascade: true
+  })
+  @JoinTable()
+  categories: Category[]
 
   @Column()
   createdAt: Date;

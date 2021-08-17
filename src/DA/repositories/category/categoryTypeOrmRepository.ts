@@ -11,7 +11,7 @@ export default class CategoryTypeOrmRepository
   }
 
   public async getAll(): Promise<ICategory[]> {
-    const data: ICategory[] = await getRepository(Category).find();
+    const data: ICategory[] = await getRepository(Category).find({relations: ["products"]});
     return data;
   }
 }

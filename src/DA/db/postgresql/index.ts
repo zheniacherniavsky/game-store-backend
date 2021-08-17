@@ -23,14 +23,11 @@ async function init(): Promise<void> {
       'No categories found, creating default categories with products...',
     );
 
-    let category = new Category();
+    const category = new Category();
     category.displayName = 'Shooter';
-
-    category = await categoryRepository.save(category);
-
     const product = new Product();
     product.displayName = 'Minecraft';
-    product.categoryIds = [category._id];
+    product.categories = [category];
     product.createdAt = new Date();
     product.price = 19;
     product.totalRating = 9;

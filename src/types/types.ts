@@ -1,8 +1,6 @@
 /* eslint-disable @typescript-eslint/no-empty-interface */
-import { ObjectId } from 'mongoose';
 export interface IProduct {
   displayName: string;
-  categoryIds: ObjectId[] | number[];
   createdAt: Date;
   totalRating: number;
   price: number;
