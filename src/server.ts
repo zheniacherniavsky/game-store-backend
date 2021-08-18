@@ -12,6 +12,8 @@ import { CategoryRouter } from './routes/category.routes';
 const port = process.env.SRV_PORT;
 const app = express();
 const router = express.Router();
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 app.use('/', router);
 
 ProductRouter(router);
