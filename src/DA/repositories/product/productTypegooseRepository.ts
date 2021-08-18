@@ -1,10 +1,17 @@
+import { ObjectId } from 'mongoose';
 import { IProduct, IProductTypegooseRepository } from '../../../types/types';
 import { ProductModel } from '../../db/mongodb/models/product';
 
-export default class ProductTypegooseRepository implements IProductTypegooseRepository {
-  public async getById(id: string): Promise<IProduct | null> {
-    const data: IProduct | null = await ProductModel.findById(id);
-    return data;
+export default class ProductTypegooseRepository
+  implements IProductTypegooseRepository
+{
+  public async getById(id: ObjectId): Promise<IProduct | null> {
+    if (typeof id !== 'string') {
+      const data: IProduct | null = await ProductModel.findById(id);
+      return data;
+    }
+    console.warn('Cannot use string id with MongoDB.');
+    return null;
   }
 
   public async update(entity: IProduct): Promise<boolean> {
@@ -16,7 +23,7 @@ export default class ProductTypegooseRepository implements IProductTypegooseRepo
   }
 
   public async delete(entity: IProduct): Promise<boolean> {
-    const data = await ProductModel.deleteOne(entity);
+    const data = await ProductModel.deleteOne({ _id: entity._id });
     return data ? true : false;
   }
   public async create(entity: IProduct): Promise<IProduct> {

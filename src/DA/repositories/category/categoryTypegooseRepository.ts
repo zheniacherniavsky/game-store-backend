@@ -1,9 +1,15 @@
+import { ObjectId } from 'mongoose';
 import { ICategory, ICategoryTypegooseRepository } from '../../../types/types';
 import { CategoryModel } from '../../db/mongodb/models/category';
 
-export default class CategoryTypegooseRepository implements ICategoryTypegooseRepository {
-
-  public async getById(id: string): Promise<ICategory | null> {
+export default class CategoryTypegooseRepository
+  implements ICategoryTypegooseRepository
+{
+  public async getById(id: ObjectId): Promise<ICategory | null> {
+    if (typeof id == 'string') {
+      console.warn('Cannot use number id with MongoDB.');
+      return null;
+    }
     const data: ICategory | null = await CategoryModel.findById(id);
     return data;
   }
@@ -16,8 +22,8 @@ export default class CategoryTypegooseRepository implements ICategoryTypegooseRe
     return data ? true : false;
   }
 
-  public async delete(entity: ICategory) : Promise<boolean> {
-    const data = await CategoryModel.deleteOne(entity);
+  public async delete(entity: ICategory): Promise<boolean> {
+    const data = await CategoryModel.deleteOne({ _id: entity._id });
     return data ? true : false;
   }
 

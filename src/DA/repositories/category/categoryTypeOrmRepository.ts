@@ -2,24 +2,31 @@ import { getRepository } from 'typeorm';
 import { ICategoryTypeOrmRepository, ICategory } from '../../../types/types';
 import { Category } from '../../db/postgresql/entity/category';
 
-export default class CategoryTypeOrmRepository implements ICategoryTypeOrmRepository {
+export default class CategoryTypeOrmRepository
+  implements ICategoryTypeOrmRepository
+{
   public async getById(id: string): Promise<ICategory | null> {
-    const data: ICategory | undefined = await getRepository(Category).findOne({_id: id});
+    const data: ICategory | undefined = await getRepository(Category).findOne({
+      _id: id,
+    });
     return data ? data : null;
   }
 
   public async update(entity: ICategory): Promise<boolean> {
-    await getRepository(Category).update({_id: entity._id}, entity);
+    await getRepository(Category).update(
+      { _id: (entity as Category)._id },
+      entity as Category,
+    );
     return true;
   }
 
   public async delete(entity: ICategory): Promise<boolean> {
-    await getRepository(Category).delete({_id: entity._id});
+    await getRepository(Category).delete({ _id: (entity as Category)._id });
     return true;
   }
-  
+
   public async create(entity: ICategory): Promise<ICategory> {
-    const data = await getRepository(Category).save(entity);
+    const data = await getRepository(Category).save(entity as Category);
     return data;
   }
 

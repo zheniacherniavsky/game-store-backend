@@ -11,6 +11,7 @@ export const connectMongoDb = (): void => {
     mongoose.connect(connectionString, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
+      useFindAndModify: false,
     });
     const db = mongoose.connection;
     db.on('error', console.error.bind(console, 'connection error:'));
