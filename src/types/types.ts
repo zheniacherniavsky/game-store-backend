@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-empty-interface */
 export interface IProduct {
+  _id: string;
   displayName: string;
   createdAt: Date;
   totalRating: number;
@@ -7,27 +8,29 @@ export interface IProduct {
 }
 
 export interface ICategory {
+  _id: string;
   displayName: string;
 }
 
-export interface IProductRepository<T> {
+interface Repository<T> {
   getAll: () => Promise<T[]>;
-  create: (entity: IProduct) => Promise<T>;
+  getById: (id: string) => Promise<T | null>;
+  create: (entity: T) => Promise<T>;
+  update: (entity: T) => Promise<boolean>;
+  delete: (entity: T) => Promise<boolean>;
 }
 
-export interface ICategoryRepository<T> {
-  getAll: () => Promise<T[]>;
-  create: (entity: ICategory) => Promise<T>;
-}
+export interface IProductRepository extends Repository<IProduct> {}
+export interface ICategoryRepository extends Repository<ICategory> {}
 
 export interface IProductTypeOrmRepository
-  extends IProductRepository<IProduct> {}
+  extends IProductRepository {}
 
 export interface IProductTypegooseRepository
-  extends IProductRepository<IProduct> {}
+  extends IProductRepository {}
 
 export interface ICategoryTypeOrmRepository
-  extends ICategoryRepository<ICategory> {}
+  extends ICategoryRepository {}
 
 export interface ICategoryTypegooseRepository
-  extends ICategoryRepository<ICategory> {}
+  extends ICategoryRepository {}

@@ -1,7 +1,5 @@
 import {
-  ICategory,
   ICategoryRepository,
-  IProduct,
   IProductRepository,
 } from '../types/types';
 import { connectMongoDb } from './db/mongodb';
@@ -11,8 +9,8 @@ import CategoryTypeOrmRepository from './repositories/category/categoryTypeOrmRe
 import ProductTypegooseRepository from './repositories/product/productTypegooseRepository';
 import ProductTypeOrmRepository from './repositories/product/productTypeOrmRepository';
 
-let ProductRepository: IProductRepository<IProduct>;
-let CategoryRepository: ICategoryRepository<ICategory>;
+let ProductRepository: IProductRepository;
+let CategoryRepository: ICategoryRepository;
 
 const database = {
   connect,

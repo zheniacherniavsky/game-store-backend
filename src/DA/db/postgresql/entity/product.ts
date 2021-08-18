@@ -6,7 +6,7 @@ import { Category } from './category';
 @Entity("product")
 export class Product implements IProduct {
   @PrimaryGeneratedColumn()
-  _id: number;
+  _id: string;
 
   @Column()
   displayName: string;

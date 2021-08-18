@@ -3,6 +3,9 @@ import { ICategory } from '../../../../types/types';
 
 export class Category implements ICategory {
   @prop()
+  public _id: string;
+
+  @prop()
   public displayName: string;
 }
 

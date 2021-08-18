@@ -3,14 +3,14 @@ import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { ICategory } from '../../../../types/types';
 import { Product } from './product';
 
-@Entity("category")
+@Entity('category')
 export class Category implements ICategory {
   @PrimaryGeneratedColumn()
-  _id: number;
+  _id: string;
 
   @Column()
   displayName: string;
 
-  @ManyToMany(type => Product, product => product.categories)
+  @ManyToMany((type) => Product, (product) => product.categories)
   products: Product[];
 }
