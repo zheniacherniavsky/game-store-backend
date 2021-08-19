@@ -1,5 +1,6 @@
 import { Router, Request, Response } from 'express';
 import { ProductRepository } from '../DA';
+import { validateProduct } from '../helpers/validation';
 import { IProduct } from '../types/types';
 
 export const ProductRouter = (router: Router): void => {
@@ -14,15 +15,20 @@ export const ProductRouter = (router: Router): void => {
 
   router.post('/products/create', async (req: Request, res: Response) => {
     try {
-      let product: IProduct = {
-        displayName: req.body.displayName || 'Game without name',
+      const product: IProduct = {
+        displayName: req.body.displayName,
         createdAt: new Date(),
-        price: req.body.price || 0,
-        totalRating: req.body.totalRating || 0,
+        price: req.body.price,
+        totalRating: req.body.totalRating,
       };
+      const validateResult = validateProduct(product);
 
-      product = await ProductRepository.create(product);
-      res.status(200).send(product);
+      if (validateResult.isValid) {
+        await ProductRepository.create(product);
+        res.status(200).send('Product was created');
+      } else {
+        res.status(400).send(validateResult.error);
+      }
     } catch (err) {
       res.status(500).send(`Error creating product: ${err.message}`);
     }
