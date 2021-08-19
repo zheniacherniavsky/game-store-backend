@@ -1,16 +1,36 @@
 import { Router, Request, Response } from 'express';
-import { ProductService } from '../service';
+import { ProductRepository } from '../DA';
+import { validateProduct } from '../helpers/validation';
+import { IProduct } from '../types/types';
 
-export const ProductRouter = (
-  router: Router,
-  service: ProductService,
-): void => {
+export const ProductRouter = (router: Router): void => {
   router.get('/products', async (req: Request, res: Response) => {
     try {
-      const products = await service.GetProducts();
+      const products = await ProductRepository.getAll();
       res.status(200).send(products);
     } catch (err) {
       res.status(500).send('Error getting products');
+    }
+  });
+
+  router.post('/products/create', async (req: Request, res: Response) => {
+    try {
+      const product: IProduct = {
+        displayName: req.body.displayName,
+        createdAt: new Date(),
+        price: req.body.price,
+        totalRating: req.body.totalRating,
+      };
+      const validateResult = validateProduct(product);
+
+      if (validateResult.isValid) {
+        await ProductRepository.create(product);
+        res.status(200).send('Product was created');
+      } else {
+        res.status(400).send(validateResult.error);
+      }
+    } catch (err) {
+      res.status(500).send(`Error creating product: ${err.message}`);
     }
   });
 };
