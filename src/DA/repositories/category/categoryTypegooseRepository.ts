@@ -1,16 +1,14 @@
-import { ObjectId } from 'mongoose';
+import { mongoose } from '@typegoose/typegoose';
 import { ICategory, ICategoryTypegooseRepository } from '../../../types/types';
 import { CategoryModel } from '../../db/mongodb/models/category';
 
 export default class CategoryTypegooseRepository
   implements ICategoryTypegooseRepository
 {
-  public async getById(id: ObjectId): Promise<ICategory | null> {
-    if (typeof id == 'string') {
-      console.warn('Cannot use number id with MongoDB.');
-      return null;
-    }
-    const data: ICategory | null = await CategoryModel.findById(id);
+  public async getById(id: string): Promise<ICategory | null> {
+    const data: ICategory | null = await CategoryModel.findOne({
+      _id: new mongoose.Types.ObjectId(id),
+    });
     return data;
   }
 

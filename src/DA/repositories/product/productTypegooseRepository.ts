@@ -1,17 +1,13 @@
-import { ObjectId } from 'mongoose';
+import { mongoose } from '@typegoose/typegoose';
 import { IProduct, IProductTypegooseRepository } from '../../../types/types';
 import { ProductModel } from '../../db/mongodb/models/product';
 
 export default class ProductTypegooseRepository
   implements IProductTypegooseRepository
 {
-  public async getById(id: ObjectId): Promise<IProduct | null> {
-    if (typeof id !== 'string') {
-      const data: IProduct | null = await ProductModel.findById(id);
-      return data;
-    }
-    console.warn('Cannot use string id with MongoDB.');
-    return null;
+  public async getById(id: string): Promise<IProduct | null> {
+    const data: IProduct | null = await ProductModel.findOne({_id: new mongoose.Types.ObjectId(id)});
+    return data;
   }
 
   public async update(entity: IProduct): Promise<boolean> {

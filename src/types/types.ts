@@ -17,24 +17,24 @@ export interface ICategory {
   displayName: string;
 }
 
-interface Repository<T, K> {
+interface Repository<T> {
   getAll: () => Promise<T[]>;
-  getById: (id: K) => Promise<T | null>;
+  getById: (id: string) => Promise<T | null>;
   create: (entity: T) => Promise<T>;
   update: (entity: T) => Promise<boolean>;
   delete: (entity: T) => Promise<boolean>;
 }
 
-export interface IProductRepository<F> extends Repository<IProduct, F> {}
-export interface ICategoryRepository<F> extends Repository<ICategory, F> {}
+export interface IProductRepository extends Repository<IProduct> {}
+export interface ICategoryRepository extends Repository<ICategory> {}
 
-export interface IProductTypeOrmRepository extends IProductRepository<string> {}
+export interface IProductTypeOrmRepository extends IProductRepository {}
 
 export interface IProductTypegooseRepository
-  extends IProductRepository<ObjectId> {}
+  extends IProductRepository {}
 
 export interface ICategoryTypeOrmRepository
-  extends ICategoryRepository<string> {}
+  extends ICategoryRepository {}
 
 export interface ICategoryTypegooseRepository
-  extends ICategoryRepository<ObjectId> {}
+  extends ICategoryRepository {}
