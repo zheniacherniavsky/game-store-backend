@@ -2,29 +2,13 @@ import { Result } from '.';
 import { IProduct } from '../../types/types';
 
 export const validateProduct = (product: IProduct): Result => {
-  if (!product.displayName)
-    return {
-      isValid: false,
-      error: 'displayName is invalid!',
-    };
-  if (isNaN(product.price))
-    return {
-      isValid: false,
-      error: 'price is invalid!',
-    };
+  const errors: string[] = [];
 
-  if (
-    isNaN(product.totalRating) ||
-    product.totalRating < 0 ||
-    product.totalRating > 10
-  )
-    return {
-      isValid: false,
-      error: 'totalRating is invalid!',
-    };
+  if (!product.displayName) errors.push('displayName is invalid!');
+  if (isNaN(product.price)) errors.push('price is invalid!');
+  if (isNaN(product.totalRating)) errors.push('totalRating is invalid!');
 
-  return {
-    isValid: true,
-    error: '',
-  };
+  if (product.totalRating < 0 || product.totalRating > 10) errors.push('totalRating should be in the range from 0 to 10!');
+
+  return { errors };
 };
