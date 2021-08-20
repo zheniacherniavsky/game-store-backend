@@ -34,10 +34,8 @@ export default class ProductTypeOrmRepository
     const searchOptions = productSearchQueryHandler(query).typeOrmOptions;
 
     const data: IProduct[] = await getRepository(Product).find({
-      where: {
-        ...searchOptions,
-      },
-      relations: ["categories"]
+      ...searchOptions,
+      relations: ['categories'],
     });
     return data;
   }

@@ -29,12 +29,14 @@ export default class ProductTypegooseRepository
   }
 
   public async getAll(query?: QueryObject): Promise<IProduct[]> {
-    let searchOptions = {};
+    let searchOptions, sortOptions = {};
     if(query) 
     {
-      searchOptions = productSearchQueryHandler(query).typegooseOptions.find;
+      const typegooseOptions = productSearchQueryHandler(query).typegooseOptions;
+      searchOptions = typegooseOptions.find;
+      sortOptions = typegooseOptions.sort;
     }
-    const data: IProduct[] = await ProductModel.find({ ...searchOptions });
+    const data: IProduct[] = await ProductModel.find({ ...searchOptions }).sort(sortOptions);
     return data;
   }
 }
