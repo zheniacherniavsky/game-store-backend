@@ -1,4 +1,5 @@
 import { getRepository } from 'typeorm';
+import { productSearchQueryHandler, QueryObject } from '../../../helpers/queryHandler';
 import { IProduct, IProductTypeOrmRepository } from '../../../types/types';
 import { Product } from '../../db/postgresql/entity/product';
 
@@ -29,9 +30,14 @@ export default class ProductTypeOrmRepository
     return data;
   }
 
-  public async getAll(): Promise<IProduct[]> {
+  public async getAll(query: QueryObject | undefined): Promise<IProduct[]> {
+    const searchOptions = productSearchQueryHandler(query).typeOrmOptions;
+
     const data: IProduct[] = await getRepository(Product).find({
-      relations: ['categories'],
+      where: {
+        ...searchOptions,
+      },
+      relations: ["categories"]
     });
     return data;
   }

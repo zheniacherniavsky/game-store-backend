@@ -1,5 +1,6 @@
 import { Ref } from '@typegoose/typegoose/lib/types';
 import { ObjectId } from 'mongoose';
+import { QueryObject } from '../helpers/queryHandler';
 
 /* eslint-disable @typescript-eslint/no-empty-interface */
 export interface IProduct {
@@ -18,7 +19,7 @@ export interface ICategory {
 }
 
 interface Repository<T> {
-  getAll: () => Promise<T[]>;
+  getAll: (query?: QueryObject) => Promise<T[]>;
   getById: (id: string) => Promise<T | null>;
   create: (entity: T) => Promise<T>;
   update: (entity: T) => Promise<boolean>;

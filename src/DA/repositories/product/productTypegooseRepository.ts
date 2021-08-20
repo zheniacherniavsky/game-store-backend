@@ -1,4 +1,5 @@
 import { mongoose } from '@typegoose/typegoose';
+import { productSearchQueryHandler, QueryObject } from '../../../helpers/queryHandler';
 import { IProduct, IProductTypegooseRepository } from '../../../types/types';
 import { ProductModel } from '../../db/mongodb/models/product';
 
@@ -27,8 +28,13 @@ export default class ProductTypegooseRepository
     return data;
   }
 
-  public async getAll(): Promise<IProduct[]> {
-    const data: IProduct[] = await ProductModel.find();
+  public async getAll(query?: QueryObject): Promise<IProduct[]> {
+    let searchOptions = {};
+    if(query) 
+    {
+      searchOptions = productSearchQueryHandler(query).typegooseOptions.find;
+    }
+    const data: IProduct[] = await ProductModel.find({ ...searchOptions });
     return data;
   }
 }
