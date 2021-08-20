@@ -1,5 +1,5 @@
 import { QueryObject, Result } from ".";
-import { ILike } from "typeorm";
+import { ILike, MoreThanOrEqual } from "typeorm";
 
 export const productSearchQueryHandler = (query?: QueryObject): Result => {
   const res: Result = {
@@ -18,6 +18,14 @@ export const productSearchQueryHandler = (query?: QueryObject): Result => {
       $options: 'i'
     };
     res.typeOrmOptions.displayName = ILike(`%${query.displayName}%`);
+  }
+
+  if(query.minRating !== undefined)
+  {
+    res.typegooseOptions.find.totalRating = {
+      $gte: query.minRating
+    };
+    res.typeOrmOptions.totalRating = MoreThanOrEqual(query.minRating);
   }
 
   return res;

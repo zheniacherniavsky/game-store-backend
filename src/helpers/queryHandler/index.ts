@@ -10,6 +10,7 @@ export interface Result {
 
 export interface QueryObject {
   displayName?: string
+  minRating?: number
 }
 
 export {productSearchQueryHandler};
