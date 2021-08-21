@@ -1,21 +1,31 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Column, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  Index,
+  JoinTable,
+  ManyToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { IProduct } from '../../../../types/types';
 import { Category } from './category';
 
-@Entity("product")
+@Index(['price', 'totalRating', 'createdAt'])
+@Entity('product')
 export class Product implements IProduct {
+  @Index({ unique: true })
   @PrimaryGeneratedColumn()
   _id: string;
 
+  @Index('Product displayName', { unique: true })
   @Column()
   displayName: string;
 
-  @ManyToMany(type => Category, category => category.products, {
-    cascade: true
+  @ManyToMany((type) => Category, (category) => category.products, {
+    cascade: true,
   })
   @JoinTable()
-  categories: Category[]
+  categories: Category[];
 
   @Column()
   createdAt: Date;
