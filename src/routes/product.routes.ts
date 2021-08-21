@@ -5,7 +5,7 @@ import { IProduct } from '../types/types';
 
 export const ProductRouter = (router: Router): void => {
   router.get('/products', async (req: Request, res: Response) => {
-    const {query} = req;
+    const { query } = req;
     try {
       const products = await ProductRepository.getAll(query);
       res.status(200).send(products);
@@ -23,7 +23,8 @@ export const ProductRouter = (router: Router): void => {
         totalRating: req.body.totalRating,
       };
       const validateResult = validateProduct(product);
-      if(validateResult.errors.length !== 0) res.status(400).send(validateResult.errors);
+      if (validateResult.errors.length !== 0)
+        res.status(400).send(validateResult.errors);
       else {
         await ProductRepository.create(product);
         res.status(200).send('Product was created');
