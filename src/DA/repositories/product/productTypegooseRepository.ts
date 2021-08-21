@@ -1,5 +1,10 @@
 import { mongoose } from '@typegoose/typegoose';
-import { productSearchQueryHandler, QueryObject } from '../../../helpers/queryHandler';
+import {
+  PaginationObject,
+  productSearchQueryHandler,
+  QueryObject,
+} from '../../../helpers/queryHandler';
+import { paginationQueryHandler } from '../../../helpers/queryHandler/pagination';
 import { IProduct, IProductTypegooseRepository } from '../../../types/types';
 import { ProductModel } from '../../db/mongodb/models/product';
 
@@ -7,7 +12,9 @@ export default class ProductTypegooseRepository
   implements IProductTypegooseRepository
 {
   public async getById(id: string): Promise<IProduct | null> {
-    const data: IProduct | null = await ProductModel.findOne({_id: new mongoose.Types.ObjectId(id)});
+    const data: IProduct | null = await ProductModel.findOne({
+      _id: new mongoose.Types.ObjectId(id),
+    });
     return data;
   }
 
@@ -29,14 +36,31 @@ export default class ProductTypegooseRepository
   }
 
   public async getAll(query?: QueryObject): Promise<IProduct[]> {
-    let searchOptions, sortOptions = {};
-    if(query) 
-    {
-      const typegooseOptions = productSearchQueryHandler(query).typegooseOptions;
+    let searchOptions,
+      sortOptions = {};
+
+    let pagination: PaginationObject = {
+      skip: 0,
+      limit: 10,
+    };
+
+    if (query) {
+      const typegooseOptions =
+        productSearchQueryHandler(query).typegooseOptions;
+      pagination = paginationQueryHandler(query).typegooseOptions.pagination;
+
       searchOptions = typegooseOptions.find;
       sortOptions = typegooseOptions.sort;
     }
-    const data: IProduct[] = await ProductModel.find({ ...searchOptions }).sort(sortOptions);
+
+    console.log(pagination);
+
+    const data: IProduct[] = await ProductModel.find({
+      ...searchOptions,
+    })
+      .skip(pagination.skip)
+      .limit(pagination.limit)
+      .sort(sortOptions);
     return data;
   }
 }

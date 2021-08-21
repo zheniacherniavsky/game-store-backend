@@ -5,11 +5,16 @@ export const productSearchQueryHandler = (query?: QueryObject): Result => {
   const res: Result = {
     typegooseOptions: {
       find: {},
-      sort: {}
+      sort: {},
+      pagination: {
+        skip: 0,
+        limit: 10,
+      },
     },
     typeOrmOptions: {
       where: {},
-      order: {}
+      order: {},
+      skip: 0,
     },
   };
 
@@ -44,17 +49,14 @@ export const productSearchQueryHandler = (query?: QueryObject): Result => {
     }
   }
 
-  if(query.sortBy !== undefined)
-  {
+  if (query.sortBy !== undefined) {
     const regex = new RegExp(/\w+:(desc|asc)+/gm);
     const sortOption = query.sortBy.match(regex);
-    if(sortOption) {
+    if (sortOption) {
       const [option, type] = sortOption[0].split(':');
-      const order = type === "desc" ? -1 : 1;
+      const order = type === 'desc' ? -1 : 1;
 
-      res.typegooseOptions.sort = [
-        [option, order]
-      ];
+      res.typegooseOptions.sort = [[option, order]];
       res.typeOrmOptions.order[option] = type.toUpperCase();
     }
   }

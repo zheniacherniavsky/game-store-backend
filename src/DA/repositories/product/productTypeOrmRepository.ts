@@ -1,5 +1,9 @@
 import { getRepository } from 'typeorm';
-import { productSearchQueryHandler, QueryObject } from '../../../helpers/queryHandler';
+import {
+  productSearchQueryHandler,
+  QueryObject,
+} from '../../../helpers/queryHandler';
+import { paginationQueryHandler } from '../../../helpers/queryHandler/pagination';
 import { IProduct, IProductTypeOrmRepository } from '../../../types/types';
 import { Product } from '../../db/postgresql/entity/product';
 
@@ -32,9 +36,11 @@ export default class ProductTypeOrmRepository
 
   public async getAll(query: QueryObject | undefined): Promise<IProduct[]> {
     const searchOptions = productSearchQueryHandler(query).typeOrmOptions;
+    const pagination = paginationQueryHandler(query).typeOrmOptions;
 
     const data: IProduct[] = await getRepository(Product).find({
       ...searchOptions,
+      ...pagination,
       relations: ['categories'],
     });
     return data;

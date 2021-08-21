@@ -3,17 +3,30 @@ import { productSearchQueryHandler } from './product';
 
 export interface Result {
   typegooseOptions: {
-    find: any;
-    sort: any;
+    find?: any;
+    sort?: any;
+    pagination: PaginationObject;
   };
-  typeOrmOptions: any;
+  typeOrmOptions: {
+    where?: any;
+    order?: any;
+    skip: number;
+    take?: number;
+  };
+}
+
+export interface PaginationObject {
+  skip: number;
+  limit: number;
 }
 
 export interface QueryObject {
   displayName?: string;
-  minRating?: number;
+  minRating?: string;
   price?: string;
   sortBy?: string;
+  offset?: string;
+  limit?: string;
 }
 
 export { productSearchQueryHandler };
