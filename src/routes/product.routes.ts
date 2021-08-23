@@ -18,7 +18,7 @@ export const ProductRouter = (router: Router): void => {
     try {
       const product: IProduct = {
         displayName: req.body.displayName,
-        categories: [],
+        categoriesIds: [],
         createdAt: new Date(),
         price: req.body.price,
         totalRating: req.body.totalRating,

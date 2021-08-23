@@ -1,20 +1,15 @@
-import { QueryObject, Result } from '.';
+import { IResultProduct, QueryObject } from '.';
 import { Between, ILike, MoreThanOrEqual } from 'typeorm';
 
-export const productSearchQueryHandler = (query?: QueryObject): Result => {
-  const res: Result = {
+export const productSearchQueryHandler = (query?: QueryObject): IResultProduct => {
+  const res: IResultProduct = {
     typegooseOptions: {
       find: {},
       sort: {},
-      pagination: {
-        skip: 0,
-        limit: 10,
-      },
     },
     typeOrmOptions: {
       where: {},
       order: {},
-      skip: 0,
     },
   };
 

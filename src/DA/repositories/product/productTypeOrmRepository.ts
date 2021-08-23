@@ -40,8 +40,7 @@ export default class ProductTypeOrmRepository
 
     const data: IProduct[] = await getRepository(Product).find({
       ...searchOptions,
-      ...pagination,
-      relations: ['categories'],
+      ...pagination
     });
     return data;
   }

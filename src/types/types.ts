@@ -8,7 +8,8 @@ export interface IProduct {
   createdAt: Date;
   totalRating: number;
   price: number;
-  categories: ICategory[];
+  categoriesIds?: string[];
+  categories?: ICategory[];
 }
 
 export interface ICategory {
@@ -19,7 +20,7 @@ export interface ICategory {
 
 interface Repository<T> {
   getAll: (query?: QueryObject) => Promise<T[]>;
-  getById: (id: string) => Promise<T | null>;
+  getById: (id: string, query?: QueryObject) => Promise<T | null>;
   create: (entity: T) => Promise<T>;
   update: (entity: T) => Promise<boolean>;
   delete: (entity: T) => Promise<boolean>;

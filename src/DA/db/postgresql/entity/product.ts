@@ -21,7 +21,7 @@ export class Product implements IProduct {
   @Column()
   displayName: string;
 
-  @ManyToMany((type) => Category, (category) => category.products, {
+  @ManyToMany(() => Category, (category) => category.products, {
     cascade: true,
   })
   @JoinTable()

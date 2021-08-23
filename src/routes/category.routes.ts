@@ -16,7 +16,8 @@ export const CategoryRouter = (
 
   router.get('/categories/:id', async (req: Request, res: Response) => {
     try {
-      const product = await CategoryRepository.getById(req.params.id);
+      const { query } = req;
+      const product = await CategoryRepository.getById(req.params.id, query);
 
       if(product) res.status(200).send(product);
       else res.status(404).send(`Product with id ${req.params.id} was not found!`);

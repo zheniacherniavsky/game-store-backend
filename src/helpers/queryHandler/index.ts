@@ -1,17 +1,38 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { productSearchQueryHandler } from './product';
 
-export interface Result {
+export interface IResultProduct {
   typegooseOptions: {
     find?: any;
     sort?: any;
-    pagination: PaginationObject;
   };
+
   typeOrmOptions: {
     where?: any;
     order?: any;
-    skip: number;
     take?: number;
+  }
+}
+
+export interface IResultCategory {
+  typegooseOptions: {
+    includeProducts: boolean;
+    includeTop3Products: boolean;
+  };
+
+  typeOrmOptions: {
+    relations: string[];
+    includeTop3Products: any;
+  };
+}
+
+export interface IResultPagination {
+  typegooseOptions: {
+    pagination: PaginationObject
+  };
+  typeOrmOptions: {
+    skip: number;
+    take: number;
   };
 }
 
@@ -27,6 +48,8 @@ export interface QueryObject {
   sortBy?: string;
   offset?: string;
   limit?: string;
+  includeProducts?: string;
+  includeTop3Products?: string;
 }
 
 export { productSearchQueryHandler };

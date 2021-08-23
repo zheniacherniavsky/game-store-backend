@@ -6,7 +6,6 @@ import {
   index,
 } from '@typegoose/typegoose';
 import { IProduct } from '../../../../types/types';
-import { Category } from './category';
 
 @index({ displayName: 1 }, { unique: true })
 @index({ createdAt: 1, totalRating: 1, price: 1 })
@@ -16,7 +15,7 @@ export class Product implements IProduct {
   public displayName: string;
 
   @prop({default: []})
-  public categories: Category[];
+  public categoriesIds: string[];
 
   @prop()
   public createdAt: Date;

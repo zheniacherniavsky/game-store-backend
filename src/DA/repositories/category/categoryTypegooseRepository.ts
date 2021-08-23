@@ -1,15 +1,35 @@
 import { mongoose } from '@typegoose/typegoose';
+import { QueryObject } from '../../../helpers/queryHandler';
+import { categorySearchQueryHandler } from '../../../helpers/queryHandler/category';
 import { ICategory, ICategoryTypegooseRepository } from '../../../types/types';
 import { Category, CategoryModel } from '../../db/mongodb/models/category';
+import { ProductModel } from '../../db/mongodb/models/product';
 
 export default class CategoryTypegooseRepository
   implements ICategoryTypegooseRepository
 {
-  public async getById(id: string): Promise<ICategory | null> {
+  public async getById(id: string, query?: QueryObject): Promise<ICategory | null> {
+    const searchOptions = categorySearchQueryHandler(query).typegooseOptions;
     const objectId = new mongoose.Types.ObjectId(id);
     const data: ICategory | null = await CategoryModel.findOne({
       _id: objectId,
     });
+
+    if (data && data._id && searchOptions.includeProducts === true) {
+      const id : string = data._id.toString();
+      /* 
+        idk why it`s don`t work...
+
+        data.products = await ProductModel.find({ categoriesIds: { $in: [id] } });
+      */
+      // temporary
+      data.products = (await ProductModel.find({})).filter(product => product.categoriesIds.includes(id));
+
+      if(searchOptions.includeTop3Products) {
+        data.products = data.products.sort((a,b) => b.totalRating - a.totalRating).slice(0,3);
+      }
+    }
+    
     return data;
   }
 

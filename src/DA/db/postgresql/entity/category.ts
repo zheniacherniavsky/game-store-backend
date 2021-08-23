@@ -4,6 +4,7 @@ import {
   Entity,
   Index,
   ManyToMany,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { ICategory } from '../../../../types/types';
@@ -19,6 +20,6 @@ export class Category implements ICategory {
   @Column()
   displayName: string;
 
-  @ManyToMany((type) => Product, (product) => product.categories)
+  @ManyToMany(() => Product, (product) => product.categories)
   products: Product[];
 }

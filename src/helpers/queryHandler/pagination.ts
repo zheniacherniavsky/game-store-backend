@@ -1,7 +1,7 @@
-import { QueryObject, Result } from '.';
+import { IResultPagination, QueryObject } from '.';
 
-export const paginationQueryHandler = (query?: QueryObject): Result => {
-  const res: Result = {
+export const paginationQueryHandler = (query?: QueryObject): IResultPagination => {
+  const res: IResultPagination = {
     typegooseOptions: {
       pagination: {
         skip: 0,
@@ -10,6 +10,7 @@ export const paginationQueryHandler = (query?: QueryObject): Result => {
     },
     typeOrmOptions: {
       skip: 0,
+      take: 20
     },
   };
 
