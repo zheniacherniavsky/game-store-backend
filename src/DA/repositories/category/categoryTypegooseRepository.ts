@@ -6,8 +6,9 @@ export default class CategoryTypegooseRepository
   implements ICategoryTypegooseRepository
 {
   public async getById(id: string): Promise<ICategory | null> {
+    const objectId = new mongoose.Types.ObjectId(id);
     const data: ICategory | null = await CategoryModel.findOne({
-      _id: new mongoose.Types.ObjectId(id),
+      _id: objectId,
     });
     return data;
   }
