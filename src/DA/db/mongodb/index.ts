@@ -46,7 +46,7 @@ function init(): void {
 
       new ProductModel({
         displayName: 'Battlefield 4',
-        categoryIds: [shooter, arcade],
+        categories: [shooter, arcade],
         createdAt: new Date(),
         totalRating: 8,
         price: 29,
@@ -54,7 +54,7 @@ function init(): void {
 
       new ProductModel({
         displayName: 'Chess',
-        categoryIds: [board],
+        categories: [board],
         createdAt: new Date(),
         totalRating: 8,
         price: 0,

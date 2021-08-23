@@ -1,6 +1,6 @@
 import { mongoose } from '@typegoose/typegoose';
 import { ICategory, ICategoryTypegooseRepository } from '../../../types/types';
-import { CategoryModel } from '../../db/mongodb/models/category';
+import { Category, CategoryModel } from '../../db/mongodb/models/category';
 
 export default class CategoryTypegooseRepository
   implements ICategoryTypegooseRepository
@@ -15,7 +15,7 @@ export default class CategoryTypegooseRepository
   public async update(entity: ICategory): Promise<boolean> {
     const data: ICategory | null = await CategoryModel.findOneAndUpdate(
       { _id: entity._id },
-      entity,
+      entity as Category,
     );
     return data ? true : false;
   }

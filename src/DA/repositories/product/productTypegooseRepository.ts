@@ -6,7 +6,7 @@ import {
 } from '../../../helpers/queryHandler';
 import { paginationQueryHandler } from '../../../helpers/queryHandler/pagination';
 import { IProduct, IProductTypegooseRepository } from '../../../types/types';
-import { ProductModel } from '../../db/mongodb/models/product';
+import { Product, ProductModel } from '../../db/mongodb/models/product';
 
 export default class ProductTypegooseRepository
   implements IProductTypegooseRepository
@@ -21,7 +21,7 @@ export default class ProductTypegooseRepository
   public async update(entity: IProduct): Promise<boolean> {
     const data: IProduct | null = await ProductModel.findOneAndUpdate(
       { _id: entity._id },
-      entity,
+      entity as Product,
     );
     return data ? true : false;
   }
@@ -52,8 +52,6 @@ export default class ProductTypegooseRepository
       searchOptions = typegooseOptions.find;
       sortOptions = typegooseOptions.sort;
     }
-
-    console.log(pagination);
 
     const data: IProduct[] = await ProductModel.find({
       ...searchOptions,

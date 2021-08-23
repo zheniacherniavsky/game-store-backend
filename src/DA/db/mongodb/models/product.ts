@@ -3,10 +3,8 @@ import {
   prop,
   modelOptions,
   Severity,
-  Ref,
   index,
 } from '@typegoose/typegoose';
-import { WhatIsIt } from '@typegoose/typegoose/lib/internal/constants';
 import { IProduct } from '../../../../types/types';
 import { Category } from './category';
 
@@ -17,8 +15,8 @@ export class Product implements IProduct {
   @prop()
   public displayName: string;
 
-  @prop({ ref: () => Category, default: [] }, WhatIsIt.ARRAY)
-  public categoryIds: Ref<Category>[];
+  @prop({default: []})
+  public categories: Category[];
 
   @prop()
   public createdAt: Date;

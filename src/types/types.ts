@@ -1,4 +1,3 @@
-import { Ref } from '@typegoose/typegoose/lib/types';
 import { ObjectId } from 'mongoose';
 import { QueryObject } from '../helpers/queryHandler';
 
@@ -9,13 +8,13 @@ export interface IProduct {
   createdAt: Date;
   totalRating: number;
   price: number;
-  categories?: ICategory[];
-  categoryIds?: Ref<ICategory>[];
+  categories: ICategory[];
 }
 
 export interface ICategory {
   _id?: ObjectId | string;
   displayName: string;
+  products?: IProduct[]
 }
 
 interface Repository<T> {
