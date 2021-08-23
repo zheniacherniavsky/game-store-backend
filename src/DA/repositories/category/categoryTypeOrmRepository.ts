@@ -10,7 +10,9 @@ export default class CategoryTypeOrmRepository
   public async getById(id: string, query?: QueryObject): Promise<ICategory | null> {
     const searchParams = categorySearchQueryHandler(query).typeOrmOptions;
     const data: ICategory | undefined = await getRepository(Category).findOne({
-      _id: id,
+      where: {
+        _id: id,
+      },
       ...searchParams,
     });
 
