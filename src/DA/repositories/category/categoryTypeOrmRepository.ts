@@ -8,17 +8,19 @@ export default class CategoryTypeOrmRepository
   implements ICategoryRepository
 {
   public async getById(id: string, query?: QueryObject): Promise<ICategory | null> {
-    const searchParams = categorySearchQueryHandler(query).typeOrmOptions;
-    const data: ICategory | undefined = await getRepository(Category).findOne({
-      where: {
-        _id: id,
-      },
-      ...searchParams,
-    });
+    const searchParams = categorySearchQueryHandler(query);
 
-    if (searchParams.includeTop3Products === true && data !== undefined) {
-      data.products = data.products?.sort((a,b) => b.totalRating - a.totalRating).slice(0,3);
-    } 
+    const myQuery = getRepository(Category)
+      .createQueryBuilder('category')
+      .where('category._id = :id', {id});
+
+    if(searchParams.includeProducts === true) {
+      myQuery.innerJoinAndSelect('category.products', 'products');
+
+      if(searchParams.includeTop3Products === true) myQuery.orderBy('products.totalRating', "DESC").limit(3);
+    }
+
+    const data = await myQuery.getOne();
 
     return data ? data : null;
   }
@@ -41,11 +43,8 @@ export default class CategoryTypeOrmRepository
     return data;
   }
 
-  public async getAll(query?: QueryObject): Promise<ICategory[]> {
-    const searchOptions = categorySearchQueryHandler(query).typeOrmOptions;
-    const data: ICategory[] = await getRepository(Category).find({
-      ...searchOptions,
-    });
+  public async getAll(): Promise<ICategory[]> {
+    const data: ICategory[] = await getRepository(Category).find({});
 
     return data;
   }

@@ -2,14 +2,8 @@ import { IResultCategory, QueryObject,  } from ".";
 
 export const categorySearchQueryHandler = (query?: QueryObject): IResultCategory => {
   const res: IResultCategory = {
-    typegooseOptions: {
-      includeProducts: false,
-      includeTop3Products: false,
-    },
-    typeOrmOptions: {
-      relations: [],
-      includeTop3Products: {},
-    },
+    includeProducts: false,
+    includeTop3Products: false,
   };
 
   if(query === undefined) return res;
@@ -19,13 +13,11 @@ export const categorySearchQueryHandler = (query?: QueryObject): IResultCategory
     (query.includeProducts === 'true' || query.includeProducts === 'false')
   ) {
     const includeProducts = Boolean(query.includeProducts);
-    res.typegooseOptions.includeProducts = includeProducts;
-    res.typeOrmOptions.relations.push('products');
+    res.includeProducts = includeProducts;
   } 
 
   if (query.includeTop3Products !== undefined && query.includeTop3Products === 'top') {
-    res.typegooseOptions.includeTop3Products = true;
-    res.typeOrmOptions.includeTop3Products = true;
+    res.includeTop3Products = true;
   }
 
   return res;

@@ -15,15 +15,8 @@ export interface IResultProduct {
 }
 
 export interface IResultCategory {
-  typegooseOptions: {
-    includeProducts: boolean;
-    includeTop3Products: boolean;
-  };
-
-  typeOrmOptions: {
-    relations: string[];
-    includeTop3Products: any;
-  };
+  includeProducts: boolean;
+  includeTop3Products: boolean;
 }
 
 export interface IResultPagination {
