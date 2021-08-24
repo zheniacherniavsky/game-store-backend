@@ -11,24 +11,28 @@ export default class CategoryTypegooseRepository
   public async getById(id: string, query?: QueryObject): Promise<ICategory | null> {
     const searchOptions = categorySearchQueryHandler(query);
     const objectId = new mongoose.Types.ObjectId(id);
+
     const data: ICategory | null = await CategoryModel.findOne({
       _id: objectId,
     });
 
-    // if (data && data._id && searchOptions.includeProducts === true) {
-    //   const id : string = data._id.toString();
-    //   /* 
-    //     idk why it`s don`t work...
+    if (searchOptions.includeProducts === true && data !== null) {
+      let additionalProducts;
 
-    //     data.products = await ProductModel.find({ categoriesIds: { $in: [id] } });
-    //   */
-    //   // temporary
-    //   data.products = (await ProductModel.find({})).filter(product => product.categoriesIds.includes(id));
+      if(searchOptions.includeTop3Products === false) {
+        additionalProducts = await ProductModel.find({
+          categoriesIds: id,
+        });
+      } 
+      else {
+        additionalProducts = await ProductModel.find({
+          categoriesIds: id,
+        }).sort([["totalRating", "DESC"]]).limit(3);
+      }
 
-    //   if(searchOptions.includeTop3Products) {
-    //     data.products = data.products.sort((a,b) => b.totalRating - a.totalRating).slice(0,3);
-    //   }
-    // }
+      data.products = additionalProducts;
+    }
+      
     
     return data;
   }

@@ -5,6 +5,7 @@ import {
   Severity,
   index,
 } from '@typegoose/typegoose';
+import { WhatIsIt } from '@typegoose/typegoose/lib/internal/constants';
 import { IProduct } from '../../../../types/types';
 
 @index({ displayName: 1 }, { unique: true })
@@ -14,7 +15,7 @@ export class Product implements IProduct {
   @prop()
   public displayName: string;
 
-  @prop({default: []})
+  @prop({default: []}, WhatIsIt.ARRAY)
   public categoriesIds: string[];
 
   @prop()
