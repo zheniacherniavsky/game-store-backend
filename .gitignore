@@ -1,2 +1,12 @@
 node_modules
 dist
+
+# used in ormconfig.js
+secretData.js
+
+# const data = {
+#   PG_DB_USERNAME: 'name',
+#   PG_DB_PASSWORD: 'password',
+# };
+
+# module.exports = data;

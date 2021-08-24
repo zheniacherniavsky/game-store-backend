@@ -12,6 +12,7 @@ export const connectMongoDb = (): void => {
       useNewUrlParser: true,
       useUnifiedTopology: true,
       useFindAndModify: false,
+      useCreateIndex: true,
     });
     const db = mongoose.connection;
     db.on('error', console.error.bind(console, 'connection error:'));
@@ -45,15 +46,31 @@ function init(): void {
 
       new ProductModel({
         displayName: 'Battlefield 4',
-        categoryIds: [shooter, arcade],
+        categoriesIds: [shooter._id.toString(), arcade._id.toString()],
         createdAt: new Date(),
         totalRating: 8,
         price: 29,
       }).save();
 
       new ProductModel({
+        displayName: 'Battlefield 1',
+        categoriesIds: [shooter._id.toString(), arcade._id.toString()],
+        createdAt: new Date(),
+        totalRating: 5,
+        price: 29,
+      }).save();
+
+      new ProductModel({
+        displayName: 'Battlefield 2',
+        categoriesIds: [shooter._id.toString(), arcade._id.toString()],
+        createdAt: new Date(),
+        totalRating: 9,
+        price: 29,
+      }).save();
+
+      new ProductModel({
         displayName: 'Chess',
-        categoryIds: [board],
+        categoriesIds: [shooter._id.toString()],
         createdAt: new Date(),
         totalRating: 8,
         price: 0,

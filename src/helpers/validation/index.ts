@@ -1,8 +1,7 @@
 import { validateProduct } from './product';
 
 export type Result = {
-  isValid: boolean;
-  error: string;
+  errors: string[];
 };
 
 export { validateProduct };
