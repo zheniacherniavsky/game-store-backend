@@ -1,11 +1,11 @@
 import { getRepository } from 'typeorm';
 import { QueryObject } from '../../../helpers/queryHandler';
 import { categorySearchQueryHandler } from '../../../helpers/queryHandler/category';
-import { ICategoryTypeOrmRepository, ICategory } from '../../../types/types';
+import { ICategory, ICategoryRepository } from '../../../types/types';
 import { Category } from '../../db/postgresql/entity/category';
 
 export default class CategoryTypeOrmRepository
-  implements ICategoryTypeOrmRepository
+  implements ICategoryRepository
 {
   public async getById(id: string, query?: QueryObject): Promise<ICategory | null> {
     const searchParams = categorySearchQueryHandler(query).typeOrmOptions;

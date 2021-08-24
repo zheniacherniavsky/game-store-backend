@@ -1,12 +1,12 @@
 import { mongoose } from '@typegoose/typegoose';
 import { QueryObject } from '../../../helpers/queryHandler';
 import { categorySearchQueryHandler } from '../../../helpers/queryHandler/category';
-import { ICategory, ICategoryTypegooseRepository } from '../../../types/types';
+import { ICategory, ICategoryRepository } from '../../../types/types';
 import { Category, CategoryModel } from '../../db/mongodb/models/category';
 import { ProductModel } from '../../db/mongodb/models/product';
 
 export default class CategoryTypegooseRepository
-  implements ICategoryTypegooseRepository
+  implements ICategoryRepository
 {
   public async getById(id: string, query?: QueryObject): Promise<ICategory | null> {
     const searchOptions = categorySearchQueryHandler(query).typegooseOptions;

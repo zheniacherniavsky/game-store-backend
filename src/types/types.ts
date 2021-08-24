@@ -28,11 +28,3 @@ interface Repository<T> {
 
 export interface IProductRepository extends Repository<IProduct> {}
 export interface ICategoryRepository extends Repository<ICategory> {}
-
-export interface IProductTypeOrmRepository extends IProductRepository {}
-
-export interface IProductTypegooseRepository extends IProductRepository {}
-
-export interface ICategoryTypeOrmRepository extends ICategoryRepository {}
-
-export interface ICategoryTypegooseRepository extends ICategoryRepository {}

@@ -5,11 +5,11 @@ import {
   QueryObject,
 } from '../../../helpers/queryHandler';
 import { paginationQueryHandler } from '../../../helpers/queryHandler/pagination';
-import { IProduct, IProductTypegooseRepository } from '../../../types/types';
+import { IProduct, IProductRepository } from '../../../types/types';
 import { Product, ProductModel } from '../../db/mongodb/models/product';
 
 export default class ProductTypegooseRepository
-  implements IProductTypegooseRepository
+  implements IProductRepository
 {
   public async getById(id: string): Promise<IProduct | null> {
     const data: IProduct | null = await ProductModel.findOne({

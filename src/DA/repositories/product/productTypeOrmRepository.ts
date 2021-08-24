@@ -4,11 +4,11 @@ import {
   QueryObject,
 } from '../../../helpers/queryHandler';
 import { paginationQueryHandler } from '../../../helpers/queryHandler/pagination';
-import { IProduct, IProductTypeOrmRepository } from '../../../types/types';
+import { IProduct, IProductRepository } from '../../../types/types';
 import { Product } from '../../db/postgresql/entity/product';
 
 export default class ProductTypeOrmRepository
-  implements IProductTypeOrmRepository
+  implements IProductRepository
 {
   public async getById(id: string): Promise<IProduct | null> {
     const data: IProduct | undefined = await getRepository(Product).findOne({
