@@ -10,7 +10,9 @@ export const ProductRouter = (router: Router): void => {
       const products = await ProductRepository.getAll(query);
       res.status(200).send(products);
     } catch (err) {
-      res.status(500).send('Error getting products');
+      res
+        .status(err.status || 500)
+        .send('Error getting products: ' + err.message);
     }
   });
 

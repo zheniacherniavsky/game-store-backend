@@ -1,7 +1,9 @@
 import { IResultProduct, QueryObject } from '.';
 import { Between, ILike, MoreThanOrEqual } from 'typeorm';
 
-export const productSearchQueryHandler = (query?: QueryObject): IResultProduct => {
+export const productSearchQueryHandler = (
+  query?: QueryObject,
+): IResultProduct => {
   const res: IResultProduct = {
     typegooseOptions: {
       find: {},
@@ -24,10 +26,16 @@ export const productSearchQueryHandler = (query?: QueryObject): IResultProduct =
   }
 
   if (query.minRating !== undefined) {
-    res.typegooseOptions.find.totalRating = {
-      $gte: query.minRating,
-    };
-    res.typeOrmOptions.where.totalRating = MoreThanOrEqual(query.minRating);
+    if (!isNaN(parseInt(query.minRating))) {
+      res.typegooseOptions.find.totalRating = {
+        $gte: query.minRating,
+      };
+      res.typeOrmOptions.where.totalRating = MoreThanOrEqual(query.minRating);
+    } else
+      throw {
+        message: 'the query minRating must be a number',
+        status: 400,
+      };
   }
 
   if (query.price !== undefined) {
@@ -41,19 +49,29 @@ export const productSearchQueryHandler = (query?: QueryObject): IResultProduct =
         $lte: max,
       };
       res.typeOrmOptions.where.price = Between(isNaN(min) ? 0 : min, max);
-    }
+    } else
+      throw {
+        message:
+          "the query price must be in the format: 'number:number' or ':number'",
+        status: 400,
+      };
   }
 
   if (query.sortBy !== undefined) {
     const regex = new RegExp(/\w+:(desc|asc)+/gm);
     const sortOption = query.sortBy.match(regex);
-    if (sortOption) {
+    if (sortOption !== null) {
       const [option, type] = sortOption[0].split(':');
       const order = type === 'desc' ? -1 : 1;
 
       res.typegooseOptions.sort = [[option, order]];
       res.typeOrmOptions.order[option] = type.toUpperCase();
-    }
+    } else
+      throw {
+        message:
+          "the query sortBy must be in the format: 'option:(desc|asc)'\nAvailable options: price, createdAt",
+        status: 400,
+      };
   }
   return res;
 };
