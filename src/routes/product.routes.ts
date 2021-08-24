@@ -25,15 +25,13 @@ export const ProductRouter = (router: Router): void => {
         price: req.body.price,
         totalRating: req.body.totalRating,
       };
-      const validateResult = validateProduct(product);
-      if (validateResult.errors.length !== 0)
-        res.status(400).send(validateResult.errors);
-      else {
-        await ProductRepository.create(product);
-        res.status(200).send('Product was created');
-      }
+      validateProduct(product);
+      await ProductRepository.create(product);
+      res.status(200).send('Product was created');
     } catch (err) {
-      res.status(500).send(`Error creating product: ${err.message}`);
+      res
+        .status(err.status || 500)
+        .send('Error creating product: ' + err.message);
     }
   });
 };
