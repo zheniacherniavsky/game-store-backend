@@ -19,6 +19,11 @@ app.use('/', router);
 ProductRouter(router);
 CategoryRouter(router);
 
+app.use((req, res) => {
+  res.status(404);
+  res.json({error: "Not found!"});
+});
+
 app.listen(port, () => {
   console.log(`Server is running at http://localhost:${port}`);
 });
