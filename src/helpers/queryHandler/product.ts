@@ -33,7 +33,7 @@ export const productSearchQueryHandler = (
       res.typeOrmOptions.where.totalRating = MoreThanOrEqual(query.minRating);
     } else
       throw {
-        message: 'the query minRating must be a number',
+        message: 'Product query handler: the query minRating must be a number',
         status: 400,
       };
   }
@@ -52,7 +52,7 @@ export const productSearchQueryHandler = (
     } else
       throw {
         message:
-          "the query price must be in the format: 'number:number' or ':number'",
+          "Product query handler: the query price must be in the format: 'number:number' or ':number'",
         status: 400,
       };
   }
@@ -69,7 +69,7 @@ export const productSearchQueryHandler = (
     } else
       throw {
         message:
-          "the query sortBy must be in the format: 'option:(desc|asc)'\nAvailable options: price, createdAt",
+          "Product query handler: the query sortBy must be in the format: 'option:(desc|asc)'. Available options: price, createdAt",
         status: 400,
       };
   }

@@ -12,7 +12,7 @@ export const validateProduct = (product: IProduct): void => {
 
   if (errors.length !== 0) {
     throw {
-      message: errors.join('\n'),
+      message: errors,
       status: 400,
     };
   }

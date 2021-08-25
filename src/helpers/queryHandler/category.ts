@@ -16,7 +16,8 @@ export const categorySearchQueryHandler = (
       res.includeProducts = includeProducts;
     } else
       throw {
-        message: 'the query includeProducts must be a boolean',
+        message:
+          'Category query handler: the query includeProducts must be a boolean',
         status: 400,
       };
   }
@@ -25,7 +26,8 @@ export const categorySearchQueryHandler = (
     if (query.includeTop3Products === 'top') res.includeTop3Products = true;
     else
       throw {
-        message: "the query includeTop3Products must be: 'top'",
+        message:
+          "Category query handler: the query includeTop3Products must be: 'top'",
         status: 400,
       };
   }

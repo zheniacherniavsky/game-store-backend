@@ -10,9 +10,9 @@ export const ProductRouter = (router: Router): void => {
       const products = await ProductRepository.getAll(query);
       res.status(200).send(products);
     } catch (err) {
-      res
-        .status(err.status || 500)
-        .send('Error getting products: ' + err.message);
+      res.status(err.status || 500).json({
+        error: err.message,
+      });
     }
   });
 
@@ -26,12 +26,12 @@ export const ProductRouter = (router: Router): void => {
         totalRating: req.body.totalRating,
       };
       validateProduct(product);
-      await ProductRepository.create(product);
-      res.status(200).send('Product was created');
+      const newProduct = await ProductRepository.create(product);
+      res.status(200).send(newProduct);
     } catch (err) {
-      res
-        .status(err.status || 500)
-        .send('Error creating product: ' + err.message);
+      res.status(err.status || 500).json({
+        error: err.message,
+      });
     }
   });
 };
