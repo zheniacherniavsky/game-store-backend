@@ -4,19 +4,19 @@ import { validateProduct } from '../helpers/validation';
 import { IProduct } from '../types/types';
 
 export const ProductRouter = (router: Router): void => {
-  router.get('/products', async (req: Request, res: Response) => {
+  router.get('/products', async (req: Request, res: Response, next) => {
     const { query } = req;
     try {
       const products = await ProductRepository.getAll(query);
       res.status(200).send(products);
     } catch (err) {
-      res.status(err.status || 500).json({
-        error: err.message,
-      });
+      next(err);
     }
+    
+    next();
   });
 
-  router.post('/products/create', async (req: Request, res: Response) => {
+  router.post('/products/create', async (req: Request, res: Response, next) => {
     try {
       const product: IProduct = {
         displayName: req.body.displayName,
@@ -29,9 +29,9 @@ export const ProductRouter = (router: Router): void => {
       const newProduct = await ProductRepository.create(product);
       res.status(200).send(newProduct);
     } catch (err) {
-      res.status(err.status || 500).json({
-        error: err.message,
-      });
+      next(err);
     }
+
+    next();
   });
 };

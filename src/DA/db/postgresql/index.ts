@@ -1,16 +1,22 @@
 import { createConnection, getRepository } from 'typeorm';
-import { dbLog } from '../common';
+import logger from '../../../helpers/logger';
 import { Category } from './entity/category';
 import { Product } from './entity/product';
 
 export const connectPostgreSQL = async (): Promise<void> => {
   await createConnection()
     .then(() => {
-      dbLog('Connection', 'Connected to PostgreSQL');
+      logger.log({
+        level: 'info',
+        message: 'Connected to PostgreSQL!',
+      });
       init();
     })
     .catch((err) => {
-      dbLog('Connection', err.message);
+      logger.log({
+        level: 'error',
+        message: "PostgreSQL: " + err.message,
+      });
     });
 };
 
@@ -18,10 +24,11 @@ async function init(): Promise<void> {
   const categoryRepository = getRepository(Category);
   const categories = await categoryRepository.find();
   if (categories.length === 0) {
-    dbLog(
-      'Initialization',
-      'No categories found, creating default categories with products...',
-    );
+    logger.log({
+      level: 'info',
+      message:
+        'PostgreSQL initialization - no categories found, creating default categories with products...',
+    });
 
     const category = new Category();
     category.displayName = 'Shooter';
@@ -60,7 +67,10 @@ async function init(): Promise<void> {
       await productsRepository.save(product3);
       await productsRepository.save(product4);
 
-      dbLog('Initialization', 'Data initialized!');
+      logger.log({
+        level: 'info',
+        message: 'PostgreSQL initialization - data initialized!',
+      });
     });
   }
 }

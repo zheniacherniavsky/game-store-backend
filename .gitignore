@@ -10,3 +10,7 @@ secretData.js
 # };
 
 # module.exports = data;
+
+# logs
+combined.log
+error.log
