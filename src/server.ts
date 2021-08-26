@@ -36,10 +36,11 @@ app.use((req, res) => {
   res.json({ error: 'Not found!' });
 });
 
-
-
 app.use(errorHandler);
 
 app.listen(port, () => {
-  console.log(`Server is running at http://localhost:${port}`);
+  logger.log({
+    level: 'info',
+    message: `Server is running at http://localhost:${port}`,
+  });
 });
