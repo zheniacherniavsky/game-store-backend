@@ -1,5 +1,6 @@
 import { IResultProduct, QueryObject } from '.';
 import { Between, ILike, MoreThanOrEqual } from 'typeorm';
+import { ResponseError } from '../errorHandler';
 
 export const productSearchQueryHandler = (
   query?: QueryObject,
@@ -31,11 +32,7 @@ export const productSearchQueryHandler = (
         $gte: query.minRating,
       };
       res.typeOrmOptions.where.totalRating = MoreThanOrEqual(query.minRating);
-    } else
-      throw {
-        message: 'Product query handler: the query minRating must be a number',
-        status: 400,
-      };
+    } else throw new ResponseError(400, 'Product query handler: the query minRating must be a number');
   }
 
   if (query.price !== undefined) {
@@ -49,12 +46,7 @@ export const productSearchQueryHandler = (
         $lte: max,
       };
       res.typeOrmOptions.where.price = Between(isNaN(min) ? 0 : min, max);
-    } else
-      throw {
-        message:
-          "Product query handler: the query price must be in the format: 'number:number' or ':number'",
-        status: 400,
-      };
+    } else throw new ResponseError(400, "Product query handler: the query price must be in the format: 'number:number' or ':number'");
   }
 
   if (query.sortBy !== undefined) {
@@ -66,12 +58,10 @@ export const productSearchQueryHandler = (
 
       res.typegooseOptions.sort = [[option, order]];
       res.typeOrmOptions.order[option] = type.toUpperCase();
-    } else
-      throw {
-        message:
-          "Product query handler: the query sortBy must be in the format: 'option:(desc|asc)'. Available options: price, createdAt",
-        status: 400,
-      };
+    } else throw new ResponseError(
+      400,
+      "Product query handler: the query sortBy must be in the format: 'option:(desc|asc)'. Available options: price, createdAt",
+    );
   }
   return res;
 };
