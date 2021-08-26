@@ -23,12 +23,20 @@ app.use('/', router);
 ProductRouter(router);
 CategoryRouter(router);
 
-app.use((req, res) => {
-  console.log(res.writableEnded);
-  logger.log({
-    level: 'info',
-    message: `New request from ${req.url}.`,
-  });
+app.use((req, res, next) => {
+  if (res.writableEnded) {
+    logger.log({
+      level: 'info',
+      message: `New request from ${req.url}. Response status is ${res.statusCode}.`,
+    });
+  } else {
+    logger.log({
+      level: 'warn',
+      message: `New request from ${req.url}. Response status is 404, route was not found.`,
+    });
+    
+    next();
+  }
 });
 
 app.use((req, res) => {
