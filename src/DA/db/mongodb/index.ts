@@ -7,6 +7,10 @@ import { dbLog } from '../common';
 export const connectMongoDb = (): void => {
   const connectionString: string = process.env.MONGODB_CONNECTION_STRING || '';
 
+  if(process.env.TS_NODE_DEV) {
+    mongoose.set("debug", true);
+  }
+
   if (connectionString !== '') {
     mongoose.connect(connectionString, {
       useNewUrlParser: true,

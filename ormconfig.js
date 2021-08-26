@@ -10,7 +10,7 @@ const srcConfig = {
   password: data.PG_DB_PASSWORD || '',
   database: process.env.PG_DB_DATABASE,
   synchronize: true,
-  logging: false,
+  logging: true,
   entities: [__dirname + '/src/DA/db/postgresql/entity/**/*.ts'],
   migrations: [__dirname + '/src/DA/db/postgresql/migration/**/*.ts'],
   subscribers: [__dirname + '/src/DA/db/postgresql/subscriber/**/*.ts'],
