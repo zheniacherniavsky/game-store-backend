@@ -3,7 +3,7 @@ interface signUpData {
   password: string;
 }
 
-export const validateSignUpData = (data: signUpData): void => {
+export const validateAccountCredentials = (data: signUpData): void => {
   const errors: string[] = [];
 
   if (!data.username) errors.push('username is invalid!');
