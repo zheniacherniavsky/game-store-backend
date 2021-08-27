@@ -18,6 +18,12 @@ export interface ICategory {
   products?: IProduct[]
 }
 
+export interface IAccount {
+  _id?: ObjectId | string;
+  username: string;
+  password: string;
+}
+
 interface Repository<T> {
   getAll: (query?: QueryObject) => Promise<T[]>;
   getById: (id: string, query?: QueryObject) => Promise<T | null>;
