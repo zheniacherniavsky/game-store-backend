@@ -43,12 +43,12 @@ export default class AccountTypegooseRepository implements IAccountRepository {
   public async authenticate(
     username: string,
     password: string,
-  ): Promise<string | null> {
+  ): Promise<IAccount | null> {
     const account: IAccount | null = await AccountModel.findOne({
       username,
     });
     if (account && (await compareHashedData(password, account.password)))
-      return 'token';
+      return account;
     else return null;
   }
 }

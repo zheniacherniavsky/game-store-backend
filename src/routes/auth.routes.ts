@@ -1,7 +1,9 @@
 import { Router } from 'express';
 import { AccountRepository } from '../DA';
-import { ResponseError } from '../helpers/errorHandler';
 import { validateAccountCredentials } from '../helpers/validation';
+import jwt from 'jsonwebtoken';
+import passport from 'passport';
+import { ResponseError } from '../helpers/errorHandler';
 
 export const AuthRouter = (router: Router): void => {
   router.post('/register', async (req, res, next) => {
@@ -17,17 +19,25 @@ export const AuthRouter = (router: Router): void => {
     next();
   });
 
-  router.post('/authenticate', async (req, res, next) => {
-    try {
-      const { username, password } = req.body;
-      validateAccountCredentials({ username, password });
-      const token = await AccountRepository.authenticate(username, password);
-      if (token !== null) {
-        res.status(200).json({ token });
-      } else next(new ResponseError(404, 'Account was not found!'));
-    } catch (err) {
-      next(err);
-    }
-    next();
+  router.post('/authenticate', (req, res, next) => {
+    const { username, password } = req.body;
+    validateAccountCredentials({ username, password });
+    passport.authenticate('local', { session: false }, (err, account, info) => {
+      if (err || !account) {
+        return res.status(info !== undefined ? 400 : 500).json({
+          error: 'Something is not right!',
+          info: info || 'server error',
+        });
+      }
+
+      return req.login(account, { session: false }, (err) => {
+        if (err) {
+          return res.send(err);
+        }
+
+        const token = jwt.sign(account.toJSON(), 'authtoken');
+        return res.json({ account, token });
+      });
+    })(req, res);
   });
 };

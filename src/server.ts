@@ -18,8 +18,9 @@ const router = express.Router();
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-
 app.use('/', router);
+
+import './config/passport';
 
 AuthRouter(router);
 ProductRouter(router);
