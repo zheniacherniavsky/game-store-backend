@@ -1,6 +1,7 @@
-import { Column, Index, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, Index, PrimaryGeneratedColumn } from 'typeorm';
 import { IAccount } from '../../../../types/types';
 
+@Entity('account')
 export class Account implements IAccount {
   @Index({ unique: true })
   @PrimaryGeneratedColumn()

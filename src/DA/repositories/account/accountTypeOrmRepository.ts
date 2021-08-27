@@ -1,4 +1,5 @@
 import { getRepository } from 'typeorm';
+import { hashData } from '../../../helpers/hash';
 import { IAccount, IAccountRepository } from '../../../types/types';
 import { Account } from '../../db/postgresql/entity/account';
 
@@ -23,8 +24,12 @@ export default class AccountTypeOrmRepository implements IAccountRepository {
   }
 
   public async create(entity: IAccount): Promise<IAccount> {
-    const data = await getRepository(Account).save(entity as Account);
-    return data;
+    const hashedPassword = await hashData(entity.password);
+    await getRepository(Account).save({
+      ...entity,
+      password: hashedPassword,
+    } as Account);
+    return entity;
   }
 
   public async getAll(): Promise<IAccount[]> {
