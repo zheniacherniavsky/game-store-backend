@@ -34,3 +34,4 @@ interface Repository<T> {
 
 export interface IProductRepository extends Repository<IProduct> {}
 export interface ICategoryRepository extends Repository<ICategory> {}
+export interface IAccountRepository extends Repository<IAccount> {}
