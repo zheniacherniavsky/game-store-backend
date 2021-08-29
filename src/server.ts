@@ -11,6 +11,7 @@ import { CategoryRouter } from './routes/category.routes';
 import logger from './helpers/logger';
 import { errorHandler } from './helpers/errorHandler';
 import { AuthRouter } from './routes/auth.routes';
+import { ProfileRouter } from './routes/profile.routes';
 
 const port = process.env.SRV_PORT;
 const app = express();
@@ -23,6 +24,7 @@ app.use('/', router);
 import './config/passport';
 
 AuthRouter(router);
+ProfileRouter(router);
 ProductRouter(router);
 CategoryRouter(router);
 

@@ -13,4 +13,10 @@ export class Account implements IAccount {
 
   @Column()
   password: string;
+
+  @Column()
+  firstName: string;
+
+  @Column()
+  lastName: string;
 }

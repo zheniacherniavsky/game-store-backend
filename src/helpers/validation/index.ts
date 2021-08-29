@@ -1,4 +1,4 @@
-import { validateAccountCredentials } from './accountCredentials';
+import { validateAccount } from './account';
 import { validateProduct } from './product';
 
-export { validateProduct, validateAccountCredentials };
+export { validateProduct, validateAccount };

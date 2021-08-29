@@ -1,12 +1,14 @@
-interface signUpData {
-  username: string;
-  password: string;
+interface IValidateAccount {
+  username: string | null;
+  password: string | null;
+  firstName: string | null;
+  lastName: string | null;
 }
 
-export const validateAccountCredentials = (data: signUpData): void => {
+export const validateAccount = (data: IValidateAccount): void => {
   const errors: string[] = [];
 
-  if (!data.username) errors.push('username is invalid!');
+  if (data.username === undefined) errors.push('username is invalid!');
   if (data.password) {
     const password = data.password.toString();
     if (password.length < 8) errors.push('min password length is 8');
@@ -19,7 +21,10 @@ export const validateAccountCredentials = (data: signUpData): void => {
       errors.push(
         'the password must consist of letters of the Latin alphabet and contain at least one capital letter and one number ',
       );
-  } else errors.push('password is invalid!');
+  } else if (data.password === undefined) errors.push('password is invalid!');
+
+  if (data.firstName === undefined) errors.push('firstName is invalid!');
+  if (data.lastName === undefined) errors.push('lastName is invalid!');
 
   if (errors.length !== 0) {
     throw {

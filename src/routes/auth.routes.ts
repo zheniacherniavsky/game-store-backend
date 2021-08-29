@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { AccountRepository } from '../DA';
-import { validateAccountCredentials } from '../helpers/validation';
+import { validateAccount } from '../helpers/validation';
 import jwt from 'jsonwebtoken';
 import passport from 'passport';
 import randtoken from 'rand-token';
@@ -12,9 +12,14 @@ const refreshTokens: { [key: string]: string } = {};
 export const AuthRouter = (router: Router): void => {
   router.post('/register', async (req, res, next) => {
     try {
-      const { username, password } = req.body;
-      validateAccountCredentials({ username, password });
-      const newAccount = await AccountRepository.create({ username, password });
+      const { username, password, firstName, lastName } = req.body;
+      validateAccount({ username, password, firstName, lastName });
+      const newAccount = await AccountRepository.create({
+        username,
+        password,
+        firstName,
+        lastName,
+      });
       res.status(200).send(newAccount);
     } catch (err) {
       next(err);
@@ -25,7 +30,7 @@ export const AuthRouter = (router: Router): void => {
 
   router.post('/authenticate', (req, res) => {
     const { username, password } = req.body;
-    validateAccountCredentials({ username, password });
+    validateAccount({ username, password, firstName: null, lastName: null });
     passport.authenticate('local', { session: false }, (err, account, info) => {
       if (err || !account) {
         return res.status(info !== undefined ? 400 : 500).json({
@@ -39,9 +44,13 @@ export const AuthRouter = (router: Router): void => {
           return res.json({ error: err });
         }
 
-        const token = jwt.sign(account.toJSON(), SECRET_AUTH, {
-          expiresIn: 600,
-        });
+        const token = jwt.sign(
+          JSON.parse(JSON.stringify(account)),
+          SECRET_AUTH,
+          {
+            expiresIn: 600,
+          },
+        );
         const refreshToken = randtoken.uid(24);
         refreshTokens[refreshToken] = account.username;
         return res.json({
