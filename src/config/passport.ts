@@ -2,6 +2,7 @@ import passport from 'passport';
 import { Strategy as LocalStrategy } from 'passport-local';
 import passportJWT from 'passport-jwt';
 import { AccountRepository } from '../DA';
+import { SECRET_AUTH } from './secretToken';
 const JWTStrategy = passportJWT.Strategy;
 const ExtractJWT = passportJWT.ExtractJwt;
 
@@ -24,7 +25,7 @@ passport.use(
   new JWTStrategy(
     {
       jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
-      secretOrKey: 'authtoken',
+      secretOrKey: SECRET_AUTH,
     },
     function (jwtPayload, cb) {
       return AccountRepository.getById(jwtPayload._id)

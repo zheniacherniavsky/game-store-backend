@@ -3,7 +3,11 @@ import { AccountRepository } from '../DA';
 import { validateAccountCredentials } from '../helpers/validation';
 import jwt from 'jsonwebtoken';
 import passport from 'passport';
+import randtoken from 'rand-token';
 import { ResponseError } from '../helpers/errorHandler';
+import { SECRET_AUTH } from '../config/secretToken';
+
+const refreshTokens: { [key: string]: string } = {};
 
 export const AuthRouter = (router: Router): void => {
   router.post('/register', async (req, res, next) => {
@@ -19,25 +23,67 @@ export const AuthRouter = (router: Router): void => {
     next();
   });
 
-  router.post('/authenticate', (req, res, next) => {
+  router.post('/authenticate', (req, res) => {
     const { username, password } = req.body;
     validateAccountCredentials({ username, password });
     passport.authenticate('local', { session: false }, (err, account, info) => {
       if (err || !account) {
         return res.status(info !== undefined ? 400 : 500).json({
           error: 'Something is not right!',
-          info: info || 'server error',
+          info: info || err.message || 'server error',
         });
       }
 
       return req.login(account, { session: false }, (err) => {
         if (err) {
-          return res.send(err);
+          return res.json({ error: err });
         }
 
-        const token = jwt.sign(account.toJSON(), 'authtoken');
-        return res.json({ account, token });
+        const token = jwt.sign(account.toJSON(), SECRET_AUTH, {
+          expiresIn: 600,
+        });
+        const refreshToken = randtoken.uid(24);
+        refreshTokens[refreshToken] = account.username;
+        return res.json({
+          accountUsername: account.username,
+          token,
+          refreshToken,
+        });
       });
     })(req, res);
+  });
+
+  router.post('/token', async (req, res, next) => {
+    const { username, refreshToken } = req.body;
+
+    if (!username || !refreshToken)
+      next(
+        new ResponseError(400, 'field username of refreshToken is invalid!'),
+      );
+
+    if (refreshTokens[refreshToken] === username) {
+      await AccountRepository.getByUsername(username).then((account) => {
+        if (account === null)
+          return next(
+            new ResponseError(
+              404,
+              `Account with username ${username} was not found`,
+            ),
+          );
+        else {
+          const token = jwt.sign(
+            JSON.parse(JSON.stringify(account)),
+            SECRET_AUTH,
+            {
+              expiresIn: 600,
+            },
+          );
+          return res.json({
+            accountUsername: account.username,
+            token,
+          });
+        }
+      });
+    } else next(new ResponseError(401, 'Refresh token is wrong!'));
   });
 };

@@ -4,12 +4,8 @@ dist
 # used in ormconfig.js
 secretData.js
 
-# const data = {
-#   PG_DB_USERNAME: 'name',
-#   PG_DB_PASSWORD: 'password',
-# };
-
-# module.exports = data;
+# jwt secret
+src/config/secretToken.ts
 
 # logs
 combined.log

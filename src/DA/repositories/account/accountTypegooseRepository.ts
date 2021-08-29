@@ -13,6 +13,14 @@ export default class AccountTypegooseRepository implements IAccountRepository {
     return data;
   }
 
+  public async getByUsername(username: string): Promise<IAccount | null> {
+    const data: IAccount | null = await AccountModel.findOne({
+      username,
+    });
+
+    return data;
+  }
+
   public async update(entity: IAccount): Promise<boolean> {
     const data: IAccount | null = await AccountModel.findOneAndUpdate(
       { _id: entity._id },

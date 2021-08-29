@@ -15,7 +15,7 @@ export interface IProduct {
 export interface ICategory {
   _id?: ObjectId | string;
   displayName: string;
-  products?: IProduct[]
+  products?: IProduct[];
 }
 
 export interface IAccount {
@@ -39,4 +39,5 @@ export interface IAccountRepository extends Repository<IAccount> {
     username: string,
     password: string,
   ) => Promise<IAccount | null>;
+  getByUsername: (username: string) => Promise<IAccount | null>;
 }

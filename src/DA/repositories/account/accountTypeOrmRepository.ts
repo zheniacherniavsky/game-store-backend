@@ -10,6 +10,14 @@ export default class AccountTypeOrmRepository implements IAccountRepository {
     });
     return data ? data : null;
   }
+
+  public async getByUsername(username: string): Promise<IAccount | null> {
+    const data: IAccount | undefined = await getRepository(Account).findOne({
+      username,
+    });
+    return data ? data : null;
+  }
+
   public async update(entity: IAccount): Promise<boolean> {
     await getRepository(Account).update(
       { _id: (entity as Account)._id },
