@@ -1,23 +1,25 @@
 import { getRepository } from 'typeorm';
-import { QueryObject } from '../../../helpers/queryHandler';
+import { CategoryQueryObject } from '../../../helpers/queryHandler';
 import { categorySearchQueryHandler } from '../../../helpers/queryHandler/category';
 import { ICategory, ICategoryRepository } from '../../../types/types';
 import { Category } from '../../db/postgresql/entity/category';
 
-export default class CategoryTypeOrmRepository
-  implements ICategoryRepository
-{
-  public async getById(id: string, query?: QueryObject): Promise<ICategory | null> {
-    const searchParams = categorySearchQueryHandler(query);
+export default class CategoryTypeOrmRepository implements ICategoryRepository {
+  public async getById(
+    id: string,
+    categoryQuery: CategoryQueryObject,
+  ): Promise<ICategory | null> {
+    const searchParams = categorySearchQueryHandler(categoryQuery);
 
     const myQuery = getRepository(Category)
       .createQueryBuilder('category')
-      .where('category._id = :id', {id});
+      .where('category._id = :id', { id });
 
-    if(searchParams.includeProducts === true) {
+    if (searchParams.includeProducts === true) {
       myQuery.innerJoinAndSelect('category.products', 'products');
 
-      if(searchParams.includeTop3Products === true) myQuery.orderBy('products.totalRating', "DESC").limit(3);
+      if (searchParams.includeTop3Products === true)
+        myQuery.orderBy('products.totalRating', 'DESC').limit(3);
     }
 
     const data = await myQuery.getOne();
@@ -43,7 +45,7 @@ export default class CategoryTypeOrmRepository
     return data;
   }
 
-  public async getAll(): Promise<ICategory[]> {
+  public async getCategoriesList(): Promise<ICategory[]> {
     const data: ICategory[] = await getRepository(Category).find({});
 
     return data;

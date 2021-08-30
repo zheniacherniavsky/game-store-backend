@@ -7,12 +7,12 @@ export const ProductRouter = (router: Router): void => {
   router.get('/products', async (req: Request, res: Response, next) => {
     const { query } = req;
     try {
-      const products = await ProductRepository.getAll(query);
+      const products = await ProductRepository.getProductsList(query);
       res.status(200).send(products);
     } catch (err) {
       next(err);
     }
-    
+
     next();
   });
 

@@ -5,7 +5,7 @@ import { ResponseError } from '../helpers/errorHandler';
 export const CategoryRouter = (router: Router): void => {
   router.get('/categories', async (req: Request, res: Response, next) => {
     try {
-      const products = await CategoryRepository.getAll();
+      const products = await CategoryRepository.getCategoriesList();
       res.status(200).send(products);
     } catch (err) {
       next(err);
@@ -19,11 +19,15 @@ export const CategoryRouter = (router: Router): void => {
       const { query } = req;
       const category = await CategoryRepository.getById(req.params.id, query);
 
-      if (category) 
-      {
+      if (category) {
         res.status(200).send(category);
-      }
-      else next(new ResponseError(404, `Category with id ${req.params.id} was not found!`));
+      } else
+        next(
+          new ResponseError(
+            404,
+            `Category with id ${req.params.id} was not found!`,
+          ),
+        );
     } catch (err) {
       next(err);
     }
