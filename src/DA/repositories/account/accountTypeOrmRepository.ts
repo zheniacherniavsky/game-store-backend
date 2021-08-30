@@ -1,5 +1,5 @@
 import { getRepository } from 'typeorm';
-import { compareHashedData, hashData } from '../../../helpers/hash';
+import { hashData } from '../../../helpers/hash';
 import { IAccount, IAccountRepository } from '../../../types/types';
 import { Account } from '../../db/postgresql/entity/account';
 
@@ -38,23 +38,5 @@ export default class AccountTypeOrmRepository implements IAccountRepository {
       password: hashedPassword,
     } as Account);
     return entity;
-  }
-
-  public async getAll(): Promise<IAccount[]> {
-    const data: IAccount[] = await getRepository(Account).find({});
-
-    return data;
-  }
-
-  public async authenticate(
-    username: string,
-    password: string,
-  ): Promise<IAccount | null> {
-    const account: IAccount | undefined = await getRepository(Account).findOne({
-      username,
-    });
-    if (account && (await compareHashedData(password, account.password)))
-      return account;
-    else return null;
   }
 }

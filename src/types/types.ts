@@ -51,10 +51,5 @@ export interface ICategoryRepository
   getCategoriesList: () => Promise<ICategory[]>;
 }
 export interface IAccountRepository extends Repository<IAccount> {
-  authenticate: (
-    username: string,
-    password: string,
-  ) => Promise<IAccount | null>;
-
   getByUsername: (username: string) => Promise<IAccount | null>;
 }
