@@ -1,15 +1,13 @@
 import { getRepository } from 'typeorm';
 import {
+  ProductQueryObject,
   productSearchQueryHandler,
-  QueryObject,
 } from '../../../helpers/queryHandler';
 import { paginationQueryHandler } from '../../../helpers/queryHandler/pagination';
 import { IProduct, IProductRepository } from '../../../types/types';
 import { Product } from '../../db/postgresql/entity/product';
 
-export default class ProductTypeOrmRepository
-  implements IProductRepository
-{
+export default class ProductTypeOrmRepository implements IProductRepository {
   public async getById(id: string): Promise<IProduct | null> {
     const data: IProduct | undefined = await getRepository(Product).findOne({
       _id: id,
@@ -34,14 +32,17 @@ export default class ProductTypeOrmRepository
     return data;
   }
 
-  public async getAll(query: QueryObject | undefined): Promise<IProduct[]> {
-    const searchOptions = productSearchQueryHandler(query).typeOrmOptions;
-    const pagination = paginationQueryHandler(query).typeOrmOptions;
+  public async getProductsList(
+    productQuery: ProductQueryObject,
+  ): Promise<IProduct[]> {
+    const searchOptions =
+      productSearchQueryHandler(productQuery).typeOrmOptions;
+    const pagination = paginationQueryHandler(productQuery).typeOrmOptions;
 
     const data: IProduct[] = await getRepository(Product).find({
       ...searchOptions,
       ...pagination,
-      relations: ["categories"]
+      relations: ['categories'],
     });
     return data;
   }

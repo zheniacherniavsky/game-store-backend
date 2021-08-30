@@ -1,5 +1,5 @@
 import { mongoose } from '@typegoose/typegoose';
-import { QueryObject } from '../../../helpers/queryHandler';
+import { CategoryQueryObject } from '../../../helpers/queryHandler';
 import { categorySearchQueryHandler } from '../../../helpers/queryHandler/category';
 import { ICategory, ICategoryRepository } from '../../../types/types';
 import { Category, CategoryModel } from '../../db/mongodb/models/category';
@@ -8,8 +8,11 @@ import { ProductModel } from '../../db/mongodb/models/product';
 export default class CategoryTypegooseRepository
   implements ICategoryRepository
 {
-  public async getById(id: string, query?: QueryObject): Promise<ICategory | null> {
-    const searchOptions = categorySearchQueryHandler(query);
+  public async getById(
+    id: string,
+    categoryQuery: CategoryQueryObject,
+  ): Promise<ICategory | null> {
+    const searchOptions = categorySearchQueryHandler(categoryQuery);
     const objectId = new mongoose.Types.ObjectId(id);
 
     const data: ICategory | null = await CategoryModel.findOne({
@@ -19,21 +22,21 @@ export default class CategoryTypegooseRepository
     if (searchOptions.includeProducts === true && data !== null) {
       let additionalProducts;
 
-      if(searchOptions.includeTop3Products === false) {
+      if (searchOptions.includeTop3Products === false) {
         additionalProducts = await ProductModel.find({
           categoriesIds: id,
         });
-      } 
-      else {
+      } else {
         additionalProducts = await ProductModel.find({
           categoriesIds: id,
-        }).sort([["totalRating", "DESC"]]).limit(3);
+        })
+          .sort([['totalRating', 'DESC']])
+          .limit(3);
       }
 
       data.products = additionalProducts;
     }
-      
-    
+
     return data;
   }
 
@@ -55,7 +58,7 @@ export default class CategoryTypegooseRepository
     return data;
   }
 
-  public async getAll(): Promise<ICategory[]> {
+  public async getCategoriesList(): Promise<ICategory[]> {
     const data: ICategory[] = await CategoryModel.find();
     return data;
   }

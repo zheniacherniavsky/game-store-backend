@@ -1,6 +1,13 @@
-import { IResultPagination, QueryObject } from '.';
+import { IResultPagination, PaginationQueryObject } from '.';
 
-export const paginationQueryHandler = (query?: QueryObject): IResultPagination => {
+export interface IPagination {
+  skip: number;
+  limit: number;
+}
+
+export const paginationQueryHandler = (
+  paginationQuery: PaginationQueryObject,
+): IResultPagination => {
   const res: IResultPagination = {
     typegooseOptions: {
       pagination: {
@@ -10,20 +17,21 @@ export const paginationQueryHandler = (query?: QueryObject): IResultPagination =
     },
     typeOrmOptions: {
       skip: 0,
-      take: 20
+      take: 10,
     },
   };
 
-  if (query === undefined) return res;
+  if (paginationQuery === undefined) return res;
 
-  if (query.offset !== undefined) {
-    res.typegooseOptions.pagination.skip = parseInt(query.offset) || 0;
-    res.typeOrmOptions.skip = parseInt(query.offset) || 0;
+  if (paginationQuery.offset !== undefined) {
+    res.typegooseOptions.pagination.skip =
+      parseInt(paginationQuery.offset) || 0;
+    res.typeOrmOptions.skip = parseInt(paginationQuery.offset) || 0;
   }
 
-  if (query.limit !== undefined) {
-    res.typegooseOptions.pagination.limit = parseInt(query.limit);
-    res.typeOrmOptions.take = parseInt(query.limit);
+  if (paginationQuery.limit !== undefined) {
+    res.typegooseOptions.pagination.limit = parseInt(paginationQuery.limit);
+    res.typeOrmOptions.take = parseInt(paginationQuery.limit);
   }
 
   return res;
