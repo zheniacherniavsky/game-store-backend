@@ -1,11 +1,14 @@
 import { Router } from 'express';
 import { AccountRepository } from '../DA';
-import { validateAccount } from '../helpers/validation';
 import jwt from 'jsonwebtoken';
 import passport from 'passport';
 import randtoken from 'rand-token';
 import { ResponseError } from '../helpers/errorHandler';
 import { SECRET_AUTH } from '../config/secretToken';
+import {
+  validateAccount,
+  validateAccountAuthInfo,
+} from '../helpers/validation';
 
 const refreshTokens: { [key: string]: string } = {};
 
@@ -30,7 +33,7 @@ export const AuthRouter = (router: Router): void => {
 
   router.post('/authenticate', (req, res) => {
     const { username, password } = req.body;
-    validateAccount({ username, password, firstName: null, lastName: null });
+    validateAccountAuthInfo({ username, password });
     passport.authenticate('local', { session: false }, (err, account, info) => {
       if (err || !account) {
         return res.status(info !== undefined ? 400 : 500).json({

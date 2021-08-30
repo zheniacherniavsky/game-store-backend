@@ -3,7 +3,10 @@ import passport from 'passport';
 import { AccountRepository } from '../DA';
 import { ResponseError } from '../helpers/errorHandler';
 import { compareHashedData, hashData } from '../helpers/hash';
-import { validateAccount } from '../helpers/validation';
+import {
+  validateAccountAuthInfo,
+  validateProfileInfo,
+} from '../helpers/validation';
 
 export const ProfileRouter = (router: Router): void => {
   router.put(
@@ -11,7 +14,7 @@ export const ProfileRouter = (router: Router): void => {
     passport.authenticate('jwt', { session: false }),
     async (req, res, next) => {
       const { username, firstName, lastName } = req.body;
-      validateAccount({ username, password: null, firstName, lastName });
+      validateProfileInfo({ username, firstName, lastName });
 
       AccountRepository.getByUsername(username)
         .then(async (account) => {
@@ -53,7 +56,7 @@ export const ProfileRouter = (router: Router): void => {
     passport.authenticate('jwt', { session: false }),
     (req, res, next) => {
       const { username, password } = req.body;
-      validateAccount({ username, password, firstName: null, lastName: null });
+      validateAccountAuthInfo({ username, password });
       AccountRepository.getByUsername(username).then(async (account) => {
         if (!account)
           next(
