@@ -15,7 +15,7 @@ export const connectPostgreSQL = async (): Promise<void> => {
     .catch((err) => {
       logger.log({
         level: 'error',
-        message: "PostgreSQL: " + err.message,
+        message: 'PostgreSQL: ' + err.message,
       });
     });
 };
@@ -26,13 +26,12 @@ async function init(): Promise<void> {
   if (categories.length === 0) {
     logger.log({
       level: 'info',
-      message:
-        'PostgreSQL initialization - no categories found, creating default categories with products...',
+      message: 'PostgreSQL initialization - no categories found, creating default categories with products...',
     });
 
     const category = new Category();
     category.displayName = 'Shooter';
-    categoryRepository.save(category).then( async (category) => {
+    categoryRepository.save(category).then(async (category) => {
       const product1 = new Product();
       product1.displayName = 'Game 1';
       product1.categories = [category];

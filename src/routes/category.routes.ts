@@ -21,13 +21,7 @@ export const CategoryRouter = (router: Router): void => {
 
       if (category) {
         res.status(200).send(category);
-      } else
-        next(
-          new ResponseError(
-            404,
-            `Category with id ${req.params.id} was not found!`,
-          ),
-        );
+      } else next(new ResponseError(404, `Category with id ${req.params.id} was not found!`));
     } catch (err) {
       next(err);
     }

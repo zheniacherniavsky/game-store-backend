@@ -7,8 +7,8 @@ import logger from '../../../helpers/logger';
 export const connectMongoDb = (): void => {
   const connectionString: string = process.env.MONGODB_CONNECTION_STRING || '';
 
-  if(process.env.TS_NODE_DEV) {
-    mongoose.set("debug", true);
+  if (process.env.TS_NODE_DEV) {
+    mongoose.set('debug', true);
   }
 
   if (connectionString !== '') {
@@ -21,8 +21,8 @@ export const connectMongoDb = (): void => {
     const db = mongoose.connection;
     db.on('error', (err) => {
       logger.log({
-        level: "error",
-        message: "MongoDB: " + err.message
+        level: 'error',
+        message: 'MongoDB: ' + err.message,
       });
     });
     db.once('open', () => {
@@ -35,8 +35,7 @@ export const connectMongoDb = (): void => {
   } else {
     logger.log({
       level: 'error',
-      message:
-        'MongoDB: process.env.MONGODB_CONNECTION_STRING is undefined. Not connected to database.',
+      message: 'MongoDB: process.env.MONGODB_CONNECTION_STRING is undefined. Not connected to database.',
     });
   }
 };
@@ -46,8 +45,7 @@ function init(): void {
     if (categories.length === 0) {
       logger.log({
         level: 'info',
-        message:
-          'MongoDB initialization - no categories found, creating default categories with products...',
+        message: 'MongoDB initialization - no categories found, creating default categories with products...',
       });
 
       const shooter = new CategoryModel({ displayName: 'Shooter' });

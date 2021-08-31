@@ -2,9 +2,7 @@ import { IResultProduct, ProductQueryObject } from '.';
 import { Between, ILike, MoreThanOrEqual } from 'typeorm';
 import { ResponseError } from '../errorHandler';
 
-export const productSearchQueryHandler = (
-  productQuery: ProductQueryObject,
-): IResultProduct => {
+export const productSearchQueryHandler = (productQuery: ProductQueryObject): IResultProduct => {
   const res: IResultProduct = {
     typegooseOptions: {
       find: {},
@@ -23,9 +21,7 @@ export const productSearchQueryHandler = (
       $regex: '.*' + productQuery.displayName + '.*',
       $options: 'i',
     };
-    res.typeOrmOptions.where.displayName = ILike(
-      `%${productQuery.displayName}%`,
-    );
+    res.typeOrmOptions.where.displayName = ILike(`%${productQuery.displayName}%`);
   }
 
   if (productQuery.minRating !== undefined) {
@@ -33,23 +29,15 @@ export const productSearchQueryHandler = (
       res.typegooseOptions.find.totalRating = {
         $gte: productQuery.minRating,
       };
-      res.typeOrmOptions.where.totalRating = MoreThanOrEqual(
-        productQuery.minRating,
-      );
-    } else
-      throw new ResponseError(
-        400,
-        'Product query handler: the query minRating must be a number',
-      );
+      res.typeOrmOptions.where.totalRating = MoreThanOrEqual(productQuery.minRating);
+    } else throw new ResponseError(400, 'Product query handler: the query minRating must be a number');
   }
 
   if (productQuery.price !== undefined) {
     const regex = new RegExp(/[0-9]*:[0-9]+/gm);
     const price = productQuery.price.match(regex);
     if (price !== null) {
-      const [min, max] = price[0]
-        .split(':')
-        .map((value: string) => parseInt(value));
+      const [min, max] = price[0].split(':').map((value: string) => parseInt(value));
 
       res.typegooseOptions.find.price = {
         $gte: isNaN(min) ? 0 : min,
@@ -59,7 +47,7 @@ export const productSearchQueryHandler = (
     } else
       throw new ResponseError(
         400,
-        "Product query handler: the query price must be in the format: 'number:number' or ':number'",
+        "Product query handler: the query price must be in the format: 'number:number' or ':number'"
       );
   }
 
@@ -75,7 +63,7 @@ export const productSearchQueryHandler = (
     } else
       throw new ResponseError(
         400,
-        "Product query handler: the query sortBy must be in the format: 'option:(desc|asc)'. Available options: price, createdAt",
+        "Product query handler: the query sortBy must be in the format: 'option:(desc|asc)'. Available options: price, createdAt"
       );
   }
   return res;

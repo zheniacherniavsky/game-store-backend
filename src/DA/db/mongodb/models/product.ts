@@ -1,10 +1,4 @@
-import {
-  getModelForClass,
-  prop,
-  modelOptions,
-  Severity,
-  index,
-} from '@typegoose/typegoose';
+import { getModelForClass, prop, modelOptions, Severity, index } from '@typegoose/typegoose';
 import { WhatIsIt } from '@typegoose/typegoose/lib/internal/constants';
 import { IProduct } from '../../../../types/types';
 
@@ -15,7 +9,7 @@ export class Product implements IProduct {
   @prop()
   public displayName: string;
 
-  @prop({default: []}, WhatIsIt.ARRAY)
+  @prop({ default: [] }, WhatIsIt.ARRAY)
   public categoriesIds: string[];
 
   @prop()

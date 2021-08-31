@@ -5,13 +5,8 @@ import { ICategory, ICategoryRepository } from '../../../types/types';
 import { Category, CategoryModel } from '../../db/mongodb/models/category';
 import { ProductModel } from '../../db/mongodb/models/product';
 
-export default class CategoryTypegooseRepository
-  implements ICategoryRepository
-{
-  public async getById(
-    id: string,
-    categoryQuery: CategoryQueryObject,
-  ): Promise<ICategory | null> {
+export default class CategoryTypegooseRepository implements ICategoryRepository {
+  public async getById(id: string, categoryQuery: CategoryQueryObject): Promise<ICategory | null> {
     const searchOptions = categorySearchQueryHandler(categoryQuery);
     const objectId = new mongoose.Types.ObjectId(id);
 
@@ -41,10 +36,7 @@ export default class CategoryTypegooseRepository
   }
 
   public async update(entity: ICategory): Promise<boolean> {
-    const data: ICategory | null = await CategoryModel.findOneAndUpdate(
-      { _id: entity._id },
-      entity as Category,
-    );
+    const data: ICategory | null = await CategoryModel.findOneAndUpdate({ _id: entity._id }, entity as Category);
     return data ? true : false;
   }
 

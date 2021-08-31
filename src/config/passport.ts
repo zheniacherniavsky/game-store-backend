@@ -19,7 +19,7 @@ passport.use(
         return done(null, account);
       })
       .catch((err) => done(err));
-  }),
+  })
 );
 
 passport.use(
@@ -34,6 +34,6 @@ passport.use(
           return cb(null, account);
         })
         .catch((err) => cb(err));
-    },
-  ),
+    }
+  )
 );
