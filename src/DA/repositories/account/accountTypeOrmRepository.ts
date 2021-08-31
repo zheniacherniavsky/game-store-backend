@@ -19,10 +19,7 @@ export default class AccountTypeOrmRepository implements IAccountRepository {
   }
 
   public async update(entity: IAccount): Promise<boolean> {
-    await getRepository(Account).update(
-      { _id: (entity as Account)._id },
-      entity as Account,
-    );
+    await getRepository(Account).update({ _id: (entity as Account)._id }, entity as Account);
     return true;
   }
 

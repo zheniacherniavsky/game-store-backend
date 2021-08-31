@@ -1,12 +1,6 @@
 import { mongoose } from '@typegoose/typegoose';
-import {
-  ProductQueryObject,
-  productSearchQueryHandler,
-} from '../../../helpers/queryHandler';
-import {
-  IPagination,
-  paginationQueryHandler,
-} from '../../../helpers/queryHandler/pagination';
+import { ProductQueryObject, productSearchQueryHandler } from '../../../helpers/queryHandler';
+import { IPagination, paginationQueryHandler } from '../../../helpers/queryHandler/pagination';
 import { IProduct, IProductRepository } from '../../../types/types';
 import { Product, ProductModel } from '../../db/mongodb/models/product';
 
@@ -19,10 +13,7 @@ export default class ProductTypegooseRepository implements IProductRepository {
   }
 
   public async update(entity: IProduct): Promise<boolean> {
-    const data: IProduct | null = await ProductModel.findOneAndUpdate(
-      { _id: entity._id },
-      entity as Product,
-    );
+    const data: IProduct | null = await ProductModel.findOneAndUpdate({ _id: entity._id }, entity as Product);
     return data ? true : false;
   }
 
@@ -35,9 +26,7 @@ export default class ProductTypegooseRepository implements IProductRepository {
     return data;
   }
 
-  public async getProductsList(
-    productQuery: ProductQueryObject,
-  ): Promise<IProduct[]> {
+  public async getProductsList(productQuery: ProductQueryObject): Promise<IProduct[]> {
     let searchOptions,
       sortOptions = {};
 
@@ -47,10 +36,8 @@ export default class ProductTypegooseRepository implements IProductRepository {
     };
 
     if (productQuery) {
-      const typegooseOptions =
-        productSearchQueryHandler(productQuery).typegooseOptions;
-      pagination =
-        paginationQueryHandler(productQuery).typegooseOptions.pagination;
+      const typegooseOptions = productSearchQueryHandler(productQuery).typegooseOptions;
+      pagination = paginationQueryHandler(productQuery).typegooseOptions.pagination;
       searchOptions = typegooseOptions.find;
       sortOptions = typegooseOptions.sort;
     }

@@ -5,21 +5,15 @@ import { ICategory, ICategoryRepository } from '../../../types/types';
 import { Category } from '../../db/postgresql/entity/category';
 
 export default class CategoryTypeOrmRepository implements ICategoryRepository {
-  public async getById(
-    id: string,
-    categoryQuery: CategoryQueryObject,
-  ): Promise<ICategory | null> {
+  public async getById(id: string, categoryQuery: CategoryQueryObject): Promise<ICategory | null> {
     const searchParams = categorySearchQueryHandler(categoryQuery);
 
-    const myQuery = getRepository(Category)
-      .createQueryBuilder('category')
-      .where('category._id = :id', { id });
+    const myQuery = getRepository(Category).createQueryBuilder('category').where('category._id = :id', { id });
 
     if (searchParams.includeProducts === true) {
       myQuery.innerJoinAndSelect('category.products', 'products');
 
-      if (searchParams.includeTop3Products === true)
-        myQuery.orderBy('products.totalRating', 'DESC').limit(3);
+      if (searchParams.includeTop3Products === true) myQuery.orderBy('products.totalRating', 'DESC').limit(3);
     }
 
     const data = await myQuery.getOne();
@@ -28,10 +22,7 @@ export default class CategoryTypeOrmRepository implements ICategoryRepository {
   }
 
   public async update(entity: ICategory): Promise<boolean> {
-    await getRepository(Category).update(
-      { _id: (entity as Category)._id },
-      entity as Category,
-    );
+    await getRepository(Category).update({ _id: (entity as Category)._id }, entity as Category);
     return true;
   }
 

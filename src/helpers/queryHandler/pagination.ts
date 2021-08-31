@@ -5,9 +5,7 @@ export interface IPagination {
   limit: number;
 }
 
-export const paginationQueryHandler = (
-  paginationQuery: PaginationQueryObject,
-): IResultPagination => {
+export const paginationQueryHandler = (paginationQuery: PaginationQueryObject): IResultPagination => {
   const res: IResultPagination = {
     typegooseOptions: {
       pagination: {
@@ -24,8 +22,7 @@ export const paginationQueryHandler = (
   if (paginationQuery === undefined) return res;
 
   if (paginationQuery.offset !== undefined) {
-    res.typegooseOptions.pagination.skip =
-      parseInt(paginationQuery.offset) || 0;
+    res.typegooseOptions.pagination.skip = parseInt(paginationQuery.offset) || 0;
     res.typeOrmOptions.skip = parseInt(paginationQuery.offset) || 0;
   }
 

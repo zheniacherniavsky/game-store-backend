@@ -1,12 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import {
-  Column,
-  Entity,
-  Index,
-  ManyToMany,
-  OneToMany,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Column, Entity, Index, ManyToMany, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { ICategory } from '../../../../types/types';
 import { Product } from './product';
 

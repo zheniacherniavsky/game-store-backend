@@ -1,9 +1,6 @@
 /* eslint-disable @typescript-eslint/no-empty-interface */
 import { ObjectId } from 'mongoose';
-import {
-  CategoryQueryObject,
-  ProductQueryObject,
-} from '../helpers/queryHandler';
+import { CategoryQueryObject, ProductQueryObject } from '../helpers/queryHandler';
 
 // Models
 export interface IProduct {
@@ -41,12 +38,8 @@ interface Repository<T> {
 export interface IProductRepository extends Repository<IProduct> {
   getProductsList: (productQuery: ProductQueryObject) => Promise<IProduct[]>;
 }
-export interface ICategoryRepository
-  extends Omit<Repository<ICategory>, 'getById'> {
-  getById: (
-    id: string,
-    query: CategoryQueryObject,
-  ) => Promise<ICategory | null>;
+export interface ICategoryRepository extends Omit<Repository<ICategory>, 'getById'> {
+  getById: (id: string, query: CategoryQueryObject) => Promise<ICategory | null>;
 
   getCategoriesList: () => Promise<ICategory[]>;
 }

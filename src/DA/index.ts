@@ -1,8 +1,4 @@
-import {
-  IAccountRepository,
-  ICategoryRepository,
-  IProductRepository,
-} from '../types/types';
+import { IAccountRepository, ICategoryRepository, IProductRepository } from '../types/types';
 import { connectMongoDb } from './db/mongodb';
 import { connectPostgreSQL } from './db/postgresql';
 import AccountTypegooseRepository from './repositories/account/accountTypegooseRepository';
