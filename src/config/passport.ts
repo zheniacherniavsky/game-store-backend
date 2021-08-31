@@ -29,9 +29,14 @@ passport.use(
       secretOrKey: SECRET_AUTH,
     },
     function (jwtPayload, cb) {
-      return AccountRepository.getById(jwtPayload._id)
+      return AccountRepository.getById(jwtPayload.id)
         .then((account) => {
-          return cb(null, account);
+          const user: Express.User = {
+            id: account?._id,
+            username: account?.username,
+            role: 'admin',
+          };
+          return cb(null, user);
         })
         .catch((err) => cb(err));
     }
