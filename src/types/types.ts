@@ -25,6 +25,7 @@ export interface IAccount {
   password: string;
   firstName: string;
   lastName: string;
+  role: string;
 }
 
 // Repositories

@@ -19,4 +19,7 @@ export class Account implements IAccount {
 
   @Column()
   lastName: string;
+
+  @Column()
+  role: string;
 }

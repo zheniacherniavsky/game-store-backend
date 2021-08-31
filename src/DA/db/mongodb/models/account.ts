@@ -14,6 +14,9 @@ export class Account implements IAccount {
 
   @prop()
   public lastName: string;
+
+  @prop()
+  public role: string;
 }
 
 export const AccountModel = getModelForClass(Account);

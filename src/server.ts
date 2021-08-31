@@ -1,32 +1,48 @@
 import express from 'express';
+import passport from 'passport';
+import logger from './helpers/logger';
+import { errorHandler, ResponseError } from './helpers/errorHandler';
+import { JWTPayload } from './config/passport';
+
 import 'reflect-metadata';
+import './config/passport';
+
 import dotenv from 'dotenv';
 dotenv.config();
 
 import { database } from './DA';
 database.connect();
 
-import { ProductRouter } from './routes/product.routes';
-import { CategoryRouter } from './routes/category.routes';
-import logger from './helpers/logger';
-import { errorHandler } from './helpers/errorHandler';
-import { AuthRouter } from './routes/auth.routes';
-import { ProfileRouter } from './routes/profile.routes';
-
 const port = process.env.SRV_PORT;
 const app = express();
 const router = express.Router();
+const adminRouter = express.Router();
 
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
-app.use('/', router);
-
-import './config/passport';
+import { ProductRouter } from './routes/product.routes';
+import { CategoryRouter } from './routes/category.routes';
+import { AuthRouter } from './routes/auth.routes';
+import { ProfileRouter } from './routes/profile.routes';
+import { AdminRouter } from './routes/admin.routes';
 
 AuthRouter(router);
 ProfileRouter(router);
 ProductRouter(router);
 CategoryRouter(router);
+AdminRouter(adminRouter);
+
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+app.use('/', router);
+app.use(
+  '/admin',
+  passport.authenticate('jwt', { session: false }),
+  (req, res, next) => {
+    const { role } = req.user as JWTPayload;
+    if (role !== 'admin') next(new ResponseError(403, 'You dont have permission for this operations'));
+    else next();
+  },
+  adminRouter
+);
 
 app.use((req, res, next) => {
   if (res.writableEnded) {

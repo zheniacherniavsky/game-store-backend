@@ -4,8 +4,15 @@ import passportJWT from 'passport-jwt';
 import { AccountRepository } from '../DA';
 import { SECRET_AUTH } from './secretToken';
 import { compareHashedData } from '../helpers/hash';
+import { ObjectId } from 'mongoose';
 const JWTStrategy = passportJWT.Strategy;
 const ExtractJWT = passportJWT.ExtractJwt;
+
+export interface JWTPayload {
+  id: number | string | ObjectId;
+  username: string;
+  role: string;
+}
 
 passport.use(
   new LocalStrategy(function (username, password, done) {
@@ -34,7 +41,7 @@ passport.use(
           const user: Express.User = {
             id: account?._id,
             username: account?.username,
-            role: 'admin',
+            role: account?.role,
           };
           return cb(null, user);
         })

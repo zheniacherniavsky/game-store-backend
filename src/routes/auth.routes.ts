@@ -19,6 +19,7 @@ export const AuthRouter = (router: Router): void => {
         password,
         firstName,
         lastName,
+        role: 'buyer',
       });
       res.status(200).send(newAccount);
     } catch (err) {
@@ -42,7 +43,7 @@ export const AuthRouter = (router: Router): void => {
       const user: Express.User = {
         id: account._id,
         username: account.username,
-        role: 'admin',
+        role: account.role,
       };
 
       req.login(user, { session: false }, (err) => {
@@ -78,7 +79,7 @@ export const AuthRouter = (router: Router): void => {
           const user: Express.User = {
             id: account._id,
             username: account.username,
-            role: 'admin',
+            role: account.role,
           };
 
           const token = jwt.sign(JSON.parse(JSON.stringify(user)), SECRET_AUTH, {
