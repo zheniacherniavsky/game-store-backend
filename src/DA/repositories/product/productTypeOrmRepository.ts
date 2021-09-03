@@ -2,6 +2,7 @@ import { getRepository } from 'typeorm';
 import { ProductQueryObject, productSearchQueryHandler } from '../../../helpers/queryHandler';
 import { paginationQueryHandler } from '../../../helpers/queryHandler/pagination';
 import { IProduct, IProductRepository } from '../../../types/types';
+import { Category } from '../../db/postgresql/entity/category';
 import { Product } from '../../db/postgresql/entity/product';
 
 export default class ProductTypeOrmRepository implements IProductRepository {
@@ -22,6 +23,16 @@ export default class ProductTypeOrmRepository implements IProductRepository {
     return true;
   }
   public async create(entity: IProduct): Promise<IProduct> {
+    if (entity.categoriesIds) {
+      console.log(entity.categoriesIds.join(','));
+      const categories = await getRepository(Category)
+        .createQueryBuilder('category')
+        .where(`category._id IN (${entity.categoriesIds.join(',')})`)
+        .getMany();
+
+      entity.categories = categories;
+    }
+    delete entity.categoriesIds;
     const data = await getRepository(Product).save(entity as Product);
     return data;
   }

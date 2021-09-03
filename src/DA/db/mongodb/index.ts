@@ -3,6 +3,8 @@ import { ICategory } from '../../../types/types';
 import { CategoryModel } from './models/category';
 import { ProductModel } from './models/product';
 import logger from '../../../helpers/logger';
+import { AccountModel } from './models/account';
+import { hashData } from '../../../helpers/hash';
 
 export const connectMongoDb = (): void => {
   const connectionString: string = process.env.MONGODB_CONNECTION_STRING || '';
@@ -41,7 +43,7 @@ export const connectMongoDb = (): void => {
 };
 
 function init(): void {
-  CategoryModel.find().then((categories: ICategory[]) => {
+  CategoryModel.find().then(async (categories: ICategory[]) => {
     if (categories.length === 0) {
       logger.log({
         level: 'info',
@@ -86,6 +88,15 @@ function init(): void {
         createdAt: new Date(),
         totalRating: 8,
         price: 0,
+      }).save();
+
+      const adminPsw = await hashData('Admin123');
+      new AccountModel({
+        username: 'admin',
+        password: adminPsw,
+        firstName: 'admin',
+        lastName: 'adminsky',
+        role: 'admin',
       }).save();
 
       logger.log({
