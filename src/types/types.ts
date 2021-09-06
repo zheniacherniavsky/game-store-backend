@@ -9,7 +9,7 @@ export interface IProduct {
   createdAt: Date;
   totalRating: number;
   price: number;
-  categoriesIds?: string[];
+  categoriesIds: string[];
   categories?: ICategory[];
 }
 

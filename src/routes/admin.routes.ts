@@ -1,7 +1,6 @@
 import { Router } from 'express';
 import { ProductRepository } from '../DA';
 import { ResponseError } from '../helpers/errorHandler';
-import { productSearchQueryHandler } from '../helpers/queryHandler';
 import { validateProduct } from '../helpers/validation';
 import { IProduct } from '../types/types';
 
@@ -44,18 +43,17 @@ export const AdminRouter = (router: Router): void => {
       .then(async (product) => {
         if (product === null) next(new ResponseError(404, `Product with id ${req.params.id} was not found!`));
         else {
-          const { displayName, price, totalRating } = req.body;
-          const updatedProduct: IProduct = {
-            _id: product._id,
-            displayName: displayName || product.displayName,
-            createdAt: product.createdAt,
-            price: price || product.price,
-            totalRating: totalRating || product.totalRating,
-          };
-          validateProduct(updatedProduct);
-
-          if (await ProductRepository.update(updatedProduct)) res.status(200).send(updatedProduct);
-          else next(new ResponseError(500, `Something went wrong`));
+          // const { displayName, price, totalRating } = req.body;
+          // const updatedProduct: IProduct = {
+          //   _id: product._id,
+          //   displayName: displayName || product.displayName,
+          //   createdAt: product.createdAt,
+          //   price: price || product.price,
+          //   totalRating: totalRating || product.totalRating,
+          // };
+          // validateProduct(updatedProduct);
+          // if (await ProductRepository.update(updatedProduct)) res.status(200).send(updatedProduct);
+          // else next(new ResponseError(500, `Something went wrong`));
         }
       })
       .catch((err) => next(err));

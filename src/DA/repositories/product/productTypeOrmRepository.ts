@@ -8,10 +8,7 @@ import { Product } from '../../db/postgresql/entity/product';
 export default class ProductTypeOrmRepository implements IProductRepository {
   public async getById(id: string): Promise<IProduct | null> {
     const data: IProduct | undefined = await getRepository(Product).findOne({
-      where: {
-        _id: id,
-      },
-      relations: ['categories'],
+      _id: id,
     });
     return data ? data : null;
   }
@@ -34,7 +31,6 @@ export default class ProductTypeOrmRepository implements IProductRepository {
 
       entity.categories = categories;
     }
-    delete entity.categoriesIds;
     const data = await getRepository(Product).save(entity as Product);
     return data;
   }
@@ -46,7 +42,6 @@ export default class ProductTypeOrmRepository implements IProductRepository {
     const data: IProduct[] = await getRepository(Product).find({
       ...searchOptions,
       ...pagination,
-      relations: ['categories'],
     });
     return data;
   }
