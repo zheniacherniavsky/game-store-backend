@@ -6,23 +6,7 @@ import { Category } from '../../db/postgresql/entity/category';
 import { Product } from '../../db/postgresql/entity/product';
 
 export default class ProductTypeOrmRepository implements IProductRepository {
-  public async getById(id: string): Promise<IProduct | null> {
-    const data: IProduct | undefined = await getRepository(Product).findOne({
-      _id: id,
-    });
-    return data ? data : null;
-  }
-
-  public async update(entity: IProduct): Promise<boolean> {
-    await getRepository(Product).update({ _id: (entity as Product)._id }, entity as Product);
-    return true;
-  }
-
-  public async delete(entity: IProduct): Promise<boolean> {
-    await getRepository(Product).delete({ _id: (entity as Product)._id });
-    return true;
-  }
-  public async create(entity: IProduct): Promise<IProduct> {
+  private async handleProductCategories(entity: IProduct) {
     if (entity.categoriesIds && entity.categoriesIds.length > 0) {
       const categories = await getRepository(Category)
         .createQueryBuilder('category')
@@ -30,7 +14,29 @@ export default class ProductTypeOrmRepository implements IProductRepository {
         .getMany();
 
       entity.categories = categories;
+      entity.categoriesIds = categories.map((category) => category._id);
     }
+  }
+
+  public async getById(id: string): Promise<IProduct | null> {
+    const data: IProduct | undefined = await getRepository(Product).findOne({
+      _id: id,
+    });
+    return data ? data : null;
+  }
+
+  public async update(entity: IProduct): Promise<IProduct | null> {
+    await this.handleProductCategories(entity);
+    const data = await getRepository(Product).save(entity as Product);
+    return data;
+  }
+
+  public async delete(entity: IProduct): Promise<boolean> {
+    await getRepository(Product).delete({ _id: (entity as Product)._id });
+    return true;
+  }
+  public async create(entity: IProduct): Promise<IProduct> {
+    await this.handleProductCategories(entity);
     const data = await getRepository(Product).save(entity as Product);
     return data;
   }

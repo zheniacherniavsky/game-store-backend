@@ -21,9 +21,10 @@ export default class AccountTypegooseRepository implements IAccountRepository {
     return data;
   }
 
-  public async update(entity: IAccount): Promise<boolean> {
-    const data: IAccount | null = await AccountModel.findOneAndUpdate({ _id: entity._id }, entity as Account);
-    return data ? true : false;
+  public async update(entity: IAccount): Promise<IAccount | null> {
+    await AccountModel.findOneAndUpdate({ _id: entity._id }, entity as Account);
+    const data = entity._id !== undefined ? await this.getById(entity._id.toString()) : null;
+    return data;
   }
 
   public async delete(entity: IAccount): Promise<boolean> {

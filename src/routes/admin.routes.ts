@@ -37,23 +37,24 @@ export const AdminRouter = (router: Router): void => {
     next();
   });
 
-  // FIXME: update categories;
   router.patch('/products/:id', async (req, res, next) => {
     await ProductRepository.getById(req.params.id)
       .then(async (product) => {
         if (product === null) next(new ResponseError(404, `Product with id ${req.params.id} was not found!`));
         else {
-          // const { displayName, price, totalRating } = req.body;
-          // const updatedProduct: IProduct = {
-          //   _id: product._id,
-          //   displayName: displayName || product.displayName,
-          //   createdAt: product.createdAt,
-          //   price: price || product.price,
-          //   totalRating: totalRating || product.totalRating,
-          // };
-          // validateProduct(updatedProduct);
-          // if (await ProductRepository.update(updatedProduct)) res.status(200).send(updatedProduct);
-          // else next(new ResponseError(500, `Something went wrong`));
+          const { displayName, price, totalRating, categoriesIds } = req.body;
+          const changedProduct: IProduct = {
+            _id: product._id,
+            displayName: displayName || product.displayName,
+            categoriesIds: categoriesIds || product.categoriesIds,
+            createdAt: product.createdAt,
+            price: price || product.price,
+            totalRating: totalRating || product.totalRating,
+          };
+          validateProduct(changedProduct);
+          await ProductRepository.update(changedProduct).then((updatedProduct) => {
+            res.status(200).send(updatedProduct);
+          });
         }
       })
       .catch((err) => next(err));

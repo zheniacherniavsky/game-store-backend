@@ -18,9 +18,10 @@ export default class AccountTypeOrmRepository implements IAccountRepository {
     return data ? data : null;
   }
 
-  public async update(entity: IAccount): Promise<boolean> {
+  public async update(entity: IAccount): Promise<IAccount | null> {
     await getRepository(Account).update({ _id: (entity as Account)._id }, entity as Account);
-    return true;
+    const data = await this.getById((entity as Account)._id);
+    return data;
   }
 
   public async delete(entity: IAccount): Promise<boolean> {

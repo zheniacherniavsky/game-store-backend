@@ -32,7 +32,7 @@ export interface IAccount {
 interface Repository<T> {
   getById: (id: string) => Promise<T | null>;
   create: (entity: T) => Promise<T>;
-  update: (entity: T) => Promise<boolean>;
+  update: (entity: T) => Promise<T | null>;
   delete: (entity: T) => Promise<boolean>;
 }
 

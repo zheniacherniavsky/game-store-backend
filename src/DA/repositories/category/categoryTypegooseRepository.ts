@@ -35,9 +35,10 @@ export default class CategoryTypegooseRepository implements ICategoryRepository 
     return data;
   }
 
-  public async update(entity: ICategory): Promise<boolean> {
-    const data: ICategory | null = await CategoryModel.findOneAndUpdate({ _id: entity._id }, entity as Category);
-    return data ? true : false;
+  public async update(entity: ICategory): Promise<ICategory | null> {
+    await CategoryModel.findOneAndUpdate({ _id: entity._id }, entity as Category);
+    const data = entity._id !== undefined ? await this.getById(entity._id.toString(), {}) : null;
+    return data;
   }
 
   public async delete(entity: ICategory): Promise<boolean> {

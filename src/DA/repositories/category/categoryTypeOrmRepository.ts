@@ -21,9 +21,10 @@ export default class CategoryTypeOrmRepository implements ICategoryRepository {
     return data ? data : null;
   }
 
-  public async update(entity: ICategory): Promise<boolean> {
+  public async update(entity: ICategory): Promise<ICategory | null> {
     await getRepository(Category).update({ _id: (entity as Category)._id }, entity as Category);
-    return true;
+    const data = await this.getById((entity as Category)._id, {});
+    return data;
   }
 
   public async delete(entity: ICategory): Promise<boolean> {
