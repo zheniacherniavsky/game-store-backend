@@ -54,11 +54,11 @@ function init(): void {
       const arcade = new CategoryModel({ displayName: 'Arcade' });
       const board = new CategoryModel({ displayName: 'Board' });
 
-      shooter.save();
-      arcade.save();
-      board.save();
+      await shooter.save();
+      await arcade.save();
+      await board.save();
 
-      new ProductModel({
+      await new ProductModel({
         displayName: 'Battlefield 4',
         categoriesIds: [shooter._id.toString(), arcade._id.toString()],
         createdAt: new Date(),
@@ -66,7 +66,7 @@ function init(): void {
         price: 29,
       }).save();
 
-      new ProductModel({
+      await new ProductModel({
         displayName: 'Battlefield 1',
         categoriesIds: [shooter._id.toString(), arcade._id.toString()],
         createdAt: new Date(),
@@ -74,7 +74,7 @@ function init(): void {
         price: 29,
       }).save();
 
-      new ProductModel({
+      await new ProductModel({
         displayName: 'Battlefield 2',
         categoriesIds: [shooter._id.toString(), arcade._id.toString()],
         createdAt: new Date(),
@@ -82,7 +82,7 @@ function init(): void {
         price: 29,
       }).save();
 
-      new ProductModel({
+      await new ProductModel({
         displayName: 'Chess',
         categoriesIds: [shooter._id.toString()],
         createdAt: new Date(),
@@ -90,8 +90,9 @@ function init(): void {
         price: 0,
       }).save();
 
+      // temp admin account
       const adminPsw = await hashData('Admin123');
-      new AccountModel({
+      await new AccountModel({
         username: 'admin',
         password: adminPsw,
         firstName: 'admin',

@@ -23,8 +23,7 @@ export default class ProductTypeOrmRepository implements IProductRepository {
     return true;
   }
   public async create(entity: IProduct): Promise<IProduct> {
-    if (entity.categoriesIds) {
-      console.log(entity.categoriesIds.join(','));
+    if (entity.categoriesIds && entity.categoriesIds.length > 0) {
       const categories = await getRepository(Category)
         .createQueryBuilder('category')
         .where(`category._id IN (${entity.categoriesIds.join(',')})`)

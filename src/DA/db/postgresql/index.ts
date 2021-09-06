@@ -1,5 +1,7 @@
 import { createConnection, getRepository } from 'typeorm';
+import { hashData } from '../../../helpers/hash';
 import logger from '../../../helpers/logger';
+import { Account } from './entity/account';
 import { Category } from './entity/category';
 import { Product } from './entity/product';
 
@@ -65,6 +67,17 @@ async function init(): Promise<void> {
       await productsRepository.save(product2);
       await productsRepository.save(product3);
       await productsRepository.save(product4);
+
+      // temp admin account
+      const adminAccount = new Account();
+      adminAccount.firstName = 'admin';
+      adminAccount.lastName = 'adminsky';
+      adminAccount.password = await hashData('Admin123');
+      adminAccount.role = 'admin';
+      adminAccount.username = 'admin';
+
+      const accountsRepository = getRepository(Account);
+      await accountsRepository.save(adminAccount);
 
       logger.log({
         level: 'info',
