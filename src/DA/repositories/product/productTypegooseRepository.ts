@@ -2,6 +2,7 @@ import { mongoose } from '@typegoose/typegoose';
 import { ProductQueryObject, productSearchQueryHandler } from '../../../helpers/queryHandler';
 import { IPagination, paginationQueryHandler } from '../../../helpers/queryHandler/pagination';
 import { IProduct, IProductRepository } from '../../../types/types';
+import { CategoryModel } from '../../db/mongodb/models/category';
 import { Product, ProductModel } from '../../db/mongodb/models/product';
 
 export default class ProductTypegooseRepository implements IProductRepository {
@@ -22,6 +23,9 @@ export default class ProductTypegooseRepository implements IProductRepository {
     return data ? true : false;
   }
   public async create(entity: IProduct): Promise<IProduct> {
+    entity.categoriesIds = (await CategoryModel.find({ _id: { $in: entity.categoriesIds } })).map((category) =>
+      category._id.toString()
+    );
     const data: IProduct = await new ProductModel(entity).save();
     return data;
   }
