@@ -8,7 +8,10 @@ import { Product } from '../../db/postgresql/entity/product';
 export default class ProductTypeOrmRepository implements IProductRepository {
   public async getById(id: string): Promise<IProduct | null> {
     const data: IProduct | undefined = await getRepository(Product).findOne({
-      _id: id,
+      where: {
+        _id: id,
+      },
+      relations: ['categories'],
     });
     return data ? data : null;
   }
