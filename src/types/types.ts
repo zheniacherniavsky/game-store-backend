@@ -33,7 +33,7 @@ interface Repository<T> {
   getById: (id: string) => Promise<T | null>;
   create: (entity: T) => Promise<T>;
   update: (entity: T) => Promise<T | null>;
-  delete: (entity: T) => Promise<boolean>;
+  delete: (id: string) => Promise<boolean>;
 }
 
 export interface IProductRepository extends Repository<IProduct> {

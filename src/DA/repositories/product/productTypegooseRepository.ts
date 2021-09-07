@@ -26,9 +26,9 @@ export default class ProductTypegooseRepository implements IProductRepository {
     return data;
   }
 
-  public async delete(entity: IProduct): Promise<boolean> {
-    const data = await ProductModel.deleteOne({ _id: entity._id });
-    return data ? true : false;
+  public async delete(id: string): Promise<boolean> {
+    const data = await ProductModel.deleteOne({ _id: id });
+    return data.deletedCount !== 0 ? true : false;
   }
   public async create(entity: IProduct): Promise<IProduct> {
     await this.handleProductCategories(entity);

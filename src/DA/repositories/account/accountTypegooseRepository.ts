@@ -27,8 +27,8 @@ export default class AccountTypegooseRepository implements IAccountRepository {
     return data;
   }
 
-  public async delete(entity: IAccount): Promise<boolean> {
-    const data = await AccountModel.deleteOne({ _id: entity._id });
+  public async delete(id: string): Promise<boolean> {
+    const data = await AccountModel.deleteOne({ _id: id });
     return data ? true : false;
   }
 

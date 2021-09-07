@@ -31,9 +31,9 @@ export default class ProductTypeOrmRepository implements IProductRepository {
     return data;
   }
 
-  public async delete(entity: IProduct): Promise<boolean> {
-    await getRepository(Product).delete({ _id: (entity as Product)._id });
-    return true;
+  public async delete(id: string): Promise<boolean> {
+    const deleteResult = await getRepository(Product).delete({ _id: id });
+    return deleteResult.affected !== 0 ? true : false;
   }
   public async create(entity: IProduct): Promise<IProduct> {
     await this.handleProductCategories(entity);

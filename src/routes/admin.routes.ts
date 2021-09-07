@@ -59,4 +59,13 @@ export const AdminRouter = (router: Router): void => {
       })
       .catch((err) => next(err));
   });
+
+  router.delete('/products/:id', async (req, res, next) => {
+    await ProductRepository.delete(req.params.id)
+      .then((result) => {
+        if (result) res.sendStatus(200);
+        else next(new ResponseError(404, `Product with id ${req.params.id} was not found!`));
+      })
+      .catch((err) => next(err));
+  });
 };

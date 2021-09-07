@@ -27,8 +27,8 @@ export default class CategoryTypeOrmRepository implements ICategoryRepository {
     return data;
   }
 
-  public async delete(entity: ICategory): Promise<boolean> {
-    await getRepository(Category).delete({ _id: (entity as Category)._id });
+  public async delete(id: string): Promise<boolean> {
+    await getRepository(Category).delete({ _id: id });
     return true;
   }
 
