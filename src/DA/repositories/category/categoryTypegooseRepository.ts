@@ -42,6 +42,7 @@ export default class CategoryTypegooseRepository implements ICategoryRepository 
   }
 
   public async delete(id: string): Promise<boolean> {
+    await ProductModel.updateMany({ categoriesIds: id }, { $pull: { categoriesIds: id } });
     const data = await CategoryModel.deleteOne({ _id: id });
     return data ? true : false;
   }
