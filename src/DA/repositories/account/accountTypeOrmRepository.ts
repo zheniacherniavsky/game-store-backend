@@ -25,8 +25,8 @@ export default class AccountTypeOrmRepository implements IAccountRepository {
   }
 
   public async delete(id: string): Promise<boolean> {
-    await getRepository(Account).delete({ _id: id });
-    return true;
+    const deleteResult = await getRepository(Account).delete({ _id: id });
+    return deleteResult.affected !== 0 ? true : false;
   }
 
   public async create(entity: IAccount): Promise<IAccount> {

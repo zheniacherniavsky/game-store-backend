@@ -1,8 +1,8 @@
 import { Router } from 'express';
-import { ProductRepository } from '../DA';
+import { CategoryRepository, ProductRepository } from '../DA';
 import { ResponseError } from '../helpers/errorHandler';
 import { validateProduct } from '../helpers/validation';
-import { IProduct } from '../types/types';
+import { ICategory, IProduct } from '../types/types';
 
 export const AdminRouter = (router: Router): void => {
   router.get('/products/:id', async (req, res, next) => {
@@ -65,6 +65,54 @@ export const AdminRouter = (router: Router): void => {
       .then((result) => {
         if (result) res.sendStatus(200);
         else next(new ResponseError(404, `Product with id ${req.params.id} was not found!`));
+      })
+      .catch((err) => next(err));
+  });
+
+  router.get('/categories/:id', async (req, res, next) => {
+    await CategoryRepository.getById(req.params.id, req.query)
+      .then((category) => {
+        if (!category) next(new ResponseError(404, `Category with id ${req.params.id} was not found!`));
+
+        res.status(200).send(category);
+      })
+      .catch((err) => next(err));
+  });
+
+  router.post('/categories', async (req, res, next) => {
+    const { displayName } = req.body;
+    const category: ICategory = {
+      displayName,
+    };
+
+    await CategoryRepository.create(category)
+      .then((newCategory) => res.status(200).send(newCategory))
+      .catch((err) => next(err));
+  });
+
+  router.patch('/categories/:id', async (req, res, next) => {
+    await CategoryRepository.getById(req.params.id, {})
+      .then(async (category) => {
+        if (category === null) next(new ResponseError(404, `Category with id ${req.params.id} was not found!`));
+        else {
+          const { displayName } = req.body;
+          const changedCategory: ICategory = {
+            _id: category._id,
+            displayName: displayName || category.displayName,
+          };
+          await CategoryRepository.update(changedCategory).then((updatedCategory) => {
+            res.status(200).send(updatedCategory);
+          });
+        }
+      })
+      .catch((err) => next(err));
+  });
+
+  router.delete('/categories/:id', async (req, res, next) => {
+    await CategoryRepository.delete(req.params.id)
+      .then((result) => {
+        if (result) res.sendStatus(200);
+        else next(new ResponseError(404, `Category with id ${req.params.id} was not found!`));
       })
       .catch((err) => next(err));
   });
