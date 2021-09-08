@@ -28,6 +28,11 @@ export default class CategoryTypeOrmRepository implements ICategoryRepository {
   }
 
   public async delete(id: string): Promise<boolean> {
+    const category = await this.getById(id, {});
+    if (category !== null) {
+      category.products = [];
+    }
+    await getRepository(Category).save(category as Category);
     const deleteResult = await getRepository(Category).delete({ _id: id });
     return deleteResult.affected !== 0 ? true : false;
   }
