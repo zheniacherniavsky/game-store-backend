@@ -17,22 +17,41 @@ const port = process.env.SRV_PORT;
 const app = express();
 const router = express.Router();
 const adminRouter = express.Router();
+const buyerRouter = express.Router();
 
 import { ProductRouter } from './routes/product.routes';
 import { CategoryRouter } from './routes/category.routes';
 import { AuthRouter } from './routes/auth.routes';
 import { ProfileRouter } from './routes/profile.routes';
 import { AdminRouter } from './routes/admin.routes';
+import { BuyerRouter } from './routes/buyer.routes';
 
 AuthRouter(router);
 ProfileRouter(router);
 ProductRouter(router);
 CategoryRouter(router);
 AdminRouter(adminRouter);
+BuyerRouter(buyerRouter);
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+
+// free access routes
 app.use('/', router);
+
+// buyer routes
+app.use(
+  '/',
+  passport.authenticate('jwt', { session: false }),
+  (req, res, next) => {
+    const { role } = req.user as JWTPayload;
+    if (role !== 'buyer') next(new ResponseError(403, 'You dont have permission for this operations'));
+    else next();
+  },
+  buyerRouter
+);
+
+// admin routes
 app.use(
   '/admin',
   passport.authenticate('jwt', { session: false }),
@@ -44,6 +63,7 @@ app.use(
   adminRouter
 );
 
+// logging
 app.use((req, res, next) => {
   if (res.writableEnded) {
     logger.log({
@@ -60,6 +80,7 @@ app.use((req, res, next) => {
   }
 });
 
+// route not found
 app.use((req, res) => {
   res.status(404);
   res.json({ error: 'Not found!' });
