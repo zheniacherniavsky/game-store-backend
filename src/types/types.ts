@@ -28,6 +28,13 @@ export interface IAccount {
   role: string;
 }
 
+export interface IRating {
+  _id?: ObjectId | string;
+  userId: string;
+  productId: string;
+  rating: number;
+}
+
 // Repositories
 interface Repository<T> {
   getById: (id: string) => Promise<T | null>;
@@ -46,4 +53,8 @@ export interface ICategoryRepository extends Omit<Repository<ICategory>, 'getByI
 }
 export interface IAccountRepository extends Repository<IAccount> {
   getByUsername: (username: string) => Promise<IAccount | null>;
+}
+
+export interface IRatingRepository extends Repository<IRating> {
+  getByProductId: (productId: string) => Promise<IRating[]>;
 }
