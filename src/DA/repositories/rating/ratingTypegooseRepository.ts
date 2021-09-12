@@ -31,4 +31,13 @@ export default class RatingTypegooseRepository implements IRatingRepository {
     const data: IRating = await new RatingModel(entity).save();
     return data;
   }
+
+  public async getProductRating(productId: string): Promise<number> {
+    const productRatings = await this.getByProductId(productId);
+    const rating: number =
+      productRatings.reduce((result: number, ratingObject: IRating) => result + ratingObject.rating, 0) /
+      productRatings.length;
+
+    return Math.floor(rating);
+  }
 }

@@ -2,6 +2,12 @@
 import { ObjectId } from 'mongoose';
 import { CategoryQueryObject, ProductQueryObject } from '../helpers/queryHandler';
 
+export interface RequestUser {
+  id: string;
+  username: string;
+  role: string;
+}
+
 // Models
 export interface IProduct {
   _id?: ObjectId | string;
@@ -57,4 +63,5 @@ export interface IAccountRepository extends Repository<IAccount> {
 
 export interface IRatingRepository extends Repository<IRating> {
   getByProductId: (productId: string) => Promise<IRating[]>;
+  getProductRating: (productId: string) => Promise<number>;
 }
