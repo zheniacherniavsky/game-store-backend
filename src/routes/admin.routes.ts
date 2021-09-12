@@ -17,14 +17,14 @@ export const AdminRouter = (router: Router): void => {
 
   router.post('/products', async (req, res, next) => {
     try {
-      const { displayName, price, totalRating, categoriesIds } = req.body;
+      const { displayName, price, categoriesIds } = req.body;
 
       const product: IProduct = {
         displayName,
         categoriesIds: categoriesIds ? Array.from(categoriesIds) : [],
         createdAt: new Date(),
         price,
-        totalRating,
+        totalRating: 0,
       };
 
       validateProduct(product);

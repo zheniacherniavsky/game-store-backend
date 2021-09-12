@@ -39,18 +39,6 @@ app.use(express.json());
 // free access routes
 app.use('/', router);
 
-// buyer routes
-app.use(
-  '/',
-  passport.authenticate('jwt', { session: false }),
-  (req, res, next) => {
-    const { role } = req.user as JWTPayload;
-    if (role !== 'buyer') next(new ResponseError(403, 'You dont have permission for this operations'));
-    else next();
-  },
-  buyerRouter
-);
-
 // admin routes
 app.use(
   '/admin',
@@ -61,6 +49,18 @@ app.use(
     else next();
   },
   adminRouter
+);
+
+// buyer routes
+app.use(
+  '/',
+  passport.authenticate('jwt', { session: false }),
+  (req, res, next) => {
+    const { role } = req.user as JWTPayload;
+    if (role !== 'buyer') next(new ResponseError(403, 'You dont have permission for this operations'));
+    else next();
+  },
+  buyerRouter
 );
 
 // logging
