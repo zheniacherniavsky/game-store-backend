@@ -4,12 +4,14 @@ import logger from './helpers/logger';
 import { errorHandler, ResponseError } from './helpers/errorHandler';
 import { JWTPayload } from './config/passport';
 import WebSocket from 'ws';
+import jobs from './jobs';
 
 import 'reflect-metadata';
 import './config/passport';
 
 import dotenv from 'dotenv';
 dotenv.config();
+jobs.start();
 
 import { database } from './DA';
 database.connect();
