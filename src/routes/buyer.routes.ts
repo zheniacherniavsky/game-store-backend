@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { ProductRepository, RatingRepository } from '../DA';
 import { ResponseError } from '../helpers/errorHandler';
 import { validateRating } from '../helpers/validation';
+import { wss } from '../server';
 import { IRating, RequestUser } from '../types/types';
 
 export const BuyerRouter = (router: Router): void => {
@@ -23,6 +24,9 @@ export const BuyerRouter = (router: Router): void => {
 
             product.totalRating = await RatingRepository.getProductRating(req.params.id);
             const updatedProduct = await ProductRepository.update(product);
+            wss.clients.forEach((client) => {
+              console.log(client);
+            });
             res.status(200).send(updatedProduct);
           } else next(new ResponseError(403, `Unauthorized!`));
         }

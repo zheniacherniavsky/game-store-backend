@@ -10,7 +10,8 @@
     "pretty": "pretty-quick --staged",
     "lint": "eslint . --ext .ts",
     "lint-fix": "eslint . --ext .ts --fix",
-    "prettier": "prettier --config .prettierrc --write src/**/*.ts"
+    "prettier": "prettier --config .prettierrc --write src/**/*.ts",
+    "test:websocket": "start ./test/websocket/index.html"
   },
   "repository": {
     "type": "git",
@@ -40,7 +41,8 @@
     "rand-token": "^1.0.1",
     "reflect-metadata": "^0.1.13",
     "typeorm": "^0.2.37",
-    "winston": "^3.3.3"
+    "winston": "^3.3.3",
+    "ws": "^8.2.2"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.0",
@@ -50,6 +52,7 @@
     "@types/passport": "^1.0.7",
     "@types/passport-jwt": "^3.0.6",
     "@types/passport-local": "^1.0.34",
+    "@types/ws": "^7.4.7",
     "@typescript-eslint/eslint-plugin": "^4.29.1",
     "@typescript-eslint/parser": "^4.29.1",
     "eslint": "^7.32.0",

@@ -3,6 +3,7 @@ import passport from 'passport';
 import logger from './helpers/logger';
 import { errorHandler, ResponseError } from './helpers/errorHandler';
 import { JWTPayload } from './config/passport';
+import WebSocket from 'ws';
 
 import 'reflect-metadata';
 import './config/passport';
@@ -13,8 +14,18 @@ dotenv.config();
 import { database } from './DA';
 database.connect();
 
-const port = process.env.SRV_PORT;
+const port = process.env.SRV_PORT || 3000;
+const wssPort = process.env.WSS_PORT || '3001';
 const app = express();
+export const wss = new WebSocket.Server({ port: parseInt(wssPort) });
+
+wss.on('listening', () => {
+  logger.log({
+    level: 'info',
+    message: `Websocket is running at ws://localhost:${wssPort}`,
+  });
+});
+
 const router = express.Router();
 const adminRouter = express.Router();
 const buyerRouter = express.Router();
