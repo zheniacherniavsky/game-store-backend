@@ -39,6 +39,7 @@ export interface IRating {
   userId: string;
   productId: string;
   rating: number;
+  createdAt: Date;
 }
 
 // Repositories
@@ -64,4 +65,5 @@ export interface IAccountRepository extends Repository<IAccount> {
 export interface IRatingRepository extends Repository<IRating> {
   getByProductId: (productId: string) => Promise<IRating[]>;
   getProductRating: (productId: string) => Promise<number>;
+  getLastRatings: () => Promise<IRating[]>;
 }

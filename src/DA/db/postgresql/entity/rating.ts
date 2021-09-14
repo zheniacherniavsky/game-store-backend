@@ -15,6 +15,10 @@ export class Rating implements IRating {
   @Column()
   productId: string;
 
+  @Index('CreatedAt')
+  @Column()
+  createdAt: Date;
+
   @Column()
   rating: number;
 }

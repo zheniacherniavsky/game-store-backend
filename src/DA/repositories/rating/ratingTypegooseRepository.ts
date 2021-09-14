@@ -3,6 +3,14 @@ import { IRating, IRatingRepository } from '../../../types/types';
 import { Rating, RatingModel } from '../../db/mongodb/models/rating';
 
 export default class RatingTypegooseRepository implements IRatingRepository {
+  public async getLastRatings(): Promise<IRating[]> {
+    const data: IRating[] = await RatingModel.find()
+      .sort([['createdAt', -1]])
+      .limit(10);
+
+    return data;
+  }
+
   public async getById(id: string): Promise<IRating | null> {
     const data: IRating | null = await RatingModel.findOne({
       _id: new mongoose.Types.ObjectId(id),

@@ -3,6 +3,17 @@ import { IRating, IRatingRepository } from '../../../types/types';
 import { Rating } from '../../db/postgresql/entity/rating';
 
 export default class RatingTypeOrmRepository implements IRatingRepository {
+  public async getLastRatings(): Promise<IRating[]> {
+    const data: IRating[] = await getRepository(Rating).find({
+      order: {
+        createdAt: 'DESC',
+      },
+      take: 10,
+    });
+
+    return data;
+  }
+
   public async getById(id: string): Promise<IRating | null> {
     const data: IRating | undefined = await getRepository(Rating).findOne({
       _id: id,

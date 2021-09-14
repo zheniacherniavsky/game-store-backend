@@ -19,6 +19,7 @@ export const BuyerRouter = (router: Router): void => {
               userId: (req.user as RequestUser).id,
               productId: req.params.id,
               rating: rating,
+              createdAt: new Date(),
             };
             await RatingRepository.create(ratingObj);
 
