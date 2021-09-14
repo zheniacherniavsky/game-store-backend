@@ -11,6 +11,14 @@ export default class RatingTypegooseRepository implements IRatingRepository {
     return data;
   }
 
+  public async cleanupLastRatings(): Promise<void> {
+    await LastRatingModel.deleteMany({
+      id: {
+        $ne: 'null',
+      },
+    });
+  }
+
   public async getById(id: string): Promise<IRating | null> {
     const data: IRating | null = await RatingModel.findOne({
       _id: new mongoose.Types.ObjectId(id),

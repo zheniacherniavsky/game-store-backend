@@ -1,12 +1,23 @@
 import cron from 'node-cron';
+import { RatingRepository } from '../DA';
 import logger from '../helpers/logger';
 
 class Jobs {
   start(): void {
-    this.test();
+    this.cleanupLastRatings();
     logger.log({
       level: 'info',
       message: `Jobs was started.`,
+    });
+  }
+
+  private cleanupLastRatings(): void {
+    cron.schedule('0 0 * * 1', () => {
+      RatingRepository.cleanupLastRatings();
+      logger.log({
+        level: 'info',
+        message: `Jobs: last ratings was cleaned`,
+      });
     });
   }
 

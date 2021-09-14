@@ -11,10 +11,11 @@ import './config/passport';
 
 import dotenv from 'dotenv';
 dotenv.config();
-jobs.start();
 
 import { database } from './DA';
 database.connect();
+
+jobs.start();
 
 const port = process.env.SRV_PORT || 3000;
 const wssPort = process.env.WSS_PORT || '3001';

@@ -1,4 +1,4 @@
-import { getRepository } from 'typeorm';
+import { getRepository, Not } from 'typeorm';
 import { IRating, IRatingRepository } from '../../../types/types';
 import { LastRating, Rating } from '../../db/postgresql/entity/rating';
 
@@ -12,6 +12,12 @@ export default class RatingTypeOrmRepository implements IRatingRepository {
     });
 
     return data;
+  }
+
+  public async cleanupLastRatings(): Promise<void> {
+    await getRepository(LastRating).delete({
+      _id: Not('-1'),
+    });
   }
 
   public async getById(id: string): Promise<IRating | null> {
