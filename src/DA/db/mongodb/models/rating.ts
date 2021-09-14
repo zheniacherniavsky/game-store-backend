@@ -17,4 +17,21 @@ export class Rating implements IRating {
   createdAt: Date;
 }
 
+@index({ userId: 1, productId: 1, createdAt: 1 })
+@modelOptions({ options: { allowMixed: Severity.ALLOW } })
+export class LastRating implements IRating {
+  @prop()
+  userId: string;
+
+  @prop()
+  productId: string;
+
+  @prop()
+  rating: number;
+
+  @prop()
+  createdAt: Date;
+}
+
 export const RatingModel = getModelForClass(Rating);
+export const LastRatingModel = getModelForClass(LastRating);

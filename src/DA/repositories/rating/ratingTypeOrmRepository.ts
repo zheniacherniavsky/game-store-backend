@@ -1,10 +1,10 @@
 import { getRepository } from 'typeorm';
 import { IRating, IRatingRepository } from '../../../types/types';
-import { Rating } from '../../db/postgresql/entity/rating';
+import { LastRating, Rating } from '../../db/postgresql/entity/rating';
 
 export default class RatingTypeOrmRepository implements IRatingRepository {
   public async getLastRatings(): Promise<IRating[]> {
-    const data: IRating[] = await getRepository(Rating).find({
+    const data: IRating[] = await getRepository(LastRating).find({
       order: {
         createdAt: 'DESC',
       },
@@ -39,6 +39,7 @@ export default class RatingTypeOrmRepository implements IRatingRepository {
   }
   public async create(entity: IRating): Promise<IRating> {
     const data = await getRepository(Rating).save(entity as Rating);
+    getRepository(LastRating).save(entity as LastRating);
     return data;
   }
 

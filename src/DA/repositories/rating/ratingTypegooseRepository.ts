@@ -1,10 +1,10 @@
 import { mongoose } from '@typegoose/typegoose';
 import { IRating, IRatingRepository } from '../../../types/types';
-import { Rating, RatingModel } from '../../db/mongodb/models/rating';
+import { LastRatingModel, Rating, RatingModel } from '../../db/mongodb/models/rating';
 
 export default class RatingTypegooseRepository implements IRatingRepository {
   public async getLastRatings(): Promise<IRating[]> {
-    const data: IRating[] = await RatingModel.find()
+    const data: IRating[] = await LastRatingModel.find()
       .sort([['createdAt', -1]])
       .limit(10);
 
@@ -37,6 +37,7 @@ export default class RatingTypegooseRepository implements IRatingRepository {
   }
   public async create(entity: IRating): Promise<IRating> {
     const data: IRating = await new RatingModel(entity).save();
+    new LastRatingModel(entity).save();
     return data;
   }
 

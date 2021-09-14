@@ -15,7 +15,29 @@ export class Rating implements IRating {
   @Column()
   productId: string;
 
-  @Index('CreatedAt')
+  @Index('Rating createdAt')
+  @Column()
+  createdAt: Date;
+
+  @Column()
+  rating: number;
+}
+
+@Entity('lastRating')
+export class LastRating implements IRating {
+  @Index({ unique: true })
+  @PrimaryGeneratedColumn()
+  _id: string;
+
+  @Index('LastRating user id')
+  @Column()
+  userId: string;
+
+  @Index('LastRating product id')
+  @Column()
+  productId: string;
+
+  @Index('LastRating createdAt')
   @Column()
   createdAt: Date;
 
