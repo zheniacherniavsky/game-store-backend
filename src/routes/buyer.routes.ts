@@ -25,9 +25,14 @@ export const BuyerRouter = (router: Router): void => {
 
             product.totalRating = await RatingRepository.getProductRating(req.params.id);
             const updatedProduct = await ProductRepository.update(product);
-            wss.clients.forEach((client) => {
-              console.log(client);
+
+            wss.clients.forEach(async (client) => {
+              if (client.readyState === client.OPEN) {
+                const lastRatings: IRating[] = await RatingRepository.getLastRatings();
+                client.send(JSON.stringify(lastRatings));
+              }
             });
+
             res.status(200).send(updatedProduct);
           } else next(new ResponseError(403, `Unauthorized!`));
         }
