@@ -1,11 +1,18 @@
-import { Router } from 'express';
+import { Router, Request, Response, NextFunction } from 'express';
+import { JWTPayload } from '../config/passport';
 import { CategoryRepository, ProductRepository } from '../DA';
 import { ResponseError } from '../helpers/errorHandler';
 import { validateProduct } from '../helpers/validation';
 import { ICategory, IProduct } from '../types/types';
 
 export const AdminRouter = (router: Router): void => {
-  router.get('/admin/products/:id', async (req, res, next) => {
+  const checkRole = (req: Request, res: Response, next: NextFunction) => {
+    const { role } = req.user as JWTPayload;
+    if (role !== 'admin') next(new ResponseError(403, 'You dont have permission for this operations'));
+    else next();
+  };
+
+  router.get('/admin/products/:id', checkRole, async (req, res, next) => {
     await ProductRepository.getById(req.params.id)
       .then((product) => {
         if (product === null) next(new ResponseError(404, `Product with id ${req.params.id} was not found!`));
@@ -15,7 +22,7 @@ export const AdminRouter = (router: Router): void => {
     next();
   });
 
-  router.post('/admin/products', async (req, res, next) => {
+  router.post('/admin/products', checkRole, async (req, res, next) => {
     try {
       const { displayName, price, totalRating, categoriesIds } = req.body;
 
@@ -37,7 +44,7 @@ export const AdminRouter = (router: Router): void => {
     next();
   });
 
-  router.patch('/admin/products/:id', async (req, res, next) => {
+  router.patch('/admin/products/:id', checkRole, async (req, res, next) => {
     await ProductRepository.getById(req.params.id)
       .then(async (product) => {
         if (product === null) next(new ResponseError(404, `Product with id ${req.params.id} was not found!`));
@@ -60,7 +67,7 @@ export const AdminRouter = (router: Router): void => {
       .catch((err) => next(err));
   });
 
-  router.delete('/admin/products/:id', async (req, res, next) => {
+  router.delete('/admin/products/:id', checkRole, async (req, res, next) => {
     await ProductRepository.delete(req.params.id)
       .then((result) => {
         if (result) res.sendStatus(200);
@@ -69,7 +76,7 @@ export const AdminRouter = (router: Router): void => {
       .catch((err) => next(err));
   });
 
-  router.get('/admin/categories/:id', async (req, res, next) => {
+  router.get('/admin/categories/:id', checkRole, async (req, res, next) => {
     await CategoryRepository.getById(req.params.id, req.query)
       .then((category) => {
         if (!category) next(new ResponseError(404, `Category with id ${req.params.id} was not found!`));
@@ -79,7 +86,7 @@ export const AdminRouter = (router: Router): void => {
       .catch((err) => next(err));
   });
 
-  router.post('/admin/categories', async (req, res, next) => {
+  router.post('/admin/categories', checkRole, async (req, res, next) => {
     const { displayName } = req.body;
     const category: ICategory = {
       displayName,
@@ -90,7 +97,7 @@ export const AdminRouter = (router: Router): void => {
       .catch((err) => next(err));
   });
 
-  router.patch('/admin/categories/:id', async (req, res, next) => {
+  router.patch('/admin/categories/:id', checkRole, async (req, res, next) => {
     await CategoryRepository.getById(req.params.id, {})
       .then(async (category) => {
         if (category === null) next(new ResponseError(404, `Category with id ${req.params.id} was not found!`));
@@ -108,7 +115,7 @@ export const AdminRouter = (router: Router): void => {
       .catch((err) => next(err));
   });
 
-  router.delete('/admin/categories/:id', async (req, res, next) => {
+  router.delete('/admin/categories/:id', checkRole, async (req, res, next) => {
     await CategoryRepository.delete(req.params.id)
       .then((result) => {
         if (result) res.sendStatus(200);
