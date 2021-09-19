@@ -1,6 +1,7 @@
 import express from 'express';
 import logger from './helpers/logger';
-import { errorHandler } from './helpers/errorHandler';
+import passport from 'passport';
+import { errorHandler, ResponseError } from './helpers/errorHandler';
 
 import 'reflect-metadata';
 import './config/passport';
@@ -20,11 +21,23 @@ import { CategoryRouter } from './routes/category.routes';
 import { AuthRouter } from './routes/auth.routes';
 import { ProfileRouter } from './routes/profile.routes';
 import { AdminRouter } from './routes/admin.routes';
+import { JWTPayload } from './config/passport';
 
+// not authorizated routes
 AuthRouter(router);
-ProfileRouter(router);
 ProductRouter(router);
 CategoryRouter(router);
+
+// authorizated routes
+router.use(passport.authenticate('jwt', { session: false }));
+ProfileRouter(router);
+
+// authorizated as admin routes
+router.use((req, res, next) => {
+  const { role } = req.user as JWTPayload;
+  if (role !== 'admin') next(new ResponseError(403, 'You dont have permission for this operations'));
+  else next();
+});
 AdminRouter(router);
 
 app.use(express.urlencoded({ extended: true }));

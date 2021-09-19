@@ -1,12 +1,11 @@
 import { Router } from 'express';
-import passport from 'passport';
 import { AccountRepository } from '../DA';
 import { ResponseError } from '../helpers/errorHandler';
 import { compareHashedData, hashData } from '../helpers/hash';
 import { validateAccountAuthInfo, validateProfileInfo } from '../helpers/validation';
 
 export const ProfileRouter = (router: Router): void => {
-  router.put('/profile', passport.authenticate('jwt', { session: false }), async (req, res, next) => {
+  router.put('/profile', async (req, res, next) => {
     const { username, firstName, lastName } = req.body;
     validateProfileInfo({ username, firstName, lastName });
 
@@ -25,7 +24,7 @@ export const ProfileRouter = (router: Router): void => {
       .catch((err) => next(err));
   });
 
-  router.get('/profile', passport.authenticate('jwt', { session: false }), async (req, res, next) => {
+  router.get('/profile', async (req, res, next) => {
     const { username } = req.body;
     if (username) {
       const account = await AccountRepository.getByUsername(username);
@@ -34,7 +33,7 @@ export const ProfileRouter = (router: Router): void => {
     } else next(new ResponseError(400, 'Field username is invalid'));
   });
 
-  router.post('/profile/password', passport.authenticate('jwt', { session: false }), (req, res, next) => {
+  router.post('/profile/password', (req, res, next) => {
     const { username, password } = req.body;
     validateAccountAuthInfo({ username, password });
     AccountRepository.getByUsername(username).then(async (account) => {

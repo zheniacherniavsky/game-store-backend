@@ -1,18 +1,10 @@
 import { Router } from 'express';
-import passport from 'passport';
-import { JWTPayload } from '../config/passport';
 import { CategoryRepository, ProductRepository } from '../DA';
 import { ResponseError } from '../helpers/errorHandler';
 import { validateProduct } from '../helpers/validation';
 import { ICategory, IProduct } from '../types/types';
 
 export const AdminRouter = (router: Router): void => {
-  router.use(passport.authenticate('jwt', { session: false }), (req, res, next) => {
-    const { role } = req.user as JWTPayload;
-    if (role !== 'admin') next(new ResponseError(403, 'You dont have permission for this operations'));
-    else next();
-  });
-
   router.get('/admin/products/:id', async (req, res, next) => {
     await ProductRepository.getById(req.params.id)
       .then((product) => {
