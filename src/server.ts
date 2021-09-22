@@ -1,6 +1,5 @@
 import express from 'express';
 import logger from './helpers/logger';
-import { errorHandler } from './middlewares/errorHandler';
 
 import 'reflect-metadata';
 import './config/passport';
@@ -20,13 +19,11 @@ import { CategoryRouter } from './routes/category.routes';
 import { AuthRouter } from './routes/auth.routes';
 import { ProfileRouter } from './routes/profile.routes';
 import { AdminRouter } from './routes/admin.routes';
-import requestLogger from './middlewares/requestLogger';
-import routeNotFound from './middlewares/routeNotFound';
+import { requestLogger, routeNotFound, errorHandler } from './middlewares';
 
 AuthRouter(router);
 ProductRouter(router);
 CategoryRouter(router);
-
 ProfileRouter(router);
 AdminRouter(router);
 
