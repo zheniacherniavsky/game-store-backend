@@ -1,22 +1,16 @@
-import { Router, Request, Response, NextFunction } from 'express';
-import { JWTPayload } from '../config/passport';
+import { Router } from 'express';
 import { CategoryRepository, ProductRepository } from '../DA';
 import { ResponseError } from '../middlewares/errorHandler';
 import { validateProduct } from '../helpers/validation';
 import { ICategory, IProduct } from '../types/types';
 import passport from 'passport';
+import adminCheck from '../middlewares/adminCheck';
 
 export const AdminRouter = (router: Router): void => {
-  const checkRole = (req: Request, res: Response, next: NextFunction) => {
-    const { role } = req.user as JWTPayload;
-    if (role !== 'admin') next(new ResponseError(403, 'You dont have permission for this operations'));
-    else next();
-  };
-
   router.get(
     '/admin/products/:id',
     passport.authenticate('jwt', { session: false }),
-    checkRole,
+    adminCheck,
     async (req, res, next) => {
       await ProductRepository.getById(req.params.id)
         .then((product) => {
@@ -31,7 +25,7 @@ export const AdminRouter = (router: Router): void => {
   router.post(
     '/admin/products',
     passport.authenticate('jwt', { session: false }),
-    checkRole,
+    adminCheck,
     async (req, res, next) => {
       try {
         const { displayName, price, totalRating, categoriesIds } = req.body;
@@ -58,7 +52,7 @@ export const AdminRouter = (router: Router): void => {
   router.patch(
     '/admin/products/:id',
     passport.authenticate('jwt', { session: false }),
-    checkRole,
+    adminCheck,
     async (req, res, next) => {
       await ProductRepository.getById(req.params.id)
         .then(async (product) => {
@@ -86,7 +80,7 @@ export const AdminRouter = (router: Router): void => {
   router.delete(
     '/admin/products/:id',
     passport.authenticate('jwt', { session: false }),
-    checkRole,
+    adminCheck,
     async (req, res, next) => {
       await ProductRepository.delete(req.params.id)
         .then((result) => {
@@ -100,7 +94,7 @@ export const AdminRouter = (router: Router): void => {
   router.get(
     '/admin/categories/:id',
     passport.authenticate('jwt', { session: false }),
-    checkRole,
+    adminCheck,
     async (req, res, next) => {
       await CategoryRepository.getById(req.params.id, req.query)
         .then((category) => {
@@ -115,7 +109,7 @@ export const AdminRouter = (router: Router): void => {
   router.post(
     '/admin/categories',
     passport.authenticate('jwt', { session: false }),
-    checkRole,
+    adminCheck,
     async (req, res, next) => {
       const { displayName } = req.body;
       const category: ICategory = {
@@ -131,7 +125,7 @@ export const AdminRouter = (router: Router): void => {
   router.patch(
     '/admin/categories/:id',
     passport.authenticate('jwt', { session: false }),
-    checkRole,
+    adminCheck,
     async (req, res, next) => {
       await CategoryRepository.getById(req.params.id, {})
         .then(async (category) => {
@@ -154,7 +148,7 @@ export const AdminRouter = (router: Router): void => {
   router.delete(
     '/admin/categories/:id',
     passport.authenticate('jwt', { session: false }),
-    checkRole,
+    adminCheck,
     async (req, res, next) => {
       await CategoryRepository.delete(req.params.id)
         .then((result) => {
