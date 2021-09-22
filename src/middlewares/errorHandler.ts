@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { NextFunction, Request, Response } from 'express';
-import logger from './logger';
+import logger from '../helpers/logger';
 
 export class ResponseError extends Error {
   constructor(status: number, message: string) {

@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { AccountRepository } from '../DA';
-import { ResponseError } from '../helpers/errorHandler';
+import { ResponseError } from '../middlewares/errorHandler';
 import { compareHashedData, hashData } from '../helpers/hash';
 import { validateAccountAuthInfo, validateProfileInfo } from '../helpers/validation';
 

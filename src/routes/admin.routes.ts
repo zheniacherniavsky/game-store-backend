@@ -1,7 +1,7 @@
 import { Router, Request, Response, NextFunction } from 'express';
 import { JWTPayload } from '../config/passport';
 import { CategoryRepository, ProductRepository } from '../DA';
-import { ResponseError } from '../helpers/errorHandler';
+import { ResponseError } from '../middlewares/errorHandler';
 import { validateProduct } from '../helpers/validation';
 import { ICategory, IProduct } from '../types/types';
 

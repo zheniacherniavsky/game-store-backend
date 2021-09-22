@@ -1,6 +1,6 @@
 import { Router, Request, Response } from 'express';
 import { CategoryRepository } from '../DA';
-import { ResponseError } from '../helpers/errorHandler';
+import { ResponseError } from '../middlewares/errorHandler';
 
 export const CategoryRouter = (router: Router): void => {
   router.get('/categories', async (req: Request, res: Response, next) => {
