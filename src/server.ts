@@ -1,6 +1,5 @@
 import express from 'express';
 import logger from './helpers/logger';
-import passport from 'passport';
 import { errorHandler } from './middlewares/errorHandler';
 
 import 'reflect-metadata';
@@ -24,13 +23,10 @@ import { AdminRouter } from './routes/admin.routes';
 import requestLogger from './middlewares/requestLogger';
 import routeNotFound from './middlewares/routeNotFound';
 
-// not authorizated routes
 AuthRouter(router);
 ProductRouter(router);
 CategoryRouter(router);
 
-// authorizated routes
-router.use(passport.authenticate('jwt', { session: false }));
 ProfileRouter(router);
 AdminRouter(router);
 
