@@ -9,7 +9,7 @@ export interface IProduct {
   createdAt: Date;
   totalRating: number;
   price: number;
-  categoriesIds?: string[];
+  categoriesIds: string[];
   categories?: ICategory[];
 }
 
@@ -25,14 +25,15 @@ export interface IAccount {
   password: string;
   firstName: string;
   lastName: string;
+  role: string;
 }
 
 // Repositories
 interface Repository<T> {
   getById: (id: string) => Promise<T | null>;
   create: (entity: T) => Promise<T>;
-  update: (entity: T) => Promise<boolean>;
-  delete: (entity: T) => Promise<boolean>;
+  update: (entity: T) => Promise<T | null>;
+  delete: (id: string) => Promise<boolean>;
 }
 
 export interface IProductRepository extends Repository<IProduct> {

@@ -21,14 +21,20 @@ export default class CategoryTypeOrmRepository implements ICategoryRepository {
     return data ? data : null;
   }
 
-  public async update(entity: ICategory): Promise<boolean> {
+  public async update(entity: ICategory): Promise<ICategory | null> {
     await getRepository(Category).update({ _id: (entity as Category)._id }, entity as Category);
-    return true;
+    const data = await this.getById((entity as Category)._id, {});
+    return data;
   }
 
-  public async delete(entity: ICategory): Promise<boolean> {
-    await getRepository(Category).delete({ _id: (entity as Category)._id });
-    return true;
+  public async delete(id: string): Promise<boolean> {
+    const category = await this.getById(id, {});
+    if (category !== null) {
+      category.products = [];
+    }
+    await getRepository(Category).save(category as Category);
+    const deleteResult = await getRepository(Category).delete({ _id: id });
+    return deleteResult.affected !== 0 ? true : false;
   }
 
   public async create(entity: ICategory): Promise<ICategory> {

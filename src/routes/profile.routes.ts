@@ -1,9 +1,9 @@
 import { Router } from 'express';
-import passport from 'passport';
 import { AccountRepository } from '../DA';
-import { ResponseError } from '../helpers/errorHandler';
+import { ResponseError } from '../middlewares/errorHandler';
 import { compareHashedData, hashData } from '../helpers/hash';
 import { validateAccountAuthInfo, validateProfileInfo } from '../helpers/validation';
+import passport from 'passport';
 
 export const ProfileRouter = (router: Router): void => {
   router.put('/profile', passport.authenticate('jwt', { session: false }), async (req, res, next) => {

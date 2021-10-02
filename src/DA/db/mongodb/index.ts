@@ -3,6 +3,8 @@ import { ICategory } from '../../../types/types';
 import { CategoryModel } from './models/category';
 import { ProductModel } from './models/product';
 import logger from '../../../helpers/logger';
+import { AccountModel } from './models/account';
+import { hashData } from '../../../helpers/hash';
 
 export const connectMongoDb = (): void => {
   const connectionString: string = process.env.MONGODB_CONNECTION_STRING || '';
@@ -41,7 +43,7 @@ export const connectMongoDb = (): void => {
 };
 
 function init(): void {
-  CategoryModel.find().then((categories: ICategory[]) => {
+  CategoryModel.find().then(async (categories: ICategory[]) => {
     if (categories.length === 0) {
       logger.log({
         level: 'info',
@@ -52,11 +54,11 @@ function init(): void {
       const arcade = new CategoryModel({ displayName: 'Arcade' });
       const board = new CategoryModel({ displayName: 'Board' });
 
-      shooter.save();
-      arcade.save();
-      board.save();
+      await shooter.save();
+      await arcade.save();
+      await board.save();
 
-      new ProductModel({
+      await new ProductModel({
         displayName: 'Battlefield 4',
         categoriesIds: [shooter._id.toString(), arcade._id.toString()],
         createdAt: new Date(),
@@ -64,7 +66,7 @@ function init(): void {
         price: 29,
       }).save();
 
-      new ProductModel({
+      await new ProductModel({
         displayName: 'Battlefield 1',
         categoriesIds: [shooter._id.toString(), arcade._id.toString()],
         createdAt: new Date(),
@@ -72,7 +74,7 @@ function init(): void {
         price: 29,
       }).save();
 
-      new ProductModel({
+      await new ProductModel({
         displayName: 'Battlefield 2',
         categoriesIds: [shooter._id.toString(), arcade._id.toString()],
         createdAt: new Date(),
@@ -80,12 +82,22 @@ function init(): void {
         price: 29,
       }).save();
 
-      new ProductModel({
+      await new ProductModel({
         displayName: 'Chess',
         categoriesIds: [shooter._id.toString()],
         createdAt: new Date(),
         totalRating: 8,
         price: 0,
+      }).save();
+
+      // temp admin account
+      const adminPsw = await hashData('Admin123');
+      await new AccountModel({
+        username: 'admin',
+        password: adminPsw,
+        firstName: 'admin',
+        lastName: 'adminsky',
+        role: 'admin',
       }).save();
 
       logger.log({

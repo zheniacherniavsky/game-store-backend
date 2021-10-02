@@ -3,7 +3,7 @@ import { AccountRepository } from '../DA';
 import jwt from 'jsonwebtoken';
 import passport from 'passport';
 import randtoken from 'rand-token';
-import { ResponseError } from '../helpers/errorHandler';
+import { ResponseError } from '../middlewares/errorHandler';
 import { SECRET_AUTH } from '../config/secretToken';
 import { validateAccount, validateAccountAuthInfo } from '../helpers/validation';
 
@@ -19,6 +19,7 @@ export const AuthRouter = (router: Router): void => {
         password,
         firstName,
         lastName,
+        role: 'buyer',
       });
       res.status(200).send(newAccount);
     } catch (err) {
@@ -39,22 +40,30 @@ export const AuthRouter = (router: Router): void => {
         });
       }
 
-      return req.login(account, { session: false }, (err) => {
+      const user: Express.User = {
+        id: account._id,
+        username: account.username,
+        role: account.role,
+      };
+
+      req.login(user, { session: false }, (err) => {
         if (err) {
           return res.json({ error: err });
         }
 
-        const token = jwt.sign(JSON.parse(JSON.stringify(account)), SECRET_AUTH, {
+        const token = jwt.sign(JSON.parse(JSON.stringify(user)), SECRET_AUTH, {
           expiresIn: 600,
         });
         const refreshToken = randtoken.uid(24);
         refreshTokens[refreshToken] = account.username;
         return res.json({
-          accountUsername: account.username,
+          user,
           token,
           refreshToken,
         });
       });
+
+      return;
     })(req, res);
   });
 
@@ -67,7 +76,13 @@ export const AuthRouter = (router: Router): void => {
       await AccountRepository.getByUsername(username).then((account) => {
         if (account === null) return next(new ResponseError(404, `Account with username ${username} was not found`));
         else {
-          const token = jwt.sign(JSON.parse(JSON.stringify(account)), SECRET_AUTH, {
+          const user: Express.User = {
+            id: account._id,
+            username: account.username,
+            role: account.role,
+          };
+
+          const token = jwt.sign(JSON.parse(JSON.stringify(user)), SECRET_AUTH, {
             expiresIn: 600,
           });
           return res.json({
