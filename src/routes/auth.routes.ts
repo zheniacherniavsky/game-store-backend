@@ -3,7 +3,7 @@ import { AccountRepository } from '../DA';
 import jwt from 'jsonwebtoken';
 import passport from 'passport';
 import randtoken from 'rand-token';
-import { ResponseError } from '../helpers/errorHandler';
+import { ResponseError } from '../middlewares/errorHandler';
 import { SECRET_AUTH } from '../config/secretToken';
 import { validateAccount, validateAccountAuthInfo } from '../helpers/validation';
 

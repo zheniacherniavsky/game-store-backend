@@ -1,6 +1,6 @@
 import { IResultProduct, ProductQueryObject } from '.';
 import { Between, ILike, MoreThanOrEqual } from 'typeorm';
-import { ResponseError } from '../errorHandler';
+import { ResponseError } from '../../middlewares/errorHandler';
 
 export const productSearchQueryHandler = (productQuery: ProductQueryObject): IResultProduct => {
   const res: IResultProduct = {

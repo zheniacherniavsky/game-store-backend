@@ -1,5 +1,5 @@
 import { CategoryQueryObject, IResultCategory } from '.';
-import { ResponseError } from '../errorHandler';
+import { ResponseError } from '../../middlewares/errorHandler';
 
 export const categorySearchQueryHandler = (categoryQuery: CategoryQueryObject): IResultCategory => {
   const res: IResultCategory = {
