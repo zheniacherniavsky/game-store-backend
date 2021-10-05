@@ -26,6 +26,7 @@ AuthRouter(router);
 ProductRouter(router);
 CategoryRouter(router);
 ProfileRouter(router);
+BuyerRouter(router);
 AdminRouter(router);
 
 app.use(express.urlencoded({ extended: true }));
