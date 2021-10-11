@@ -1,7 +1,7 @@
 import { getRepository } from 'typeorm';
 import { ProductQueryObject, productSearchQueryHandler } from '../../../helpers/queryHandler';
 import { paginationQueryHandler } from '../../../helpers/queryHandler/pagination';
-import { IProduct, IProductRepository } from '../../../types/types';
+import { IProduct, IProductRepository, IRating } from '../../../types/types';
 import { Category } from '../../db/postgresql/entity/category';
 import { Product } from '../../db/postgresql/entity/product';
 
@@ -50,5 +50,10 @@ export default class ProductTypeOrmRepository implements IProductRepository {
       ...pagination,
     });
     return data;
+  }
+
+  public async rateProduct(productId: string, ratingObj: IRating): Promise<IProduct | null> {
+    // new model
+    return null;
   }
 }

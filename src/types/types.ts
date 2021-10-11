@@ -17,6 +17,7 @@ export interface IProduct {
   price: number;
   categoriesIds: string[];
   categories?: ICategory[];
+  ratings?: IRating[];
 }
 
 export interface ICategory {
@@ -34,6 +35,12 @@ export interface IAccount {
   role: string;
 }
 
+export interface IRating {
+  _id?: string;
+  userId: ObjectId | string;
+  rating: number;
+}
+
 // Repositories
 interface Repository<T> {
   getById: (id: string) => Promise<T | null>;
@@ -44,6 +51,7 @@ interface Repository<T> {
 
 export interface IProductRepository extends Repository<IProduct> {
   getProductsList: (productQuery: ProductQueryObject) => Promise<IProduct[]>;
+  rateProduct: (productId: string, ratingObj: IRating) => Promise<IProduct | null>;
 }
 export interface ICategoryRepository extends Omit<Repository<ICategory>, 'getById'> {
   getById: (id: string, query: CategoryQueryObject) => Promise<ICategory | null>;

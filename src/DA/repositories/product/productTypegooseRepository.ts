@@ -1,7 +1,7 @@
 import { mongoose } from '@typegoose/typegoose';
 import { ProductQueryObject, productSearchQueryHandler } from '../../../helpers/queryHandler';
 import { IPagination, paginationQueryHandler } from '../../../helpers/queryHandler/pagination';
-import { IProduct, IProductRepository } from '../../../types/types';
+import { IProduct, IProductRepository, IRating } from '../../../types/types';
 import { CategoryModel } from '../../db/mongodb/models/category';
 import { Product, ProductModel } from '../../db/mongodb/models/product';
 
@@ -59,5 +59,41 @@ export default class ProductTypegooseRepository implements IProductRepository {
       .limit(pagination.limit)
       .sort(sortOptions);
     return data;
+  }
+
+  public async rateProduct(productId: string, ratingObject: IRating): Promise<IProduct | null> {
+    const isUpdated = await ProductModel.findOneAndUpdate(
+      {
+        _id: productId,
+        'ratings.userId': ratingObject.userId,
+      },
+      {
+        $set: {
+          'ratings.$.rating': ratingObject.rating,
+        },
+      }
+    );
+
+    if (isUpdated === null) {
+      await ProductModel.findOneAndUpdate(
+        {
+          _id: productId,
+        },
+        {
+          $push: {
+            ratings: ratingObject,
+          },
+        }
+      );
+    }
+
+    const [{ avgRating }] = await ProductModel.aggregate([
+      { $match: { _id: new mongoose.Types.ObjectId(productId) } },
+      { $project: { avgRating: { $avg: '$ratings.rating' } } },
+    ]);
+
+    const updating = await ProductModel.updateOne({ _id: productId }, { $set: { totalRating: avgRating.toFixed(2) } });
+
+    return updating.ok ? await this.getById(productId) : null;
   }
 }
