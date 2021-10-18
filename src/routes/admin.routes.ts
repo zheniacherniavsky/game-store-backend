@@ -36,6 +36,7 @@ export const AdminRouter = (router: Router): void => {
           createdAt: new Date(),
           price,
           totalRating,
+          ratings: [],
         };
 
         validateProduct(product);
@@ -66,6 +67,7 @@ export const AdminRouter = (router: Router): void => {
               createdAt: product.createdAt,
               price: price || product.price,
               totalRating: totalRating || product.totalRating,
+              ratings: product.ratings,
             };
             validateProduct(changedProduct);
             await ProductRepository.update(changedProduct).then((updatedProduct) => {

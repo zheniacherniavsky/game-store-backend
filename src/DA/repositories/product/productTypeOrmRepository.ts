@@ -4,6 +4,7 @@ import { paginationQueryHandler } from '../../../helpers/queryHandler/pagination
 import { IProduct, IProductRepository, IRating } from '../../../types/types';
 import { Category } from '../../db/postgresql/entity/category';
 import { Product } from '../../db/postgresql/entity/product';
+import { Rating } from '../../db/postgresql/entity/rating';
 
 export default class ProductTypeOrmRepository implements IProductRepository {
   private async handleProductCategories(entity: IProduct) {
@@ -53,7 +54,19 @@ export default class ProductTypeOrmRepository implements IProductRepository {
   }
 
   public async rateProduct(productId: string, ratingObj: IRating): Promise<IProduct | null> {
-    // new model
-    return null;
+    const product = await this.getById(productId);
+    if (!product) return null;
+
+    const ratingRepository = getRepository(Rating);
+    const rating = await ratingRepository.findOne({ where: { userId: ratingObj.userId, product } });
+    if (rating) {
+      rating.rating = ratingObj.rating;
+      await ratingRepository.save(rating);
+    } else {
+      ratingObj.product = product;
+      await ratingRepository.save(ratingObj as Rating);
+    }
+
+    return await this.getById(productId);
   }
 }

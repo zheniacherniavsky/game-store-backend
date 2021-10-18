@@ -13,11 +13,11 @@ export interface IProduct {
   _id?: ObjectId | string;
   displayName: string;
   createdAt: Date;
+  ratings: IRating[];
   totalRating: number;
   price: number;
   categoriesIds: string[];
   categories?: ICategory[];
-  ratings?: IRating[];
 }
 
 export interface ICategory {
@@ -39,6 +39,7 @@ export interface IRating {
   _id?: string;
   userId: ObjectId | string;
   rating: number;
+  product?: IProduct;
 }
 
 // Repositories

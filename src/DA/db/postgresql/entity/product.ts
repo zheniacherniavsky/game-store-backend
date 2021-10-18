@@ -35,7 +35,6 @@ export class Product implements IProduct {
 
   @OneToMany(() => Rating, (rating) => rating.product, {
     eager: true,
-    cascade: true,
   })
   ratings: IRating[];
 

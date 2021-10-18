@@ -8,13 +8,15 @@ export class Rating implements IRating {
   @PrimaryGeneratedColumn()
   _id: string;
 
-  @Index('Rating userId', { unique: true })
+  @Index('Rating userId')
   @Column()
   userId: string;
 
   @Column()
   rating: number;
 
-  @ManyToOne(() => Product, (product) => product.ratings)
+  @ManyToOne(() => Product, (product) => product.ratings, {
+    onDelete: 'CASCADE',
+  })
   product: IProduct;
 }
