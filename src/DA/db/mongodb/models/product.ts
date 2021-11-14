@@ -1,16 +1,16 @@
-import { getModelForClass, prop, modelOptions, Severity, index } from '@typegoose/typegoose';
+import { getModelForClass, prop, modelOptions, Severity, index, Ref } from '@typegoose/typegoose';
 import { WhatIsIt } from '@typegoose/typegoose/lib/internal/constants';
-import { IProduct, IRating } from '../../../../types/types';
+import { ICategoryMongo, IProductMongo, IRating } from '../../../../types/types';
 
 @index({ displayName: 1 }, { unique: true })
 @index({ createdAt: 1, totalRating: 1, price: 1 })
 @modelOptions({ options: { allowMixed: Severity.ALLOW } })
-export class Product implements IProduct {
+export class Product implements IProductMongo {
   @prop()
   public displayName: string;
 
-  @prop({ default: [] }, WhatIsIt.ARRAY)
-  public categoriesIds: string[];
+  @prop({ ref: 'Category' })
+  categories: Ref<ICategoryMongo>[];
 
   @prop()
   public createdAt: Date;

@@ -1,22 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import {
-  Column,
-  Entity,
-  Index,
-  JoinTable,
-  ManyToMany,
-  ManyToOne,
-  OneToMany,
-  PrimaryGeneratedColumn,
-  RelationId,
-} from 'typeorm';
-import { IProduct, IRating } from '../../../../types/types';
+import { Column, Entity, Index, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { ICategoryPostgres, IProductPostgres, IRating } from '../../../../types/types';
 import { Category } from './category';
 import { Rating } from './rating';
 
 @Index(['price', 'totalRating', 'createdAt'])
 @Entity('product')
-export class Product implements IProduct {
+export class Product implements IProductPostgres {
   @Index({ unique: true })
   @PrimaryGeneratedColumn()
   _id: string;
@@ -29,9 +19,7 @@ export class Product implements IProduct {
     cascade: true,
   })
   @JoinTable()
-  categories: Category[];
-  @RelationId((product: Product) => product.categories)
-  categoriesIds: string[] = [];
+  categories: ICategoryPostgres[];
 
   @OneToMany(() => Rating, (rating) => rating.product)
   ratings: IRating[];

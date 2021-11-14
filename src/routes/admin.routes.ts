@@ -32,7 +32,6 @@ export const AdminRouter = (router: Router): void => {
 
         const product: IProduct = {
           displayName,
-          categoriesIds: categoriesIds ? Array.from(categoriesIds) : [],
           createdAt: new Date(),
           price,
           totalRating,
@@ -40,7 +39,7 @@ export const AdminRouter = (router: Router): void => {
         };
 
         validateProduct(product);
-        const newProduct = await ProductRepository.create(product);
+        const newProduct = await ProductRepository.create(product, categoriesIds ? Array.from(categoriesIds) : []);
         res.status(200).send(newProduct);
       } catch (err) {
         next(err);
@@ -63,16 +62,18 @@ export const AdminRouter = (router: Router): void => {
             const changedProduct: IProduct = {
               _id: product._id,
               displayName: displayName || product.displayName,
-              categoriesIds: categoriesIds || product.categoriesIds,
+              categories: product.categories,
               createdAt: product.createdAt,
               price: price || product.price,
               totalRating: totalRating || product.totalRating,
               ratings: product.ratings,
             };
             validateProduct(changedProduct);
-            await ProductRepository.update(changedProduct).then((updatedProduct) => {
-              res.status(200).send(updatedProduct);
-            });
+            await ProductRepository.update(changedProduct, categoriesIds ? Array.from(categoriesIds) : []).then(
+              (updatedProduct) => {
+                res.status(200).send(updatedProduct);
+              }
+            );
           }
         })
         .catch((err) => next(err));

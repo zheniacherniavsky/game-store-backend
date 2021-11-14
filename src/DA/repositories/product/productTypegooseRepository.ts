@@ -1,17 +1,11 @@
 import { mongoose } from '@typegoose/typegoose';
 import { ProductQueryObject, productSearchQueryHandler } from '../../../helpers/queryHandler';
 import { IPagination, paginationQueryHandler } from '../../../helpers/queryHandler/pagination';
-import { IProduct, IProductRepository, IRating } from '../../../types/types';
+import { ICategoryMongo, IProduct, IProductRepository, IRating } from '../../../types/types';
 import { CategoryModel } from '../../db/mongodb/models/category';
 import { Product, ProductModel } from '../../db/mongodb/models/product';
 
 export default class ProductTypegooseRepository implements IProductRepository {
-  private async handleProductCategories(entity: IProduct) {
-    entity.categoriesIds = (await CategoryModel.find({ _id: { $in: entity.categoriesIds } })).map((category) =>
-      category._id.toString()
-    );
-  }
-
   public async getById(id: string): Promise<IProduct | null> {
     const data: IProduct | null = await ProductModel.findOne({
       _id: new mongoose.Types.ObjectId(id),
@@ -19,8 +13,12 @@ export default class ProductTypegooseRepository implements IProductRepository {
     return data;
   }
 
-  public async update(entity: IProduct): Promise<IProduct | null> {
-    await this.handleProductCategories(entity);
+  public async update(entity: IProduct, categoriesIds: string[] = []): Promise<IProduct | null> {
+    let categories: ICategoryMongo[] = [];
+    if (categoriesIds.length > 0) {
+      categories = await CategoryModel.find({ _id: categoriesIds });
+      entity.categories = categories;
+    }
     await ProductModel.findOneAndUpdate({ _id: entity._id }, entity as Product);
     const data = entity._id !== undefined ? await this.getById(entity._id.toString()) : null;
     return data;
@@ -30,8 +28,12 @@ export default class ProductTypegooseRepository implements IProductRepository {
     const data = await ProductModel.deleteOne({ _id: id });
     return data.deletedCount !== 0 ? true : false;
   }
-  public async create(entity: IProduct): Promise<IProduct> {
-    await this.handleProductCategories(entity);
+  public async create(entity: IProduct, categoriesIds: string[] = []): Promise<IProduct> {
+    let categories: ICategoryMongo[] = [];
+    if (categoriesIds.length > 0) {
+      categories = await CategoryModel.find({ _id: categoriesIds });
+    }
+    entity.categories = categories;
     const data: IProduct = await new ProductModel(entity).save();
     return data;
   }

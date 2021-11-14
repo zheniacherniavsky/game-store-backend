@@ -60,28 +60,28 @@ function init(): void {
 
       await new ProductModel({
         displayName: 'Battlefield 4',
-        categoriesIds: [shooter._id.toString(), arcade._id.toString()],
+        categories: [shooter, arcade],
         createdAt: new Date(),
         price: 29,
       }).save();
 
       await new ProductModel({
         displayName: 'Battlefield 1',
-        categoriesIds: [shooter._id.toString(), arcade._id.toString()],
+        categories: [shooter, arcade],
         createdAt: new Date(),
         price: 29,
       }).save();
 
       await new ProductModel({
         displayName: 'Battlefield 2',
-        categoriesIds: [shooter._id.toString(), arcade._id.toString()],
+        categories: [shooter, arcade],
         createdAt: new Date(),
         price: 29,
       }).save();
 
       await new ProductModel({
         displayName: 'Chess',
-        categoriesIds: [shooter._id.toString()],
+        categories: [shooter],
         createdAt: new Date(),
         price: 0,
       }).save();

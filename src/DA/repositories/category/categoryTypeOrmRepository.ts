@@ -5,12 +5,12 @@ import { ICategory, ICategoryRepository } from '../../../types/types';
 import { Category } from '../../db/postgresql/entity/category';
 
 export default class CategoryTypeOrmRepository implements ICategoryRepository {
-  public async getById(id: string, categoryQuery: CategoryQueryObject): Promise<ICategory | null> {
-    const searchParams = categorySearchQueryHandler(categoryQuery);
+  public async getById(id: string, categoryQuery?: CategoryQueryObject): Promise<ICategory | null> {
+    const searchParams = categoryQuery ? categorySearchQueryHandler(categoryQuery) : null;
 
     const myQuery = getRepository(Category).createQueryBuilder('category').where('category._id = :id', { id });
 
-    if (searchParams.includeProducts === true) {
+    if (searchParams && searchParams.includeProducts === true) {
       myQuery.innerJoinAndSelect('category.products', 'products');
 
       if (searchParams.includeTop3Products === true) myQuery.orderBy('products.totalRating', 'DESC').limit(3);
