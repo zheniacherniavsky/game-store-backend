@@ -62,7 +62,6 @@ function init(): void {
         displayName: 'Battlefield 4',
         categoriesIds: [shooter._id.toString(), arcade._id.toString()],
         createdAt: new Date(),
-        totalRating: 8,
         price: 29,
       }).save();
 
@@ -70,7 +69,6 @@ function init(): void {
         displayName: 'Battlefield 1',
         categoriesIds: [shooter._id.toString(), arcade._id.toString()],
         createdAt: new Date(),
-        totalRating: 5,
         price: 29,
       }).save();
 
@@ -78,7 +76,6 @@ function init(): void {
         displayName: 'Battlefield 2',
         categoriesIds: [shooter._id.toString(), arcade._id.toString()],
         createdAt: new Date(),
-        totalRating: 9,
         price: 29,
       }).save();
 
@@ -86,7 +83,6 @@ function init(): void {
         displayName: 'Chess',
         categoriesIds: [shooter._id.toString()],
         createdAt: new Date(),
-        totalRating: 8,
         price: 0,
       }).save();
 

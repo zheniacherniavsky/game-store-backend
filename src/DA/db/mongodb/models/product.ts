@@ -15,7 +15,7 @@ export class Product implements IProduct {
   @prop()
   public createdAt: Date;
 
-  @prop()
+  @prop({ default: 0 })
   public totalRating: number;
 
   @prop()

@@ -58,15 +58,26 @@ export default class ProductTypeOrmRepository implements IProductRepository {
     if (!product) return null;
 
     const ratingRepository = getRepository(Rating);
-    const rating = await ratingRepository.findOne({ where: { userId: ratingObj.userId, product } });
+    const rating = await ratingRepository.findOne({ where: { userId: ratingObj.userId, product: product } });
+
     if (rating) {
       rating.rating = ratingObj.rating;
       await ratingRepository.save(rating);
     } else {
-      ratingObj.product = product;
+      ratingObj.product = product as Product;
       await ratingRepository.save(ratingObj as Rating);
     }
 
+    const [results] = await ratingRepository
+      .createQueryBuilder()
+      .select('AVG(rating)')
+      .where('product_id = :productId', { productId })
+      .execute();
+
+    if (results.avg) {
+      product.totalRating = parseInt(results.avg);
+      await this.update(product);
+    }
     return await this.getById(productId);
   }
 }

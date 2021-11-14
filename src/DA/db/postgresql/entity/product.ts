@@ -33,15 +33,13 @@ export class Product implements IProduct {
   @RelationId((product: Product) => product.categories)
   categoriesIds: string[] = [];
 
-  @OneToMany(() => Rating, (rating) => rating.product, {
-    eager: true,
-  })
+  @OneToMany(() => Rating, (rating) => rating.product)
   ratings: IRating[];
 
   @Column()
   createdAt: Date;
 
-  @Column()
+  @Column({ default: 0 })
   totalRating: number;
 
   @Column()
