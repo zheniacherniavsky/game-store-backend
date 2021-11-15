@@ -1,15 +1,14 @@
-import { getModelForClass, index, modelOptions, prop, Severity } from '@typegoose/typegoose';
-import { ICategory } from '../../../../types/types';
-import { Product } from './product';
+import { getModelForClass, index, modelOptions, prop, Ref, Severity } from '@typegoose/typegoose';
+import { ICategoryMongo, IProductMongo } from '../../../../types/types';
 
 @index({ displayName: 1 }, { unique: true })
 @modelOptions({ options: { allowMixed: Severity.ALLOW } })
-export class Category implements ICategory {
+export class Category implements ICategoryMongo {
   @prop()
   public displayName: string;
 
-  @prop({ default: undefined })
-  public products: Product[];
+  @prop({ ref: 'Product' })
+  public products: Ref<IProductMongo>[];
 }
 
 export const CategoryModel = getModelForClass(Category);

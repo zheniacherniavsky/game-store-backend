@@ -1,22 +1,61 @@
 /* eslint-disable @typescript-eslint/no-empty-interface */
+import { Ref } from '@typegoose/typegoose';
 import { ObjectId } from 'mongoose';
 import { CategoryQueryObject, ProductQueryObject } from '../helpers/queryHandler';
+
+export interface RequestUser {
+  id: string;
+  username: string;
+  role: string;
+}
 
 // Models
 export interface IProduct {
   _id?: ObjectId | string;
   displayName: string;
   createdAt: Date;
+  ratings: IRating[];
   totalRating: number;
   price: number;
-  categoriesIds: string[];
-  categories?: ICategory[];
+  categories?: ICategoryPostgres[] | Ref<ICategoryMongo>[];
+}
+
+export interface IProductMongo {
+  _id?: ObjectId;
+  displayName: string;
+  createdAt: Date;
+  ratings: IRating[];
+  totalRating: number;
+  price: number;
+  categories: Ref<ICategoryMongo>[];
+}
+
+export interface IProductPostgres {
+  _id?: string;
+  displayName: string;
+  createdAt: Date;
+  ratings: IRating[];
+  totalRating: number;
+  price: number;
+  categories: ICategoryPostgres[];
 }
 
 export interface ICategory {
   _id?: ObjectId | string;
   displayName: string;
-  products?: IProduct[];
+  products?: IProduct[] | Ref<IProductMongo>[];
+}
+
+export interface ICategoryMongo {
+  _id?: ObjectId;
+  displayName: string;
+  products: Ref<IProductMongo>[];
+}
+
+export interface ICategoryPostgres {
+  _id: string;
+  displayName: string;
+  products: IProductPostgres[];
 }
 
 export interface IAccount {
@@ -28,22 +67,34 @@ export interface IAccount {
   role: string;
 }
 
+export interface IRating {
+  _id?: string;
+  userId: ObjectId | string;
+  rating: number;
+  product?: IProduct;
+}
+
 // Repositories
-interface Repository<T> {
-  getById: (id: string) => Promise<T | null>;
-  create: (entity: T) => Promise<T>;
-  update: (entity: T) => Promise<T | null>;
+
+export interface IProductRepository {
+  getById: (id: string) => Promise<IProduct | null>;
+  create: (entity: IProduct, categoriesIds: string[]) => Promise<IProduct>;
+  update: (entity: IProduct, categoriesIds: string[]) => Promise<IProduct | null>;
   delete: (id: string) => Promise<boolean>;
-}
-
-export interface IProductRepository extends Repository<IProduct> {
   getProductsList: (productQuery: ProductQueryObject) => Promise<IProduct[]>;
+  rateProduct: (productId: string, ratingObj: IRating) => Promise<IProduct | null>;
 }
-export interface ICategoryRepository extends Omit<Repository<ICategory>, 'getById'> {
-  getById: (id: string, query: CategoryQueryObject) => Promise<ICategory | null>;
-
+export interface ICategoryRepository {
+  getById: (id: string, query?: CategoryQueryObject) => Promise<ICategory | null>;
+  create: (entity: ICategory) => Promise<ICategory>;
+  update: (entity: ICategory) => Promise<ICategory | null>;
+  delete: (id: string) => Promise<boolean>;
   getCategoriesList: () => Promise<ICategory[]>;
 }
-export interface IAccountRepository extends Repository<IAccount> {
+export interface IAccountRepository {
+  getById: (id: string) => Promise<IAccount | null>;
+  create: (entity: IAccount) => Promise<IAccount>;
+  update: (entity: IAccount) => Promise<IAccount | null>;
+  delete: (id: string) => Promise<boolean>;
   getByUsername: (username: string) => Promise<IAccount | null>;
 }

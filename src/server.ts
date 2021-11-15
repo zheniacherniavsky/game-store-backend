@@ -19,16 +19,20 @@ import { CategoryRouter } from './routes/category.routes';
 import { AuthRouter } from './routes/auth.routes';
 import { ProfileRouter } from './routes/profile.routes';
 import { AdminRouter } from './routes/admin.routes';
+import { BuyerRouter } from './routes/buyer.routes';
 import { requestLogger, routeNotFound, errorHandler } from './middlewares';
 
 AuthRouter(router);
 ProductRouter(router);
 CategoryRouter(router);
 ProfileRouter(router);
+BuyerRouter(router);
 AdminRouter(router);
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+
+// free access routes
 app.use('/', router);
 app.use(requestLogger);
 app.use(routeNotFound);

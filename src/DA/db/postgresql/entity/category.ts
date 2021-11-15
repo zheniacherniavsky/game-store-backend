@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Column, Entity, Index, ManyToMany, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { ICategory } from '../../../../types/types';
+import { ICategory, IProductPostgres } from '../../../../types/types';
 import { Product } from './product';
 
 @Entity('category')
@@ -14,5 +14,5 @@ export class Category implements ICategory {
   displayName: string;
 
   @ManyToMany(() => Product, (product) => product.categories)
-  products: Product[];
+  products: IProductPostgres[];
 }
