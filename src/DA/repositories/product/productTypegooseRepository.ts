@@ -64,19 +64,22 @@ export default class ProductTypegooseRepository implements IProductRepository {
   }
 
   public async rateProduct(productId: string, ratingObject: IRating): Promise<IProduct | null> {
-    const isUpdated = await ProductModel.findOneAndUpdate(
+    // find product with user rating
+    const productWithUserRating = await ProductModel.findOneAndUpdate(
       {
         _id: productId,
         'ratings.userId': ratingObject.userId,
       },
       {
+        // replace existing user rating
         $set: {
           'ratings.$.rating': ratingObject.rating,
         },
       }
     );
 
-    if (isUpdated === null) {
+    if (productWithUserRating === null) {
+      // find product and push user rating object
       await ProductModel.findOneAndUpdate(
         {
           _id: productId,
