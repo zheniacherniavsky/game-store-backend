@@ -14,7 +14,6 @@ wss.on('listening', () => {
 
 export const sendLastRatingsInfo = (ratings: IRating[]): void => {
   if (ratings.length > 0) {
-    console.log(ratings);
     wss.clients.forEach(async (client) => {
       if (client.readyState === client.OPEN) {
         const lastRatings: IRating[] = ratings;
