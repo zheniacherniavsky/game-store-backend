@@ -101,4 +101,30 @@ export default class ProductTypegooseRepository implements IProductRepository {
 
     return updating.ok ? await this.getById(productId) : null;
   }
+
+  public async getLastRatings(): Promise<IRating[] | null> {
+    // will be refactored at task-14. (lastRatings model)
+
+    const products: IProduct[] = await ProductModel.find();
+
+    if (products.length > 0) {
+      const ratings: IRating[] = [];
+
+      products.forEach((product) => {
+        ratings.push(...product.ratings);
+      });
+
+      return ratings.length > 0
+        ? ratings
+            .sort((a, b) => {
+              const aDate = new Date(a.createdAt).getTime();
+              const bDate = new Date(b.createdAt).getTime();
+              return bDate - aDate;
+            })
+            .slice(0, 10)
+        : null;
+    }
+
+    return null;
+  }
 }

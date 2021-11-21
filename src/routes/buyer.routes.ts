@@ -5,6 +5,7 @@ import { validateRating } from '../helpers/validation';
 import buyerCheck from '../middlewares/buyerCheck';
 import { ResponseError } from '../middlewares/errorHandler';
 import { IRating, RequestUser } from '../types/types';
+import { sendLastRatingsInfo } from '../websocket';
 
 export const BuyerRouter = (router: Router): void => {
   router.post(
@@ -27,6 +28,10 @@ export const BuyerRouter = (router: Router): void => {
       };
       const updatedProduct = await ProductRepository.rateProduct(req.params.id, ratingObj);
       if (updatedProduct === null) next(new ResponseError(500, `Something went wrong!`));
+
+      const lastRatings: IRating[] | null = await ProductRepository.getLastRatings();
+
+      lastRatings && sendLastRatingsInfo(lastRatings);
 
       res.status(200).send(updatedProduct);
       next();
