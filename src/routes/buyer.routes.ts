@@ -22,6 +22,7 @@ export const BuyerRouter = (router: Router): void => {
 
       const ratingObj: IRating = {
         userId: (req.user as RequestUser).id,
+        createdAt: new Date(),
         rating: rating,
       };
       const updatedProduct = await ProductRepository.rateProduct(req.params.id, ratingObj);

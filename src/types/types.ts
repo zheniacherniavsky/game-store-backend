@@ -71,6 +71,7 @@ export interface IRating {
   _id?: string;
   userId: ObjectId | string;
   rating: number;
+  createdAt: Date;
   product?: IProduct;
 }
 

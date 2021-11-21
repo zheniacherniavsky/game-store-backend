@@ -55,6 +55,7 @@ export default class ProductTypeOrmRepository implements IProductRepository {
 
     if (rating) {
       rating.rating = ratingObj.rating;
+      rating.createdAt = ratingObj.createdAt;
       await ratingRepository.save(rating);
     } else {
       ratingObj.product = product as Product;
