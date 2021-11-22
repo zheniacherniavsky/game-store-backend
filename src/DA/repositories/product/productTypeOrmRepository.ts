@@ -55,6 +55,7 @@ export default class ProductTypeOrmRepository implements IProductRepository {
 
     if (rating) {
       rating.rating = ratingObj.rating;
+      rating.createdAt = ratingObj.createdAt;
       await ratingRepository.save(rating);
     } else {
       ratingObj.product = product as Product;
@@ -72,5 +73,18 @@ export default class ProductTypeOrmRepository implements IProductRepository {
       await this.update(product);
     }
     return await this.getById(productId);
+  }
+
+  public async getLastRatings(): Promise<IRating[] | null> {
+    const ratingRepository = getRepository(Rating);
+
+    const ratings: IRating[] = await ratingRepository.find({
+      order: {
+        createdAt: 'DESC',
+      },
+      take: 10,
+    });
+
+    return ratings.length > 0 ? ratings : null;
   }
 }

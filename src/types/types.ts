@@ -71,6 +71,7 @@ export interface IRating {
   _id?: string;
   userId: ObjectId | string;
   rating: number;
+  createdAt: Date;
   product?: IProduct;
 }
 
@@ -83,6 +84,7 @@ export interface IProductRepository {
   delete: (id: string) => Promise<boolean>;
   getProductsList: (productQuery: ProductQueryObject) => Promise<IProduct[]>;
   rateProduct: (productId: string, ratingObj: IRating) => Promise<IProduct | null>;
+  getLastRatings: () => Promise<IRating[] | null>;
 }
 export interface ICategoryRepository {
   getById: (id: string, query?: CategoryQueryObject) => Promise<ICategory | null>;

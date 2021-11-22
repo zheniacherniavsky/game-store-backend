@@ -15,6 +15,10 @@ export class Rating implements IRating {
   @Column()
   rating: number;
 
+  @Index('rating_CreatedAt')
+  @Column()
+  createdAt: Date;
+
   @ManyToOne(() => Product, (product) => product.ratings, {
     onDelete: 'CASCADE',
   })

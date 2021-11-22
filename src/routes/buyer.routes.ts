@@ -5,6 +5,7 @@ import { validateRating } from '../helpers/validation';
 import buyerCheck from '../middlewares/buyerCheck';
 import { ResponseError } from '../middlewares/errorHandler';
 import { IRating, RequestUser } from '../types/types';
+import { sendLastRatingsInfo } from '../websocket';
 
 export const BuyerRouter = (router: Router): void => {
   router.post(
@@ -12,26 +13,27 @@ export const BuyerRouter = (router: Router): void => {
     passport.authenticate('jwt', { session: false }),
     buyerCheck,
     async (req, res, next) => {
-      await ProductRepository.getById(req.params.id)
-        .then(async (product) => {
-          if (product === null) {
-            next(new ResponseError(404, `Product with id ${req.params.id} was not found`));
-          } else {
-            const { rating } = req.body;
-            validateRating(rating);
-            if (req.user && (req.user as RequestUser).id !== undefined) {
-              const ratingObj: IRating = {
-                userId: (req.user as RequestUser).id,
-                rating: rating,
-              };
+      const product = await ProductRepository.getById(req.params.id);
+      if (product === null) {
+        next(new ResponseError(404, `Product with id ${req.params.id} was not found`));
+      }
 
-              const updatedProduct = await ProductRepository.rateProduct(req.params.id, ratingObj);
-              if (updatedProduct === null) next(new ResponseError(500, `Something went wrong!`));
-              res.status(200).send(updatedProduct);
-            } else next(new ResponseError(403, `Unauthorized!`));
-          }
-        })
-        .catch((err) => next(err));
+      const { rating } = req.body;
+      validateRating(rating);
+
+      const ratingObj: IRating = {
+        userId: (req.user as RequestUser).id,
+        createdAt: new Date(),
+        rating: rating,
+      };
+      const updatedProduct = await ProductRepository.rateProduct(req.params.id, ratingObj);
+      if (updatedProduct === null) next(new ResponseError(500, `Something went wrong!`));
+
+      const lastRatings: IRating[] | null = await ProductRepository.getLastRatings();
+
+      lastRatings && sendLastRatingsInfo(lastRatings);
+
+      res.status(200).send(updatedProduct);
       next();
     }
   );

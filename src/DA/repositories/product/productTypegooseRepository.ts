@@ -64,19 +64,22 @@ export default class ProductTypegooseRepository implements IProductRepository {
   }
 
   public async rateProduct(productId: string, ratingObject: IRating): Promise<IProduct | null> {
-    const isUpdated = await ProductModel.findOneAndUpdate(
+    // find product with user rating
+    const productWithUserRating = await ProductModel.findOneAndUpdate(
       {
         _id: productId,
         'ratings.userId': ratingObject.userId,
       },
       {
+        // replace existing user rating
         $set: {
           'ratings.$.rating': ratingObject.rating,
         },
       }
     );
 
-    if (isUpdated === null) {
+    if (productWithUserRating === null) {
+      // find product and push user rating object
       await ProductModel.findOneAndUpdate(
         {
           _id: productId,
@@ -97,5 +100,31 @@ export default class ProductTypegooseRepository implements IProductRepository {
     const updating = await ProductModel.updateOne({ _id: productId }, { $set: { totalRating: avgRating.toFixed(2) } });
 
     return updating.ok ? await this.getById(productId) : null;
+  }
+
+  public async getLastRatings(): Promise<IRating[] | null> {
+    // will be refactored at task-14. (lastRatings model)
+
+    const products: IProduct[] = await ProductModel.find();
+
+    if (products.length > 0) {
+      const ratings: IRating[] = [];
+
+      products.forEach((product) => {
+        ratings.push(...product.ratings);
+      });
+
+      return ratings.length > 0
+        ? ratings
+            .sort((a, b) => {
+              const aDate = new Date(a.createdAt).getTime();
+              const bDate = new Date(b.createdAt).getTime();
+              return bDate - aDate;
+            })
+            .slice(0, 10)
+        : null;
+    }
+
+    return null;
   }
 }

@@ -22,8 +22,7 @@ export default class CategoryTypeOrmRepository implements ICategoryRepository {
   }
 
   public async update(entity: ICategory): Promise<ICategory | null> {
-    await getRepository(Category).update({ _id: (entity as Category)._id }, entity as Category);
-    const data = await this.getById((entity as Category)._id, {});
+    const data = await getRepository(Category).save(entity as Category);
     return data;
   }
 

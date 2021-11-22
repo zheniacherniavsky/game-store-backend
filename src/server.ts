@@ -7,6 +7,8 @@ import './config/passport';
 import dotenv from 'dotenv';
 dotenv.config();
 
+import './websocket';
+
 import { database } from './DA';
 database.connect();
 
