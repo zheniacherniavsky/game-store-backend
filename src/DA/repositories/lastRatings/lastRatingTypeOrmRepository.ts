@@ -17,10 +17,14 @@ export default class LastRatingTypeOrmRepository implements ILastRatingRepositor
   public async deleteOldRatings(): Promise<boolean> {
     const lastRatings = await this.getLast10();
 
-    if (lastRatings) {
+    if (lastRatings && lastRatings.length > 0) {
       const { createdAt } = lastRatings[lastRatings.length - 1];
 
-      await getRepository(LastRating).createQueryBuilder().delete().where('createdAt < :createdAt', { createdAt });
+      await getRepository(LastRating)
+        .createQueryBuilder()
+        .delete()
+        .where('createdAt < :createdAt', { createdAt })
+        .execute();
 
       return true;
     }
