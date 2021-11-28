@@ -68,8 +68,22 @@ export interface IAccount {
 }
 
 export interface IRating {
+  _id?: ObjectId | string;
+  userId: string;
+  rating: number;
+  createdAt: Date;
+  product?: Ref<IProductMongo> | IProduct;
+}
+export interface IRatingMongo {
+  _id?: ObjectId;
+  userId: string;
+  rating: number;
+  createdAt: Date;
+  product?: Ref<IProductMongo>;
+}
+export interface IRatingPostgres {
   _id?: string;
-  userId: ObjectId | string;
+  userId: string;
   rating: number;
   createdAt: Date;
   product?: IProduct;
@@ -99,4 +113,12 @@ export interface IAccountRepository {
   update: (entity: IAccount) => Promise<IAccount | null>;
   delete: (id: string) => Promise<boolean>;
   getByUsername: (username: string) => Promise<IAccount | null>;
+}
+
+export interface ILastRatingRepository {
+  getLast10: () => Promise<IRating[] | null>;
+  deleteOldRatings: () => Promise<boolean>;
+  create: (entity: IRating) => Promise<IRating>;
+  update: (entity: IRating) => Promise<IRating | null>;
+  delete: (id: string) => Promise<boolean>;
 }

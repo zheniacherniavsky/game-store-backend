@@ -1,4 +1,5 @@
 import { getRepository } from 'typeorm';
+import { LastRatingRepository } from '../..';
 import { ProductQueryObject, productSearchQueryHandler } from '../../../helpers/queryHandler';
 import { paginationQueryHandler } from '../../../helpers/queryHandler/pagination';
 import { ICategoryPostgres, IProduct, IProductRepository, IRating } from '../../../types/types';
@@ -50,6 +51,8 @@ export default class ProductTypeOrmRepository implements IProductRepository {
     const product = await this.getById(productId);
     if (!product) return null;
 
+    ratingObj.product = product as Product;
+
     const ratingRepository = getRepository(Rating);
     const rating = await ratingRepository.findOne({ where: { userId: ratingObj.userId, product: product } });
 
@@ -58,9 +61,10 @@ export default class ProductTypeOrmRepository implements IProductRepository {
       rating.createdAt = ratingObj.createdAt;
       await ratingRepository.save(rating);
     } else {
-      ratingObj.product = product as Product;
       await ratingRepository.save(ratingObj as Rating);
     }
+
+    await LastRatingRepository.create(ratingObj as Rating);
 
     const [results] = await ratingRepository
       .createQueryBuilder()
