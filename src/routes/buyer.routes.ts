@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import passport from 'passport';
-import { ProductRepository } from '../DA';
+import { LastRatingRepository, ProductRepository } from '../DA';
 import { validateRating } from '../helpers/validation';
 import buyerCheck from '../middlewares/buyerCheck';
 import { ResponseError } from '../middlewares/errorHandler';
@@ -29,7 +29,7 @@ export const BuyerRouter = (router: Router): void => {
       const updatedProduct = await ProductRepository.rateProduct(req.params.id, ratingObj);
       if (updatedProduct === null) next(new ResponseError(500, `Something went wrong!`));
 
-      const lastRatings: IRating[] | null = await ProductRepository.getLastRatings();
+      const lastRatings: IRating[] | null = await LastRatingRepository.getLast10();
 
       lastRatings && sendLastRatingsInfo(lastRatings);
 

@@ -78,17 +78,4 @@ export default class ProductTypeOrmRepository implements IProductRepository {
     }
     return await this.getById(productId);
   }
-
-  public async getLastRatings(): Promise<IRating[] | null> {
-    const ratingRepository = getRepository(Rating);
-
-    const ratings: IRating[] = await ratingRepository.find({
-      order: {
-        createdAt: 'DESC',
-      },
-      take: 10,
-    });
-
-    return ratings.length > 0 ? ratings : null;
-  }
 }
