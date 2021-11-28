@@ -60,11 +60,11 @@ export default class ProductTypeOrmRepository implements IProductRepository {
       rating.rating = ratingObj.rating;
       rating.createdAt = ratingObj.createdAt;
       await ratingRepository.save(rating);
+      await LastRatingRepository.update(ratingObj as Rating);
     } else {
       await ratingRepository.save(ratingObj as Rating);
+      await LastRatingRepository.create(ratingObj as Rating);
     }
-
-    await LastRatingRepository.create(ratingObj as Rating);
 
     const [results] = await ratingRepository
       .createQueryBuilder()

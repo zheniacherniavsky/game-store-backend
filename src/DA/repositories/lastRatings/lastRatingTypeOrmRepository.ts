@@ -40,7 +40,12 @@ export default class LastRatingTypeOrmRepository implements ILastRatingRepositor
 
   public async update(entity: IRating): Promise<IRating | null> {
     const lastRatingRepository = getRepository(LastRating);
-    const rating = await lastRatingRepository.findOne(entity._id as string);
+    const rating = await lastRatingRepository.findOne({
+      where: {
+        product: entity.product,
+        userId: entity.userId,
+      },
+    });
     let updatedRating = null;
 
     if (rating) {
