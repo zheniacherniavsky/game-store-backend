@@ -1,4 +1,5 @@
 import { mongoose } from '@typegoose/typegoose';
+import { LastRatingRepository } from '../..';
 import { ProductQueryObject, productSearchQueryHandler } from '../../../helpers/queryHandler';
 import { IPagination, paginationQueryHandler } from '../../../helpers/queryHandler/pagination';
 import { ICategoryMongo, IProduct, IProductRepository, IRating } from '../../../types/types';
@@ -64,67 +65,53 @@ export default class ProductTypegooseRepository implements IProductRepository {
   }
 
   public async rateProduct(productId: string, ratingObject: IRating): Promise<IProduct | null> {
-    // find product with user rating
-    const productWithUserRating = await ProductModel.findOneAndUpdate(
-      {
-        _id: productId,
-        'ratings.userId': ratingObject.userId,
-      },
-      {
-        // replace existing user rating
-        $set: {
-          'ratings.$.rating': ratingObject.rating,
-        },
-      }
-    );
+    const product = await this.getById(productId);
 
-    if (productWithUserRating === null) {
-      // find product and push user rating object
-      await ProductModel.findOneAndUpdate(
+    if (product) {
+      // find product with user rating
+      const productWithUserRating = await ProductModel.findOneAndUpdate(
         {
           _id: productId,
+          'ratings.userId': ratingObject.userId,
         },
         {
-          $push: {
-            ratings: ratingObject,
+          // replace existing user rating
+          $set: {
+            'ratings.$.rating': ratingObject.rating,
           },
         }
       );
-    }
 
-    const [{ avgRating }] = await ProductModel.aggregate([
-      { $match: { _id: new mongoose.Types.ObjectId(productId) } },
-      { $project: { avgRating: { $avg: '$ratings.rating' } } },
-    ]);
+      if (productWithUserRating === null) {
+        // find product and push user rating object
+        await ProductModel.findOneAndUpdate(
+          {
+            _id: productId,
+          },
+          {
+            $push: {
+              ratings: ratingObject,
+            },
+          }
+        );
+        ratingObject.product = product;
+        await LastRatingRepository.create(ratingObject);
+      } else {
+        ratingObject.product = product;
+        await LastRatingRepository.update(ratingObject);
+      }
 
-    const updating = await ProductModel.updateOne({ _id: productId }, { $set: { totalRating: avgRating.toFixed(2) } });
+      const [{ avgRating }] = await ProductModel.aggregate([
+        { $match: { _id: new mongoose.Types.ObjectId(productId) } },
+        { $project: { avgRating: { $avg: '$ratings.rating' } } },
+      ]);
 
-    return updating.ok ? await this.getById(productId) : null;
-  }
+      const updating = await ProductModel.updateOne(
+        { _id: productId },
+        { $set: { totalRating: avgRating.toFixed(2) } }
+      );
 
-  public async getLastRatings(): Promise<IRating[] | null> {
-    // will be refactored at task-14. (lastRatings model)
-
-    const products: IProduct[] = await ProductModel.find();
-
-    if (products.length > 0) {
-      const ratings: IRating[] = [];
-
-      products.forEach((product) => {
-        ratings.push(...product.ratings);
-      });
-
-      return ratings.length > 0
-        ? ratings
-            .sort((a, b) => {
-              const aDate = new Date(a.createdAt).getTime();
-              const bDate = new Date(b.createdAt).getTime();
-              return bDate - aDate;
-            })
-            .slice(0, 10)
-        : null;
-    }
-
-    return null;
+      return updating.ok ? await this.getById(productId) : null;
+    } else return null;
   }
 }

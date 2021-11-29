@@ -12,6 +12,9 @@ import './websocket';
 import { database } from './DA';
 database.connect();
 
+import jobs from './jobs';
+jobs.start();
+
 const port = process.env.SRV_PORT;
 const app = express();
 const router = express.Router();
