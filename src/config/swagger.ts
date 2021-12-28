@@ -577,6 +577,142 @@ const swaggerConfig = {
         },
       },
     },
+    '/admin/products/{id}': {
+      get: {
+        security: [
+          {
+            Bearer: [],
+          },
+        ],
+        tags: ['Admin'],
+        summary: 'Get product by ID',
+        description: '',
+        operationId: 'getProductById',
+        consumes: ['application/json'],
+        produces: ['application/json'],
+        parameters: [
+          {
+            in: 'path',
+            name: 'id',
+            schema: {
+              type: 'integer',
+            },
+            required: true,
+            description: 'Product id',
+          },
+        ],
+        responses: {
+          200: {
+            description: 'Successful operation',
+          },
+          401: {
+            description: 'Unauthorized',
+          },
+          404: {
+            description: 'Product not found',
+          },
+        },
+      },
+      patch: {
+        security: [
+          {
+            Bearer: [],
+          },
+        ],
+        tags: ['Admin'],
+        summary: 'Update product by ID',
+        description: '',
+        operationId: 'updateProductById',
+        consumes: ['application/json'],
+        produces: ['application/json'],
+        parameters: [
+          {
+            in: 'path',
+            name: 'id',
+            schema: {
+              type: 'integer',
+            },
+            required: true,
+            description: 'Product id',
+          },
+          {
+            in: 'body',
+            name: 'body',
+            description: 'New Product properties',
+            required: true,
+            schema: {
+              type: 'object',
+              properties: {
+                displayName: {
+                  type: 'string',
+                  example: 'Minecraft',
+                },
+                price: {
+                  type: 'number',
+                  example: '3',
+                },
+                categoriesIds: {
+                  type: 'array',
+                  items: {
+                    type: 'string',
+                  },
+                  example: ['1', '2'],
+                  description: 'Category ids list',
+                },
+              },
+            },
+          },
+        ],
+        responses: {
+          200: {
+            description: 'Successful operation',
+          },
+          400: {
+            description: 'Bad request',
+          },
+          401: {
+            description: 'Unauthorized',
+          },
+          404: {
+            description: 'Product not found',
+          },
+        },
+      },
+      delete: {
+        security: [
+          {
+            Bearer: [],
+          },
+        ],
+        tags: ['Admin'],
+        summary: 'Delete product by ID',
+        description: '',
+        operationId: 'deleteProductById',
+        produces: ['application/json'],
+        parameters: [
+          {
+            in: 'path',
+            name: 'id',
+            schema: {
+              type: 'integer',
+            },
+            required: true,
+            description: 'Product id',
+          },
+        ],
+        responses: {
+          200: {
+            description: 'Successful operation',
+          },
+          401: {
+            description: 'Unauthorized',
+          },
+          404: {
+            description: 'Product not found',
+          },
+        },
+      },
+    },
     '/admin/products': {
       post: {
         security: [
