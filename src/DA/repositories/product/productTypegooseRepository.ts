@@ -2,6 +2,7 @@ import { mongoose } from '@typegoose/typegoose';
 import { LastRatingRepository } from '../..';
 import { ProductQueryObject, productSearchQueryHandler } from '../../../helpers/queryHandler';
 import { IPagination, paginationQueryHandler } from '../../../helpers/queryHandler/pagination';
+import { ResponseError } from '../../../middlewares/errorHandler';
 import { ICategoryMongo, IProduct, IProductRepository, IRating } from '../../../types/types';
 import { CategoryModel } from '../../db/mongodb/models/category';
 import { Product, ProductModel } from '../../db/mongodb/models/product';
@@ -35,7 +36,9 @@ export default class ProductTypegooseRepository implements IProductRepository {
       categories = await CategoryModel.find({ _id: categoriesIds });
     }
     entity.categories = categories;
-    const data: IProduct = await new ProductModel(entity).save();
+    const data: IProduct = await new ProductModel(entity).save().catch((reason) => {
+      throw new ResponseError(400, reason);
+    });
     return data;
   }
 

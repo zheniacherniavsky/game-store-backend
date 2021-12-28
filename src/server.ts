@@ -15,9 +15,16 @@ database.connect();
 import jobs from './jobs';
 jobs.start();
 
+import swaggerUi from 'swagger-ui-express';
+import swaggerDocument from './config/swagger';
+
 const port = process.env.SRV_PORT;
 const app = express();
 const router = express.Router();
+
+// swagger setup
+router.use('/api-docs', swaggerUi.serve);
+router.get('/api-docs', swaggerUi.setup(swaggerDocument));
 
 import { ProductRouter } from './routes/product.routes';
 import { CategoryRouter } from './routes/category.routes';

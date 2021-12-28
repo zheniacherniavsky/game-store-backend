@@ -2,6 +2,7 @@ import { getRepository } from 'typeorm';
 import { LastRatingRepository } from '../..';
 import { ProductQueryObject, productSearchQueryHandler } from '../../../helpers/queryHandler';
 import { paginationQueryHandler } from '../../../helpers/queryHandler/pagination';
+import { ResponseError } from '../../../middlewares/errorHandler';
 import { ICategoryPostgres, IProduct, IProductRepository, IRating } from '../../../types/types';
 import { Category } from '../../db/postgresql/entity/category';
 import { Product } from '../../db/postgresql/entity/product';
@@ -32,7 +33,11 @@ export default class ProductTypeOrmRepository implements IProductRepository {
       });
     }
     entity.categories = categories;
-    const data = await getRepository(Product).save(entity as Product);
+    const data = await getRepository(Product)
+      .save(entity as Product)
+      .catch((reason) => {
+        throw new ResponseError(400, reason);
+      });
     return data;
   }
 

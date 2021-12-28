@@ -2,6 +2,7 @@ import { mongoose } from '@typegoose/typegoose';
 import { IAccount, IAccountRepository } from '../../../types/types';
 import { Account, AccountModel } from '../../db/mongodb/models/account';
 import { hashData } from '../../../helpers/hash';
+import { ResponseError } from '../../../middlewares/errorHandler';
 export default class AccountTypegooseRepository implements IAccountRepository {
   public async getById(id: string): Promise<IAccount | null> {
     const objectId = new mongoose.Types.ObjectId(id);
@@ -37,7 +38,11 @@ export default class AccountTypegooseRepository implements IAccountRepository {
     await new AccountModel({
       ...entity,
       password: hashedPassword,
-    }).save();
+    })
+      .save()
+      .catch((reason) => {
+        throw new ResponseError(400, reason);
+      });
     return entity;
   }
 }
