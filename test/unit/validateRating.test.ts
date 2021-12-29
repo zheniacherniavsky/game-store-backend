@@ -19,7 +19,5 @@ test('Throws error when rating less then 0', () => {
 });
 
 test('Returns undefined when rating is correct', () => {
-  expect(() => {
-    validateRating(10);
-  }).toBeUndefined;
+  expect(validateRating(10)).toBeUndefined();
 });

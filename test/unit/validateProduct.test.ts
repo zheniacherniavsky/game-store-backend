@@ -13,13 +13,13 @@ test('Throws error when displayName is invalid', () => {
 });
 
 test('Returns undefined if product is correct', () => {
-  expect(() => {
+  expect(
     validateProduct({
       displayName: 'Hello',
       price: 10,
       createdAt: new Date(),
       ratings: [],
       totalRating: 0,
-    });
-  }).toBeUndefined;
+    })
+  ).toBeUndefined();
 });
