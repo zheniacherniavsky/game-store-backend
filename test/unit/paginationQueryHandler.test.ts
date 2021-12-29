@@ -1,7 +1,7 @@
 import { paginationQueryHandler } from '../../src/helpers/queryHandler/pagination';
 
 test('Returns initial value for pagination', () => {
-  expect(paginationQueryHandler({})).toStrictEqual({
+  expect(paginationQueryHandler(undefined)).toStrictEqual({
     typegooseOptions: {
       pagination: {
         skip: 0,
@@ -26,6 +26,21 @@ test('Returns pagination with correct offset', () => {
     typeOrmOptions: {
       skip: 5,
       take: 10,
+    },
+  });
+});
+
+test('Returns pagination with correct limit', () => {
+  expect(paginationQueryHandler({ limit: '5' })).toStrictEqual({
+    typegooseOptions: {
+      pagination: {
+        skip: 0,
+        limit: 5,
+      },
+    },
+    typeOrmOptions: {
+      skip: 0,
+      take: 5,
     },
   });
 });
