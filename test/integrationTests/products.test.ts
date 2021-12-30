@@ -2,7 +2,6 @@ import express from 'express';
 import request from 'supertest';
 import { ProductRouter } from '../../src/routes/product.routes';
 
-import { ProductRepository } from '../../src/DA';
 const router = express.Router();
 const app = express();
 ProductRouter(router);
