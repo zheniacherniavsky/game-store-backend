@@ -2,7 +2,6 @@ import passport from 'passport';
 import { Strategy as LocalStrategy } from 'passport-local';
 import passportJWT from 'passport-jwt';
 import { AccountRepository } from '../DA';
-import { SECRET_AUTH } from './secretToken';
 import { compareHashedData } from '../helpers/hash';
 import { ObjectId } from 'mongoose';
 const JWTStrategy = passportJWT.Strategy;
@@ -33,7 +32,7 @@ passport.use(
   new JWTStrategy(
     {
       jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
-      secretOrKey: SECRET_AUTH,
+      secretOrKey: process.env.SECRET_AUTH,
     },
     function (jwtPayload, cb) {
       return AccountRepository.getById(jwtPayload.id)

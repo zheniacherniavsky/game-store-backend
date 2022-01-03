@@ -4,7 +4,6 @@ import jwt from 'jsonwebtoken';
 import passport from 'passport';
 import randtoken from 'rand-token';
 import { ResponseError } from '../middlewares/errorHandler';
-import { SECRET_AUTH } from '../config/secretToken';
 import { validateAccount, validateAccountAuthInfo } from '../helpers/validation';
 
 const refreshTokens: { [key: string]: string } = {};
@@ -51,7 +50,7 @@ export const AuthRouter = (router: Router): void => {
           return res.json({ error: err });
         }
 
-        const token = jwt.sign(JSON.parse(JSON.stringify(user)), SECRET_AUTH, {
+        const token = jwt.sign(JSON.parse(JSON.stringify(user)), process.env.SECRET_AUTH || '', {
           expiresIn: 600,
         });
         const refreshToken = randtoken.uid(24);
@@ -82,7 +81,7 @@ export const AuthRouter = (router: Router): void => {
             role: account.role,
           };
 
-          const token = jwt.sign(JSON.parse(JSON.stringify(user)), SECRET_AUTH, {
+          const token = jwt.sign(JSON.parse(JSON.stringify(user)), process.env.SECRET_AUTH || '', {
             expiresIn: 600,
           });
           return res.json({
