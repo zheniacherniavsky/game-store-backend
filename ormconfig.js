@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 /* eslint-disable no-undef */
-const data = require('./secretData');
+const { postgresqlCredentials: data } = require('./secretData');
 
 const srcConfig = {
   type: 'postgres',

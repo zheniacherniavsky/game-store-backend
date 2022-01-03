@@ -1,5 +1,5 @@
 import { getRepository } from 'typeorm';
-import { ILastRatingRepository, IRating, IRatingPostgres } from '../../../types/types';
+import { ILastRatingRepository, IRating } from '../../../types/types';
 import { LastRating } from '../../db/postgresql/entity/lastRating';
 
 export default class LastRatingTypeOrmRepository implements ILastRatingRepository {

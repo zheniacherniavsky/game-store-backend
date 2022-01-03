@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "start": "ts-node-dev src/server.ts",
-    "build": "npm run lint && tsc && npm run start-build",
+    "build": "npm run lint && tsc",
     "start-build": "nodemon dist/server.js",
     "pretty": "pretty-quick --staged",
     "lint": "eslint . --ext .ts",

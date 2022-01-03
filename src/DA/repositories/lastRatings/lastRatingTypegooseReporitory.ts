@@ -1,4 +1,4 @@
-import { ILastRatingRepository, IRating, IRatingMongo } from '../../../types/types';
+import { ILastRatingRepository, IRating } from '../../../types/types';
 import { LastRating, LastRatingModel } from '../../db/mongodb/models/lastRating';
 import { Product } from '../../db/mongodb/models/product';
 
