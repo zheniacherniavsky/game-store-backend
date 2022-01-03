@@ -4,9 +4,9 @@
   "description": "Lab work iTechArt",
   "main": "server.js",
   "scripts": {
-    "start": "ts-node-dev src/server.ts",
+    "dev": "ts-node-dev src/server.ts",
     "build": "npm run lint && tsc",
-    "start-build": "nodemon dist/server.js",
+    "start": "node dist/server.js",
     "pretty": "pretty-quick --staged",
     "lint": "eslint . --ext .ts",
     "lint-fix": "eslint . --ext .ts --fix",
