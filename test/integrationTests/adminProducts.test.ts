@@ -36,8 +36,16 @@ jest.mock('../../src/DA', () => {
     ...originalModule,
     ProductRepository: {
       getById: jest.fn().mockImplementation(async (id) => fakeProducts.find((product) => product._id == id) || null),
-      create: jest.fn().mockImplementation(() => {
+      create: jest.fn().mockImplementation(async () => {
         console.log('Product has been created');
+      }),
+      update: jest.fn().mockImplementation(async () => {
+        console.log('Product has been updated');
+        return {};
+      }),
+      delete: jest.fn().mockImplementation(async () => {
+        console.log('Product has been deleted');
+        return true;
       }),
     },
   };
@@ -79,6 +87,30 @@ describe('Testing admin product routes', () => {
       .send(product)
       .then((res) => {
         expect(ProductRepository.create).toHaveBeenCalled();
+        expect(res.statusCode).toBe(200);
+      });
+  });
+
+  test('PATCH /admin/products/{id} - success', async () => {
+    const product = {
+      displayName: 'heeloWorld',
+      price: 10,
+    };
+    await request(app)
+      .patch('/admin/products/3')
+      .type('json')
+      .send(product)
+      .then((res) => {
+        expect(ProductRepository.update).toHaveBeenCalled();
+        expect(res.statusCode).toBe(200);
+      });
+  });
+
+  test('DELETE /admin/products/{id} - success', async () => {
+    await request(app)
+      .delete('/admin/products/3')
+      .then((res) => {
+        expect(ProductRepository.delete).toHaveBeenCalled();
         expect(res.statusCode).toBe(200);
       });
   });
