@@ -1,11 +1,11 @@
 import express from 'express';
 import logger from './helpers/logger';
 
-import 'reflect-metadata';
-import './config/passport';
-
 import dotenv from 'dotenv';
 dotenv.config();
+
+import 'reflect-metadata';
+import './config/passport';
 
 import './websocket';
 
