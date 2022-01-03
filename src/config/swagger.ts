@@ -471,11 +471,11 @@ const swaggerConfig = {
               properties: {
                 username: {
                   type: 'string',
-                  example: 'yauheni2012',
+                  example: 'PolichMandela',
                 },
                 password: {
                   type: 'string',
-                  example: 'pAsSwOrD',
+                  example: '12345Qwerty',
                 },
               },
             },

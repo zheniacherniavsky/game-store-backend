@@ -1,10 +1,13 @@
-import express, { Request, NextFunction, Response } from 'express';
+import express from 'express';
 import request from 'supertest';
 import { AdminRouter } from '../../src/routes/admin.routes';
+import { ProductRepository } from '../../src/DA';
 const router = express.Router();
 const app = express();
 AdminRouter(router);
 
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 app.use('/', router);
 
 const fakeProducts = [
@@ -33,6 +36,9 @@ jest.mock('../../src/DA', () => {
     ...originalModule,
     ProductRepository: {
       getById: jest.fn().mockImplementation(async (id) => fakeProducts.find((product) => product._id == id) || null),
+      create: jest.fn().mockImplementation(() => {
+        console.log('Product has been created');
+      }),
     },
   };
 });
@@ -60,5 +66,20 @@ describe('Testing admin product routes', () => {
   test('GET /admin/products/{id} - error (Not Found)', async () => {
     const response = await request(app).get(`/admin/products/${TEST_PRODUCT_ID * 1000}`);
     expect(response.statusCode).toBe(404);
+  });
+
+  test('POST /admin/products - success', async () => {
+    const product = {
+      displayName: 'heeloWorld',
+      price: 10,
+    };
+    await request(app)
+      .post('/admin/products')
+      .type('json')
+      .send(product)
+      .then((res) => {
+        expect(ProductRepository.create).toHaveBeenCalled();
+        expect(res.statusCode).toBe(200);
+      });
   });
 });
