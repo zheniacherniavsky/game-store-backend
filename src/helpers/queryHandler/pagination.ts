@@ -5,7 +5,7 @@ export interface IPagination {
   limit: number;
 }
 
-export const paginationQueryHandler = (paginationQuery: PaginationQueryObject): IResultPagination => {
+export const paginationQueryHandler = (paginationQuery?: PaginationQueryObject): IResultPagination => {
   const res: IResultPagination = {
     typegooseOptions: {
       pagination: {
