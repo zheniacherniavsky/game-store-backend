@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 /* eslint-disable no-undef */
-console.log('process.env.TS_NODE_DEV', process.env.TS_NODE_DEV);
 const { postgresqlCredentials: data = {} } = process.env.TS_NODE_DEV == 'true' ? require('./secretData') : {};
 
 const srcConfig = {
