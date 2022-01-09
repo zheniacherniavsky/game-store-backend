@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 /* eslint-disable no-undef */
-const { postgresqlCredentials: data } = require('./secretData');
+console.log('process.env.TS_NODE_DEV', process.env.TS_NODE_DEV);
+const { postgresqlCredentials: data = {} } = process.env.TS_NODE_DEV == 'true' ? require('./secretData') : {};
 
 const srcConfig = {
   type: 'postgres',
@@ -25,10 +26,13 @@ const distConfig = {
   type: 'postgres',
   synchronize: true,
   logging: false,
-  url: process.env.DATABASE_URL,
+  ssl: true,
   extra: {
-    ssl: true,
+    ssl: {
+      rejectUnauthorized: false,
+    },
   },
+  url: process.env.DATABASE_URL,
   entities: [__dirname + '/dist/DA/db/postgresql/entity/**/*.js'],
   migrations: [__dirname + '/dist/DA/db/postgresql/migration/**/*.js'],
   subscribers: [__dirname + '/dist/DA/db/postgresql/subscriber/**/*.js'],
@@ -39,4 +43,4 @@ const distConfig = {
   },
 };
 
-module.exports = true ? srcConfig : distConfig;
+module.exports = process.env.TS_NODE_DEV ? srcConfig : distConfig;
