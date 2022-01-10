@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 /* eslint-disable no-undef */
-const data = require('./secretData');
+console.log('process.env.TS_NODE_DEV', process.env.TS_NODE_DEV);
+const { postgresqlCredentials: data = {} } = process.env.TS_NODE_DEV == 'true' ? require('./secretData') : {};
 
 const srcConfig = {
   type: 'postgres',
@@ -16,26 +17,28 @@ const srcConfig = {
   subscribers: [__dirname + '/src/DA/db/postgresql/subscriber/**/*.ts'],
   cli: {
     entitiesDir: __dirname + '/src/DA/db/postgresql/entity',
-    migrationsDir: __dirname + '/src/DA/db/postgresql/migration',
+    migrationsDir: '/src/DA/db/postgresql/migration',
     subscribersDir: __dirname + '/src/DA/db/postgresql/subscriber',
   },
 };
 
 const distConfig = {
   type: 'postgres',
-  host: process.env.PG_DB_HOST,
-  port: process.env.PG_DB_PORT,
-  username: data.PG_DB_USERNAME || '',
-  password: data.PG_DB_PASSWORD || '',
-  database: process.env.PG_DB_DATABASE,
   synchronize: true,
   logging: false,
+  ssl: true,
+  extra: {
+    ssl: {
+      rejectUnauthorized: false,
+    },
+  },
+  url: process.env.DATABASE_URL,
   entities: [__dirname + '/dist/DA/db/postgresql/entity/**/*.js'],
   migrations: [__dirname + '/dist/DA/db/postgresql/migration/**/*.js'],
   subscribers: [__dirname + '/dist/DA/db/postgresql/subscriber/**/*.js'],
   cli: {
     entitiesDir: __dirname + '/dist/DA/db/postgresql/entity',
-    migrationsDir: __dirname + '/dist/DA/db/postgresql/migration',
+    migrationsDir: '/dist/DA/db/postgresql/migration',
     subscribersDir: __dirname + '/dist/DA/db/postgresql/subscriber',
   },
 };

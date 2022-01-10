@@ -14,12 +14,12 @@ const logger = createLogger({
   ],
 });
 
-if (process.env.TS_NODE_DEV) {
-  logger.add(
-    new transports.Console({
-      format: combine(label({ label: 'Global' }), timestamp(), myFormat),
-    })
-  );
-}
+// if (process.env.TS_NODE_DEV) {
+logger.add(
+  new transports.Console({
+    format: combine(label({ label: 'Global' }), timestamp(), myFormat),
+  })
+);
+// }
 
 export default logger;

@@ -1,11 +1,11 @@
 import express from 'express';
 import logger from './helpers/logger';
 
-import 'reflect-metadata';
-import './config/passport';
-
 import dotenv from 'dotenv';
 dotenv.config();
+
+import 'reflect-metadata';
+import './config/passport';
 
 import './websocket';
 
@@ -18,7 +18,7 @@ jobs.start();
 import swaggerUi from 'swagger-ui-express';
 import swaggerDocument from './config/swagger';
 
-const port = process.env.SRV_PORT;
+const port = process.env.PORT || process.env.SRV_PORT || 5000;
 const app = express();
 const router = express.Router();
 

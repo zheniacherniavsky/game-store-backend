@@ -7,7 +7,7 @@ import { AccountModel } from './models/account';
 import { hashData } from '../../../helpers/hash';
 
 export const connectMongoDb = (): void => {
-  const connectionString: string = process.env.MONGODB_CONNECTION_STRING || '';
+  const connectionString: string = process.env.MONGO_CONNECTION_STRING || '';
 
   if (process.env.TS_NODE_DEV) {
     mongoose.set('debug', true);
